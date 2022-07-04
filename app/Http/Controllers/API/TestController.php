@@ -60,7 +60,7 @@ class TestController extends Controller
         
         if($request->hasFile('file')){
             $filename = time().'.'.$request->file->getClientOriginalExtension();
-            $request->file->move('assets', $filename);
+            $request->file->move('assets/files/', $filename);
         } else {
             $filename = 'no file';
         }
@@ -69,25 +69,20 @@ class TestController extends Controller
         
         
         $param = [
-            $request->userid,
             $filename
         ];
-        DB::insert('exec userAddFile ?, ?', $param);
+        DB::insert('exec userAddFile ?', $param);
     }
 
     public function images(Request $request){
         if ($request->hasFile('files')){
-
-
             foreach ($request->file('files') as $file){
 
                 $filename = $file->getClientOriginalName();
-                $file->move(public_path('assets/img/emp'), $filename);
+                $file->move(public_path('assets/files/'), $filename);
 
                 DB::insert('exec userAddFile ?', [$filename]);
-
             }
-
         }
     }
 
@@ -97,14 +92,10 @@ class TestController extends Controller
         return $file;
     }
 
-    public function download($id){
+    public function download($file){
 
-        $file = DB::table('files')->where('id',$id)->first();
+        return response()->download(public_path('assets/files/'.$file));
 
-        $filepath = public_path("assets/{$file->files}");
-        return response()->download($filepath);
-
-        // return $filepath;
     }
 
 

@@ -94,20 +94,13 @@
                             <td> {{ list.files}} </td>
 
                             <td>
-                                <a class="ms-4" href="{{ `url(/download/${list.id})` }}">Download</a>
+                                <a class="ms-4" href="#" @click="download(list.files)">Download</a>
                             </td>
 
-                            <!-- <td>
-                                <a href="#" class="btn btn-sm btn-primary" v-if="btnPrev" @click="onPrev(list.user_id)">
-                                    <i class="fe fe-search"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-info btn-b" v-if="btnEdit" @click="onEdit(list.user_id)">
-                                    <i class="las la-pen"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-danger" v-if="btnDel" @click="onDel(list.user_id)">
-                                    <i class="fe fe-trash-2"></i>
-                                </a>
-                            </td> -->
+                            <!-- <a href="#" @click="download(list.files)">
+                                <i class="fas fa-download ms-4"></i>
+                            </a> -->
+
                         </tr>
                     </tbody>
                 </table>
@@ -117,9 +110,9 @@
                 <input type="file" @change="imageChange" name="image" ref="files" multiple/>
             </div>
 
-            <div class="m-auto">
+            <!-- <div class="m-auto">
                 <p v-for="(image,index) in images" :key="index">{{ image.name }}</p>
-            </div>
+            </div> -->
 
             <div>
                 <button @click="uploadImages">Upload</button>
@@ -192,16 +185,15 @@ export default {
                 })
         },
 
-        download(id){
-                this.$axios.post(`/api/test/download/${id}`)
-                .then((response)=>{
 
-                        // this.prevData = response.data;
+        download(file){
 
-                }).catch((error)=>{
-                    console.log(error);
-                })
+            const url = `/api/test/download/${file}`;
+            window.location.href = url;
+
         },
+
+        
 
         getFile(){
             this.$axios.get('api/test/file').then((result)=>{

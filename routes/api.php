@@ -51,8 +51,8 @@ Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
 Route::group(['prefix' => 'test', 'middlewar' => 'auth:santum'], function(){
     Route::post('/addfile', [TestController::class, 'addfile']);
     Route::get('/file', [TestController::class, 'file']);
-    Route::post('/download/{id}', [TestController::class, 'download']);
     Route::post('/images', [TestController::class, 'images']);
+    Route::get('/download/{file}', [TestController::class, 'download']);
 
 });
 

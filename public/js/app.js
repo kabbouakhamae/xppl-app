@@ -23241,11 +23241,9 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    download: function download(id) {
-      this.$axios.post("/api/test/download/".concat(id)).then(function (response) {// this.prevData = response.data;
-      })["catch"](function (error) {
-        console.log(error);
-      });
+    download: function download(file) {
+      var url = "/api/test/download/".concat(file);
+      window.location.href = url;
     },
     getFile: function getFile() {
       var _this2 = this;
@@ -25507,18 +25505,9 @@ var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-  "class": "ms-4",
-  href: "{{ `url(/download/${list.id})` }}"
-}, "Download")], -1
-/* HOISTED */
-);
-
+var _hoisted_22 = ["onClick"];
 var _hoisted_23 = {
   "class": "mt-5"
-};
-var _hoisted_24 = {
-  "class": "m-auto"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Button trigger modal "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button type=\"button\" class=\"btn btn-primary\" data-bs-toggle=\"modal\" data-bs-target=\"#staticBackdrop\">\r\n                Launch static backdrop modal\r\n            </button> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -25610,7 +25599,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.files), 1
     /* TEXT */
-    ), _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <td>\r\n                                <a href=\"#\" class=\"btn btn-sm btn-primary\" v-if=\"btnPrev\" @click=\"onPrev(list.user_id)\">\r\n                                    <i class=\"fe fe-search\"></i>\r\n                                </a>\r\n                                <a href=\"#\" class=\"btn btn-sm btn-info btn-b\" v-if=\"btnEdit\" @click=\"onEdit(list.user_id)\">\r\n                                    <i class=\"las la-pen\"></i>\r\n                                </a>\r\n                                <a href=\"#\" class=\"btn btn-sm btn-danger\" v-if=\"btnDel\" @click=\"onDel(list.user_id)\">\r\n                                    <i class=\"fe fe-trash-2\"></i>\r\n                                </a>\r\n                            </td> ")]);
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      "class": "ms-4",
+      href: "#",
+      onClick: function onClick($event) {
+        return $options.download(list.files);
+      }
+    }, "Download", 8
+    /* PROPS */
+    , _hoisted_22)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <a href=\"#\" @click=\"download(list.files)\">\r\n                                <i class=\"fas fa-download ms-4\"></i>\r\n                            </a> ")]);
   }), 128
   /* KEYED_FRAGMENT */
   ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -25623,15 +25620,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     multiple: ""
   }, null, 544
   /* HYDRATE_EVENTS, NEED_PATCH */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.images, function (image, index) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", {
-      key: index
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(image.name), 1
-    /* TEXT */
-    );
-  }), 128
-  /* KEYED_FRAGMENT */
-  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"m-auto\">\r\n                <p v-for=\"(image,index) in images\" :key=\"index\">{{ image.name }}</p>\r\n            </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     onClick: _cache[10] || (_cache[10] = function () {
       return $options.uploadImages && $options.uploadImages.apply($options, arguments);
     })
