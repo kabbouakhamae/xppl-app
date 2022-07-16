@@ -19,7 +19,7 @@ class LookupController extends Controller
     }
 
     public function status(){
-        $status = DB::select("select code as value, descr as label from lookup_code where category ='employee status' and used ='y'");
+        $status = DB::select("select code as value, code as label from lookup_code where category ='employee status' and used ='y'");
         return $status;
     }
 
@@ -62,8 +62,7 @@ class LookupController extends Controller
         return $crew;
     }
 
-    public function nameLK(){
-        // $nameList = DB::select("select name as value, name as label from emp_names");
+    public function name(){
         $nameList = DB::select('exec uspNamelist');
         return $nameList;
     }

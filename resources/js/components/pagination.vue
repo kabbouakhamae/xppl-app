@@ -1,6 +1,6 @@
 
 <template>
-  <div class=" py-4">
+  <div class="py-3">
     <nav aria-label="...">
       <ul class="pagination justify-content-end mb-0">
         <li class="page-item" v-bind:class="[back ? 'disabled' : '']">

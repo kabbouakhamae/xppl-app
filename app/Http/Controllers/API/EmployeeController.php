@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-
 class EmployeeController extends Controller{
 
     public function paginateArray($data, $perPage = 8){
@@ -33,33 +32,30 @@ class EmployeeController extends Controller{
         return $emp;
     }
 
-    public function addNew(Request $request){
+    public function newUserid(){
+        $userid = DB::select("exec uspEmpNewUserid");
+        return $userid;
+    }
+
+    public function empInsert(Request $request){
         try{
             $checkName = DB::table('emp_names')
                         ->where('name', $request->name)
                         ->Where('surname', $request->surname); 
             if ($checkName->count()){
                 $success = false;
-                $message = "This name already use!";
+                $message = "This name already in database!";
             } else {
 
-                if($request->file('file')){
-                    $upload_path = "assets\img";
-                    $generate_new_img = 'emp-'.time().'.'.$request->file->getClientOriginalExtension();
-                    $image = $request->file('file');
-                    $img = Image::make($image->getRealpath());
-                    $img->resize(
-                        800, null, function($constraint){
-                            $constraint->aspectRatio();
-                        });
-                    $img->save($upload_path.'/'.$generate_new_img);  // ບັນທຶກຂື້ນ Server
-
+                if($request->hasFile('file')){
+                    $filename = $request->userid.'-'.time().'.'.$request->file->getClientOriginalExtension();
+                    $request->file->move('assets/img/profile/', $filename);
                 } else {
-                    $generate_new_img = 'No pic';
+                    $filename = null;
                 }
 
-
                 $param = [
+                    $request->userid,
                     $request->gender,
                     $request->name,
                     $request->surname,
@@ -78,7 +74,7 @@ class EmployeeController extends Controller{
                     $request->status,
                     $request->contract,
                     $request->levels,
-                    $request->employeeid,
+                    $request->empid,
                     $request->scanid,
                     $request->foodid,
                     $request->roster,
@@ -88,9 +84,9 @@ class EmployeeController extends Controller{
                     $request->dept,
                     $request->section,
                     $request->crew,
-                    $generate_new_img
+                    $filename
                 ];
-                DB::insert('exec uspAddNewEmp ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', $param);
+                DB::insert('exec uspEmpInsert ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', $param);
 
                 $success = true;
                 $message = "Insert completed!";
@@ -106,19 +102,75 @@ class EmployeeController extends Controller{
         return response()->json($response);
     }
 
-    public function edit($id){
-        $edit = DB::select('select * from emp_names where user_id = ?', [$id]);
+    public function empUpdate(Request $request){
+        if($request->hasFile('file')){
+            if($request->imageName != "" && $request->imageName){
+                if(file_exists('assets/img/profile/'.$request->imageName)){
+                    unlink('assets/img/profile/'.$request->imageName);
+                }
+            }
+
+            $filename = $request->userid.'-'.time().'.'.$request->file->getClientOriginalExtension();
+            $request->file->move('assets/img/profile/', $filename);
+        } else {
+            $filename = 'no pic';
+        }
+
+        $param = [
+            $request->userid,
+            $request->gender,
+            $request->name,
+            $request->surname,
+            $request->phone,
+            $request->namelao,
+            $request->surnamelao,
+            $request->birthday,
+            $request->email,
+            $request->country,
+            $request->province,
+            $request->district,
+            $request->village,
+            $filename
+        ];
+        DB::update("exec uspEmpUpdate ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?", $param);
+    }
+
+    public function edit($userid){
+        $edit = DB::select('select * from emp_names where userid = ?', [$userid]);
         return $edit;
     }
 
-
-    public function preview($user_id){
-        $empPrev = DB::select('exec uspEmpPreview ?', [$user_id]);
+    public function preview($userid){
+        $empPrev = DB::select('exec uspEmpPreview ?', [$userid]);
         return $empPrev;
     }
 
-    public function delete($user_id){
-        DB::delete('delete from emp_names where user_id = ?', [$user_id]);
+    public function delete($userid){
+            $images = DB::table('emp_names')
+                    ->where('userid',$userid)
+                    ->first();
+        
+        // return $images->images;
+        
+        if($images->images != "" && $images->images){
+            if(file_exists('assets/img/profile/'.$images->images)){
+                unlink('assets/img/profile/'.$images->images);
+            }
+        }
+        // DB::delete('delete from emp_names where userid = ?', [$userid]);
+        DB::table('emp_names')->where('userid', $userid)->delete();
+
+    }
+
+    public function detail($userid){
+        // $details = DB::select('select * from emp_details');
+        $details = DB::select('select * from emp_details where userid = ?', [$userid]);
+        return $details;
+    }
+
+    public function editDetail($id){
+        $details = DB::select('select * from emp_details where id = ?', [$id]);
+        return $details;
     }
 
 

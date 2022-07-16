@@ -75,31 +75,32 @@
 
 
             {{ addData }}
-            <div class="mt-5">
-                <table>
+            <div class="table-responsive mt-5">
+                <table class="table-hover mb-0 text-md-nowrap bd-gray-100 bd-1">
                     <thead>
                         <tr>
 
-                            <th class="w-20">ID</th>
-                            <th><span>User ID</span></th>
-                            <th><span>Files</span></th>
+                            <th class="w-20 bd-1 bd-gray-100">ID</th>
+                            <th class="bd-1 bd-gray-100">User ID</th>
+                            <th class="bd-1 bd-gray-100">File</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="tr-hover" v-for="list in fileData" :key="list.id">
+                    <tbody style="font-size: 13px">
+                        <tr class="bd-1 bd-gray-100" v-for="list in fileData" :key="list.id">
 
                             <td> {{ list.id }} </td>
-                            <td> {{ list.userid}} </td>
-                            <td> {{ list.files}} </td>
+                            <td class="bd-1 bd-gray-100 py-1 px-3"> {{ list.userid}} </td>
+                            <td class="bd-1 bd-gray-100 py-1 px-3"> {{ list.files}} </td>
+
+                            <!-- <td>
+                                <a class="ms-4" href="#" @click="download(list.files)">Download</a>
+                            </td> -->
 
                             <td>
-                                <a class="ms-4" href="#" @click="download(list.files)">Download</a>
+                                <a href="#" @click="download(list.files)"> <i class="fe fe-download ms-4"></i></a>
+                                <a href="#" @click="deleteFile(list.files)"> <i class="fe fe-trash-2 ms-4"></i></a>
                             </td>
-
-                            <!-- <a href="#" @click="download(list.files)">
-                                <i class="fas fa-download ms-4"></i>
-                            </a> -->
 
                         </tr>
                     </tbody>
@@ -116,6 +117,39 @@
 
             <div>
                 <button @click="uploadImages">Upload</button>
+            </div>
+
+
+
+                <div class="table-responsive mg-t-25">
+                    <table class="table main-table-reference table-hover text-nowrap mg-b-0 mg-t-10">
+                        <thead>
+                            <tr>
+                                <th class="wd-30p" style="letter-spacing: 0px">Class</th>
+                                <th class="wd-70p" style="letter-spacing: 0px">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 4px 10px">1</td>
+                                <td style="padding: 4px 10px">Add border in all sides of an element using default color and width.</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Add border to top side of element.</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+            <i class="fa fa-minus-circle cursor-pointer text-warning"></i>
+            <i class="fa fa-plus-circle cursor-pointer text-info"></i> |  
+            <i class="fa fa-times-circle cursor-pointer text-danger"></i>
+            <i class="fa fa-edit cursor-pointer text-warning mb-5"></i>
+
+            <div class=" pos-relative">
+                <button class="btn btn-icon btn-sm btn-i"><i class="fa fa-plus-circle cur-pointer text-primary"></i></button>
             </div>
 
         </div>
@@ -193,6 +227,14 @@ export default {
 
         },
 
+        deleteFile(file){
+            this.$axios.post(`api/test/deleteFile/${file}`)
+                .then(response => {
+                    this.getFile();
+                }).catch (err =>{
+                    console.log(err);
+                })
+        },
         
 
         getFile(){

@@ -21,7 +21,6 @@
 					</div>
 					<ul class="side-menu">
 						<li class="side-item side-item-category">Admin</li>
-
                         <li class="slide " @click="login_click">
 							<router-link class="side-menu__item" :class="login_act" to="/employee">
 								<span class="side-menu__label"><i class="far fa-user ibox"></i><span class="mx-2">Staff</span></span>
@@ -99,7 +98,7 @@
 						<ul class="nav nav-item  navbar-nav-right ms-auto">
 						
                         	<li class="nav-item full-screen fullscreen-button">
-								<a class="new nav-link full-screen-link" href="#"><svg
+								<a class="new nav-link full-screen-link" href="#" title="Full screen"><svg
 										xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24"
 										fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
 										stroke-linejoin="round">
@@ -111,26 +110,28 @@
 
 							<li class="dropdown main-profile-menu nav nav-item nav-link">
 								<a class="profile-user d-flex pt-2" href="">
-                                    <img alt=""
-										src="assets/img/brand/ae.jpg">
-                                    <p class=" pt-2 mx-2 text-muted">{{ signinInfo.username }}</p>
+                                    <p class=" pt-2 me-2 text-muted">{{ fullname }}</p>
+                                    <img alt="" v-if="images" :src="'assets/img/profile/'+ images">
+                                    <img alt="" v-if="!images && gender == 'Male'" src="assets/img/male.png">
+                                    <img alt="" v-if="!images && gender != 'Male'" src="assets/img/female.png">
                                 </a>
 								
                                 <div class="dropdown-menu">
 									<div class="main-header-profile bg-primary p-3">
 										<div class="d-flex wd-100p">
-											<div class="main-img-user"><img alt="" src="assets/img/brand/ae.jpg"
-													class=""></div>
+											<div v-if="images" class="main-img-user"><img alt="" :src="'assets/img/profile/'+ images"></div>
+											<div v-if="!images && gender == 'Male'" class="main-img-user"><img alt="" src="assets/img/male.png"></div>
+											<div v-if="!images && gender != 'Male'" class="main-img-user"><img alt="" src="assets/img/female.png"></div>											
 											<div class="ms-3 my-auto">
-												<h6>{{ signinInfo.username }}</h6><span> User Type: {{ signinInfo.usertype }}</span>
+												<h6>{{ name }}</h6><span> User type: {{ signinInfo.usertype }}</span>
 											</div>
 										</div>
 									</div>
-									<a class="dropdown-item" href=""><i class="bx bx-user-circle"></i>Profile</a>
-									<a class="dropdown-item" href=""><i class="bx bx-cog"></i> Edit Profile</a>
-									<a class="dropdown-item" href=""><i class="bx bxs-inbox"></i>Inbox</a>
-									<a class="dropdown-item" href=""><i class="bx bx-envelope"></i>Messages</a>
-									<a class="dropdown-item" href=""><i class="bx bx-slider-alt"></i> Account
+									<a class="dropdown-item disabled" href=""><i class="bx bx-user-circle"></i>Profile</a>
+									<a class="dropdown-item disabled" href=""><i class="bx bx-cog"></i> Edit Profile</a>
+									<a class="dropdown-item disabled" href=""><i class="bx bxs-inbox"></i>Inbox</a>
+									<a class="dropdown-item disabled" href=""><i class="bx bx-envelope"></i>Messages</a>
+									<a class="dropdown-item disabled" href=""><i class="bx bx-slider-alt"></i> Account
 										Settings</a>
 									<a class="dropdown-item" href="" @click="signOut()"><i class="bx bx-log-out"></i> Sign out</a>
 								</div>
@@ -156,11 +157,11 @@
 
 
 			<!-- Footer opened -->
-			<!-- <div class="main-footer ht-40" v-if="isSignin">
+			<div class="main-footer ht-40" v-if="isSignin">
 				<div class="container-fluid pd-t-0-f ht-100p">
 					<span>Copyright © 2022 <a href="#">XPPL</a>. Designed by <a href="#">Chamlong</a> All rights reserved.</span>
 				</div>
-			</div> -->
+			</div>
 			<!-- Footer closed -->
 
 		</div>
@@ -178,9 +179,11 @@ export default {
         return {
             isSignin: false,
             appClass: '',
-            signinInfo: []
-
-            
+            signinInfo: [],
+			name: '',
+			fullname: '',
+			gender: '',
+			images: '',
         };
     },
 
@@ -189,10 +192,8 @@ export default {
     },
 
     methods: {
-
-
         signOut(){
-            this.$axios.post("api/signout").then((response) => {
+            this.$axios.post("api/signOut").then((response) => {
                 if(response.data.success){
                     window.location.href = "/" // ໄປໜ້າທຳອິດ
                 } else {
@@ -202,20 +203,37 @@ export default {
                 console.error(error);
             });
         },
-        
+		
+		getProfile(){
+			this.$axios.post('api/profile',{
+					userid : this.signinInfo.userid		
+				}).then((response) =>{
+					this.images = response.data[0].images;
+					this.fullname = response.data[0].fullname;
+					this.name = response.data[0].name;
+					this.gender = response.data[0].gender;
+				}).catch((error)=>{
+					console.log(error);
+				})
+		},
+
     },
 
     created(){
 
         // console.log("ສະຖານະ Login: "+window.Laravel.isLoggedin_laravel);
+		// console.log(window.Laravel.user);
+
         if(window.Laravel.isLoggedin_laravel){
             this.isSignin = true;
             this.appClass = "main-content app-content";
-            this.signinInfo = window.Laravel.user
+            this.signinInfo = window.Laravel.user;
+			this.getProfile();
         } else {
-            this.isSignin = false;
+			this.isSignin = false;
             this.appClass = "";
         }
+		
   }
 };
 </script>
@@ -241,14 +259,14 @@ export default {
         left: 10px;
         top: 50%;
         transform: translateY(-50%);
-        color: gray;
+        /* color: gray; */
     }
 
     .search-c:hover{
-        background: #F1F3F4;
+        background: #E9EBEC;
     }
 
-    .search-c-i{ 
+    .search-c{ 
         position: absolute;
         z-index: 999;
         top: 50%;
@@ -259,6 +277,13 @@ export default {
         color: gray;
         border-radius: 50px;
     }
+
+	.btn-i:hover{
+		background: #E9EBEC;
+	}
+	.btn-i{
+		border-radius: 50px;
+	}
 
 
 </style>

@@ -65,7 +65,7 @@ export default {
 
     methods: {
         getNameLK(){
-            this.$axios.get('api/nameLK')
+            this.$axios.get('api/lookup/name')
             .then((res)=>{
                 this.nameLK = res.data;
             })
@@ -83,7 +83,7 @@ export default {
                         this.textErr = "";
 
                         /// ທຳການຍິງຂໍ້ມູນ ສົ່ງໄປ Back-end ໂດຍໃຊ້ axios
-                        this.$axios.post("api/signup",{   
+                        this.$axios.post("api/signUp",{   
                             fullname: this.fullname,
                             username: this.username,
                             password: this.password1

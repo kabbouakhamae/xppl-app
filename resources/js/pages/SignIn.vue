@@ -57,7 +57,7 @@ export default {
                 this.showErr = false;
                 this.textErr = "";
 
-                this.$axios.post("api/signin",{   
+                this.$axios.post("api/signIn",{   
                         username: this.username,
                         password: this.password
                     }).then((response) => {                           

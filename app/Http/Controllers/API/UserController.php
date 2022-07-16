@@ -22,7 +22,7 @@ class UserController extends Controller
                 $message = "This username already used!";
             } else {  // ບໍ່ມີອີເມວ
                 $user = new User();
-                $user->user_id = $request->fullname;
+                $user->userid = $request->fullname;
                 $user->username = $request->username;
                 $user->password = Hash::make($request->password);
                 $user->save();
@@ -79,6 +79,12 @@ class UserController extends Controller
         ];
 
         return response()->json($response);
+    }
+
+    public function profile(Request $request){
+        $param = $request->userid;
+        $profile = DB::select('exec uspProfile ?', [$param]);
+        return $profile;
     }
 
 

@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use DB;
 
-use Illuminate\Support\Facades\Storage;
-use File;
-use Response;
-// use App\Images;
-
 
 class TestController extends Controller
 {
@@ -96,6 +91,14 @@ class TestController extends Controller
 
         return response()->download(public_path('assets/files/'.$file));
 
+    }
+
+    public function deleteFile($file){
+        DB::delete('delete from files where files = ?', [$file]);
+
+        if(file_exists(public_path('assets/files/'.$file))){
+            unlink(public_path('assets/files/'.$file));
+        }
     }
 
 
