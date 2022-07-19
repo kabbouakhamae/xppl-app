@@ -63,8 +63,8 @@ class LookupController extends Controller
     }
 
     public function name(){
-        $nameList = DB::select('exec uspNamelist');
-        return $nameList;
+        $name = DB::select('exec uspEmpName');
+        return $name;
     }
 
 

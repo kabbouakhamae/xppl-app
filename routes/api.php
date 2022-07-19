@@ -26,14 +26,16 @@ Route::post('profile', [UserController::class, 'profile']);
 
 Route::group(['prefix' => 'employee', 'middlewar' => 'auth:santum'], function(){
     Route::get('/', [EmployeeController::class, 'index']);
-    Route::get('/newUserid', [EmployeeController::class, 'newUserid']);
-    Route::post('/empInsert', [EmployeeController::class, 'empInsert']);
-    Route::post('/edit/{userid}', [EmployeeController::class, 'edit']);
-    Route::post('/empUpdate', [EmployeeController::class, 'empUpdate']);
-    Route::post('/preview/{userid}', [EmployeeController::class, 'preview']);
-    Route::post('/delete/{userid}', [EmployeeController::class, 'delete']);
-    Route::post('/detail/{userid}', [EmployeeController::class, 'detail']);
-    Route::post('/editDetail/{id}', [EmployeeController::class, 'editDetail']);
+    Route::post('/add', [EmployeeController::class, 'add']);
+    Route::post('/update', [EmployeeController::class, 'update']);
+    Route::post('/edit/{id}', [EmployeeController::class, 'edit']);
+    Route::post('/delete/{id}', [EmployeeController::class, 'delete']);
+    Route::post('/preview/{id}', [EmployeeController::class, 'preview']);
+    Route::post('/detail/{id}', [EmployeeController::class, 'detail']);
+    Route::post('/detailEdit/{id}', [EmployeeController::class, 'detailEdit']);
+    Route::post('/detailDel/{id}', [EmployeeController::class, 'detailDel']);
+    Route::post('/detailAdd', [EmployeeController::class, 'detailAdd']);
+    Route::post('/detailUpdate', [EmployeeController::class, 'detailUpdate']);
 });
 
 

@@ -121,7 +121,7 @@
 
 
 
-                <div class="table-responsive mg-t-25">
+                <!-- <div class="table-responsive mg-t-25">
                     <table class="table main-table-reference table-hover text-nowrap mg-b-0 mg-t-10">
                         <thead>
                             <tr>
@@ -141,16 +141,74 @@
                             
                         </tbody>
                     </table>
-                </div>
+                </div> -->
 
-            <i class="fa fa-minus-circle cursor-pointer text-warning"></i>
+            <!-- <i class="fa fa-minus-circle cursor-pointer text-warning"></i>
             <i class="fa fa-plus-circle cursor-pointer text-info"></i> |  
             <i class="fa fa-times-circle cursor-pointer text-danger"></i>
             <i class="fa fa-edit cursor-pointer text-warning mb-5"></i>
 
             <div class=" pos-relative">
-                <button class="btn btn-icon btn-sm btn-i"><i class="fa fa-plus-circle cur-pointer text-primary"></i></button>
+                <button class="btn btn-icon btn-sm btn-i">
+                    
+                    <i class="fa fa-plus-circle cur-pointer text-primary"></i></button>
+            </div> -->
+
+            <!-- <td class="text-center">
+                <span class="label text-danger d-flex">
+                    <div class="dot-label bg-danger me-1"></div> banned
+                </span>
+            </td>
+                
+
+            <div class="main-header-message ">
+                <span class=" pulse-danger"></span>
+            </div> -->
+
+
+            <div>
+                <button class="btn btn-icon btn-sm btn-i wd-30 ht-30" data-bs-toggle="dropdown">
+                    <i class="mdi mdi-dots-vertical"></i>
+                </button>
+                
+                <div  class="dropdown-menu tx-13">
+                    <div class="dropdown-item cur-pointer">
+                        <i class="fe fe-search me-2"></i><span>Preview</span>
+                    </div>
+                    <div class="dropdown-item cur-pointer">
+                        <i class="fe fe-edit me-2"></i><span>Edit</span>
+                    </div>
+                    <div class="dropdown-item cur-pointer">
+                        <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                    </div>
+		        </div>
             </div>
+
+
+<div class="d-flex justify-content-between">
+									<h4 class="card-title mg-b-0">USERS TABLE</h4>
+									<i class="mdi mdi-dots-horizontal text-gray"></i>
+								</div>
+
+
+            <!-- <div class="dropdown">
+                <button class="btn btn-primary" data-bs-toggle="dropdown"  type="button">
+                    
+                    <i class="fa fa-ellipsis-h ms-1   "></i>
+                
+                </button>
+
+                <div  class="dropdown-menu tx-13">
+                    <a class="dropdown-item" href="#">Preview</a>
+                    <a class="dropdown-item" href="#">Edit</a>
+                    <a class="dropdown-item" href="#">Delete</a>
+                </div>
+
+            </div> -->
+	
+
+
+
 
         </div>
     </div>
@@ -418,6 +476,7 @@ export default {
 
         
     }
+
 
 
 

@@ -6,8 +6,7 @@ import SignIn from "../pages/SignIn.vue";
 import SignUp from "../pages/SignUp.vue";
 import Employee from "../pages/Employee.vue";
 import test from "../pages/test.vue";
-import sport from "../pages/sport.vue";
-import display from "../pages/display.vue";
+
 
 
 
@@ -37,16 +36,7 @@ const routes =[
         path: "/test",
         component: test
     },
-    {
-        name: "sport-page",
-        path: "/sport",
-        component: sport
-    },
-    {
-        name: "display-page",
-        path: "/display",
-        component: display
-    },
+
 
 
 

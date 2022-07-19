@@ -16,7 +16,7 @@ class UserController extends Controller
     //
     public function signUp(Request $request){
         try{
-            $userCheck = User::where('username',$request->username);
+            $userCheck = User::where('username', $request->username);
             if($userCheck->count()){  /// ກວດຊອບອີເມວໃນຖານຂໍ້ມູນ
                 $success = false;
                 $message = "This username already used!";
@@ -31,7 +31,6 @@ class UserController extends Controller
                 $message = "Sign up completed!";
             }
         } catch (\Illnminate\Database\QueryException $ex) {
-            //throw $th;
             $success = false;
             $message = $ex->getMessage();
         }
@@ -81,10 +80,30 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function profile(Request $request){
-        $param = $request->userid;
-        $profile = DB::select('exec uspProfile ?', [$param]);
-        return $profile;
+    public function profile(){
+        $id = auth()->user()->userid;
+        $data = DB::table('emp_names as a')
+                    ->join('users as b', 'a.id','b.userid')
+                    ->select('a.gender', 'a.name', 'a.surname', 'a.photo', 'b.username', 'b.usertype', 'b.department')
+                    ->where('a.id', $id)
+                    ->first();
+        
+        if ($data->surname != null && $data->surname != ""){
+            $fullname = $data->name." ".$data->surname;
+        } else {
+            $fullname = $data->name;
+        }
+
+        $result =[
+            'fullname' => $fullname,
+            'gender' => $data->gender,
+            'name' => $data->name,
+            'photo' => $data->photo,
+            'username' => $data->username,
+            'usertype' => $data->usertype,
+            'dept' => $data->department,
+        ];
+        return $result;
     }
 
 

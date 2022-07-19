@@ -21,23 +21,24 @@ class EmployeeController extends Controller{
     }
     
     public function index(Request $request){
-        // $param1 = auth()->user()->department;
-        $param2 = $request->search.'%';
-        // $param3 = $request->search.'%';
+        $name = $request->search.'%';
+        $namelao = $request->search.'%';
         // $param3 = '%'.$request->search.'%';
 
+        $usertype = auth()->user()->usertype;
+        if ($usertype != 'full'){
+            $dept = auth()->user()->department;
+        } else {
+            $dept = '%';
+        }
+
         $emp = $this->paginateArray(
-            DB::select('exec uspEmployeeList ?', [$param2])
+            DB::select('exec uspEmpList ?, ?, ?', [$name, $namelao, $dept])
         );
         return $emp;
     }
 
-    public function newUserid(){
-        $userid = DB::select("exec uspEmpNewUserid");
-        return $userid;
-    }
-
-    public function empInsert(Request $request){
+    public function add(Request $request){
         try{
             $checkName = DB::table('emp_names')
                         ->where('name', $request->name)
@@ -47,46 +48,54 @@ class EmployeeController extends Controller{
                 $message = "This name already in database!";
             } else {
 
-                if($request->hasFile('file')){
-                    $filename = $request->userid.'-'.time().'.'.$request->file->getClientOriginalExtension();
-                    $request->file->move('assets/img/profile/', $filename);
+                $maxUserid = DB::table('emp_names')->max('id');
+                $newUserid = $maxUserid + 1;
+
+                if($request->hasFile('photo')){
+                    $filename = $newUserid.'-'.time().'.'.$request->photo->getClientOriginalExtension();
+                    $request->photo->move('assets/img/profile/', $filename);
                 } else {
                     $filename = null;
                 }
 
-                $param = [
-                    $request->userid,
-                    $request->gender,
-                    $request->name,
-                    $request->surname,
-                    $request->phone,
-                    $request->namelao,
-                    $request->surnamelao,
-                    $request->birthday,
-                    $request->email,
-                    $request->country,
-                    $request->province,
-                    $request->district,
-                    $request->village,
-                    $request->startdate,
-                    $request->enddate,
-                    $request->position,
-                    $request->status,
-                    $request->contract,
-                    $request->levels,
-                    $request->empid,
-                    $request->scanid,
-                    $request->foodid,
-                    $request->roster,
-                    $request->scantimes,
-                    $request->hours,
-                    $request->site,
-                    $request->dept,
-                    $request->section,
-                    $request->crew,
-                    $filename
-                ];
-                DB::insert('exec uspEmpInsert ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', $param);
+                // Insert to employee names
+                DB::table('emp_names')->insert([
+                    'id' => $newUserid,
+                    'gender' => $request->gender,
+                    'name' => $request->name,
+                    'surname' => $request->surname,
+                    'namelao' => $request->namelao,
+                    'surnamelao' => $request->surnamelao,
+                    'phone' => $request->phone,
+                    'email' => $request->email,
+                    'birthday' => $request->birthday,
+                    'country' => $request->country,
+                    'province' => $request->province,
+                    'district' => $request->district,
+                    'village' => $request->village,
+                    'photo' => $filename
+                ]);
+                
+                // Insert to employee details
+                DB::table('emp_details')->insert([
+                    'userid' => $newUserid,
+                    'startdate' => $request->startdate,
+                    'enddate' => $request->enddate,
+                    'position' => $request->position,
+                    'status' => $request->status,
+                    'site' => $request->site,
+                    'department' => $request->dept,
+                    'section' => $request->section,
+                    'crew' => $request->crew,
+                    'empid' => $request->empid,
+                    'scanid' => $request->scanid,
+                    'foodid' => $request->foodid,
+                    'roster' => $request->roster,
+                    'scantimes' => $request->scantimes,
+                    'working_hrs' => $request->hours,
+                    'levels' => $request->levels,
+                    'contract' => $request->contract
+                ]);
 
                 $success = true;
                 $message = "Insert completed!";
@@ -102,22 +111,24 @@ class EmployeeController extends Controller{
         return response()->json($response);
     }
 
-    public function empUpdate(Request $request){
-        if($request->hasFile('file')){
-            if($request->imageName != "" && $request->imageName){
-                if(file_exists('assets/img/profile/'.$request->imageName)){
-                    unlink('assets/img/profile/'.$request->imageName);
+    public function update(Request $request){
+        if($request->hasFile('photo')){
+            $data = DB::table('emp_names')->find($request->id);
+
+            if($data->photo != '' && $data->photo != null){
+                if(file_exists('assets/img/profile/'.$data->photo)){
+                    unlink('assets/img/profile/'.$data->photo);
                 }
             }
 
-            $filename = $request->userid.'-'.time().'.'.$request->file->getClientOriginalExtension();
-            $request->file->move('assets/img/profile/', $filename);
+            $filename = $request->id.'-'.time().'.'.$request->photo->getClientOriginalExtension();
+            $request->photo->move('assets/img/profile/', $filename);
         } else {
             $filename = 'no pic';
         }
 
         $param = [
-            $request->userid,
+            $request->id,
             $request->gender,
             $request->name,
             $request->surname,
@@ -135,9 +146,9 @@ class EmployeeController extends Controller{
         DB::update("exec uspEmpUpdate ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?", $param);
     }
 
-    public function edit($userid){
-        $edit = DB::select('select * from emp_names where userid = ?', [$userid]);
-        return $edit;
+    public function edit($id){
+        $edit = DB::table('emp_names')->find($id);
+        return $edit;            
     }
 
     public function preview($userid){
@@ -145,32 +156,98 @@ class EmployeeController extends Controller{
         return $empPrev;
     }
 
-    public function delete($userid){
-            $images = DB::table('emp_names')
-                    ->where('userid',$userid)
-                    ->first();
-        
-        // return $images->images;
-        
-        if($images->images != "" && $images->images){
-            if(file_exists('assets/img/profile/'.$images->images)){
-                unlink('assets/img/profile/'.$images->images);
+    public function delete($id){
+        $data = DB::table('emp_names')->find($id);
+
+        if($data->photo != '' && $data->photo != null){
+            if(file_exists('assets/img/profile/'.$data->photo)){
+                unlink('assets/img/profile/'.$data->photo);
             }
         }
-        // DB::delete('delete from emp_names where userid = ?', [$userid]);
-        DB::table('emp_names')->where('userid', $userid)->delete();
+        DB::delete('delete from emp_names where id = ?', [$id]);
+    }
+
+    public function detail($id){
+        $detail = DB::select('select * from emp_details where userid = ?', [$id]);
+        return $detail;
+    }
+
+    public function detailAdd(Request $request){
+        $check = DB::table('emp_details')
+                        ->where('userid', $request->userid)
+                        ->where('startdate', $request->startdate);
+        
+        if ($check->count()){
+            $success = false;
+            $message = 'Duplicate record!';
+        } else {
+
+            DB::table('emp_details')->insert([
+                'userid' => $request->userid,
+                'startdate' => $request->startdate,
+                'enddate' => $request->enddate,
+                'position' => $request->position,
+                'status' => $request->status,
+                'site' => $request->site,
+                'department' => $request->dept,
+                'section' => $request->section,
+                'crew' => $request->crew,
+                'empid' => $request->empid,
+                'scanid' => $request->scanid,
+                'foodid' => $request->foodid,
+                'roster' => $request->roster,
+                'scantimes' => $request->scantimes,
+                'working_hrs' => $request->hours,
+                'levels' => $request->levels,
+                'contract' => $request->contract,
+                'remarks' => $request->remarks
+            ]);
+
+            $success = true;
+            $message = "Insert completed!";
+        }
+
+        $response = [
+            'success' => $success,
+            'message' => $message
+        ];
+        return response()->json($response);
+    }
+
+    public function detailEdit($id){
+        $detail = DB::table('emp_details')->find($id);
+        return $detail;
+    }
+
+    public function detailUpdate(Request $request){
+        
+        $param = [
+            $request->id,
+            $request->startdate,
+            $request->enddate,
+            $request->position,
+            $request->status,
+            $request->site,
+            $request->dept,
+            $request->section,
+            $request->crew,
+            $request->empid,
+            $request->scanid,
+            $request->foodid,
+            $request->roster,
+            $request->scantimes,
+            $request->hours,
+            $request->levels,
+            $request->contract,
+            $request->remarks
+        ];
+
+        DB::update("exec uspEmpDetailUpdate ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?", $param);
 
     }
 
-    public function detail($userid){
-        // $details = DB::select('select * from emp_details');
-        $details = DB::select('select * from emp_details where userid = ?', [$userid]);
-        return $details;
-    }
-
-    public function editDetail($id){
-        $details = DB::select('select * from emp_details where id = ?', [$id]);
-        return $details;
+    public function detailDel($id){
+        DB::delete('delete from emp_details where id = ?', [$id]);
     }
 
 

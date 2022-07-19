@@ -7,7 +7,6 @@
                     <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                         <div class="card pd-20">
                             <h5>Sign Up</h5>
-
                             <div class="form-group multi-color mt-5">
                                 <!-- <label class="mb-0">Name</label>  -->
                                 <Multiselect :options="nameLK" placeholder="Full name" searchable = true v-model="fullname" />
@@ -24,15 +23,11 @@
                                 <input class="form-control" type="password" placeholder="Confirm password" v-model="password2" @keyup.enter="signUp()">
                             </div>
 
-
-
                             <button class="btn btn-primary btn-block mt-4" @click="signUp()">Sign Up</button>
                             <div class="alert alert-warning mt-2 mb-0" role="alert" v-if="showErr">
                                 <strong>Warning!</strong> {{ textErr }}
                             </div>
                             <p class=" text-muted mt-3">Already have an account? <router-link to="/signin"> &nbsp; Sign in</router-link></p>
-
-
                         </div>
                     </div>
                 </div>
@@ -48,13 +43,13 @@ export default {
 
     data() {
         return {
-            nameLK: [],
-            fullname: '',
-            username: '',
-            password1: '',
-            password2: '',
-            showErr: false,
-            textErr: ''
+            nameLK: []
+            ,fullname: ""
+            ,username: ""
+            ,password1: ""
+            ,password2: ""
+            ,showErr: false
+            ,textErr: ""
             
         };
     },
@@ -72,7 +67,7 @@ export default {
         },
 
         signUp(){
-            if(this.fullname == '' || this.username =='' || this.password1 ==''){
+            if(this.fullname == null || this.username == "" || this.password1 == ""){
                 this.showErr = true;
                 this.textErr = "Please fill out all required fields!";
             } else {
@@ -84,9 +79,9 @@ export default {
 
                         /// ທຳການຍິງຂໍ້ມູນ ສົ່ງໄປ Back-end ໂດຍໃຊ້ axios
                         this.$axios.post("api/signUp",{   
-                            fullname: this.fullname,
-                            username: this.username,
-                            password: this.password1
+                            fullname: this.fullname
+                            ,username: this.username
+                            ,password: this.password1
                         }).then((response) => {
                             
                             if(response.data.success){
@@ -116,7 +111,6 @@ export default {
         if(window.Laravel.isLoggedin_laravel){
             window.location.href = "/";
         }
-
         next();
 	}
 };
