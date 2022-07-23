@@ -1,9 +1,7 @@
 <template>
     <div>
-        
-
-    
-<!-- Page -->
+           
+		<!-- Page -->
 		<div class="page">
 			<!-- main-sidebar -->
 			<div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
@@ -20,10 +18,16 @@
 					</div>
 					<ul class="side-menu">
 						<li class="side-item side-item-category">{{ dept }}</li>
-                        <li class="slide " @click="login_click">
-							<router-link class="side-menu__item" :class="login_act" to="/employee">
-								<span class="side-menu__label"><i class="fa fa-users text-center wd-20"></i><span class="mx-2">Staff</span></span>
-								<span class="badge bg-success text-light" id="bg-side-text">1</span>
+						<li class="slide" @click="homeClick()">
+							<router-link class="side-menu__item " :class="homeAct"  to="/">
+								<span class="side-menu__label"><i class="fa fa-home text-center wd-20"></i><span class="mx-2">Home</span></span>
+							</router-link>
+						</li>
+
+                        <li class="slide " @click="empClick()">
+							<router-link class="side-menu__item" :class="empAct" to="/employee">
+								<span class="side-menu__label"><i class="fa fa-users text-center wd-20"></i><span class="mx-2">Employee</span></span>
+								<!-- <span class="badge bg-success rounded-circle wd-15 ht-15 text-light" id="bg-side-text">1</span> -->
 							</router-link>
 						</li>
 
@@ -35,54 +39,66 @@
 
 						
 
-                        <li class="slide" :class="otherinfo_exp" @click="otherinfo_click">
-							<a class="side-menu__item active" :class="otherinfo_act" href="#">
-								<span class="side-menu__label"><i class="fa fa-info-circle text-center wd-20"></i><span class="mx-2">Other Info</span></span>
+                        <li class="slide" :class="infoExp" @click="infoClick()">
+							<a class="side-menu__item" :class="infoAct" href="#">
+								<span class="side-menu__label"><i class="fa fa-info text-center wd-20"></i><span class="mx-2">Other Info</span></span>
 								<i class="angle fe fe-chevron-down"></i>
 							</a>
 							<ul class="slide-menu">
-								<li><router-link class="slide-item" @click="otherinfosub_click" to="/annualLeave">Annual Leave</router-link></li>
-								<li><router-link class="slide-item" @click="otherinfosub_click" to="/leaveInfo">Leave Info</router-link></li>
-								<li><router-link class="slide-item" @click="otherinfosub_click" to="/transport">Daily Transport</router-link></li>			
+								<li><router-link class="slide-item" :class="alAct" @click="alClick()" to="/annualLeave">Annual Leave</router-link></li>
+								<li><router-link class="slide-item" :class="leaveAct" @click="leaveClick()" to="/leaveInfo">Leave Info</router-link></li>
+								<li><router-link class="slide-item" :class="transAct" @click="transClick()" to="/transport">Daily Transport</router-link></li>			
 							</ul>
 						</li>
 
-
-
-                        <div v-if="fuel">
+						<!-- Fuel -->
+                        <!-- <div v-if="fuel">
 							<li class="side-item side-item-category mt-4">Fuel</li>
 							<li class="slide" :class="consump_exp" @click="consump_click">
-							<a class="side-menu__item" :class="consump_act" href="#">
-									<span class="side-menu__label"><i class="fa fa-info-circle text-center wd-20"></i><span class="mx-2">Fuel Consumption</span></span>
+								<a class="side-menu__item" :class="consump_act" href="#">
+									<span class="side-menu__label"><i class="fas fa-tachometer-alt text-center wd-20"></i><span class="mx-2">Fuel Consumption</span></span>
 									<i class="angle fe fe-chevron-down"></i>
 								</a>
 								<ul class="slide-menu">
-									<li><a class="slide-item" @click="consumpsub_click" href="/register">Register</a></li>
+									<li><a class="slide-item" @click="consumpsub_click" href="#">Register</a></li>
 									<li><a class="slide-item" @click="consumpsub_click" href="#">Draggablecards</a></li>
 									<li><a class="slide-item" @click="consumpsub_click" href="#">Range-slider</a></li>
 									<li><a class="slide-item" @click="consumpsub_click" href="#">Calendar</a></li>
 								</ul>
 							</li>
-						</div>
+						</div> -->
 
-						<div v-if="safety">
+						<!-- SHE -->
+						<div v-if="sheShow">
 							<!-- <li class="side-item side-item-category mt-4">Safety Dept.</li> -->
-							<li class="slide" :class="consump_exp" @click="consump_click">
-							<a class="side-menu__item" :class="consump_act" href="#">
-									<span class="side-menu__label"><i class="fa fa-info-circle text-center wd-20"></i><span class="mx-2">Safety</span></span>
+
+							<li class="slide">
+								<a class="side-menu__item" href="#">
+									<span class="side-menu__label"><i class="fa fa-fire-extinguisher text-center wd-20"></i><span class="mx-2">SHE</span></span>
 									<i class="angle fe fe-chevron-down"></i>
 								</a>
 								<ul class="slide-menu">
-									<li><a class="slide-item" @click="consumpsub_click" href="/register">Register</a></li>
-									<li><a class="slide-item" @click="consumpsub_click" href="#">Draggablecards</a></li>
-									<li><a class="slide-item" @click="consumpsub_click" href="#">Range-slider</a></li>
-									<li><a class="slide-item" @click="consumpsub_click" href="#">Calendar</a></li>
+									<li><a class="slide-item" href="#">Register</a></li>
+									<li><a class="slide-item" href="#">Draggablecards</a></li>
+									<li><a class="slide-item" href="#">Range-slider</a></li>
+									<li><a class="slide-item" href="#">Calendar</a></li>
 								</ul>
 							</li>
 						</div>
 						
-	
-	
+						<!-- Setting -->
+						<li class="slide" :class="settExp" @click="settClick()">
+							<a class="side-menu__item" :class="settAct" href="#">
+								<span class="side-menu__label"><i class="fa fa-cog text-center wd-20"></i><span class="mx-2">Setting</span></span>
+								<i class="angle fe fe-chevron-down"></i>
+							</a>
+							<ul class="slide-menu">
+								<li><a class="slide-item" :class="lookupAct" @click="lookupClick()" href="#">Lookup</a></li>
+								<li v-if="permissShow"><router-link class="slide-item" :class="permissAct" @click="permissClick()" to="/permiss">Permission</router-link></li>
+							</ul>
+						</li>
+
+
 						
 					</ul>
 				</div>
@@ -125,7 +141,7 @@
 										</svg></a>
 								</li>
 
-								<li class="dropdown main-profile-menu nav nav-item nav-link">
+								<li class="dropdown main-profile-menu nav nav-item nav-link p-0">
 									<a class="profile-user d-flex pt-2" href="">
 										<p class="pt-2 me-2 text-muted text-capitalize">{{ fullname }}</p>
 										<img alt="" v-if="photo" :src="'assets/img/profile/'+ photo">
@@ -198,8 +214,25 @@ export default {
 			,usertype: ''
 			,username: ''
 			,dept: ''
-			,fuel: false
-			,safety: false
+			,fuel: true
+			,safety: true
+
+			,homeAct: ''
+			,empAct: ''
+			,infoAct: ''
+			,settAct: ''
+			,alAct: ''
+			,leaveAct: ''
+			,transAct: ''
+			,lookupAct: ''
+			,permissAct: ''
+
+			,settExp: ''
+			,infoExp: ''
+
+			,sheShow: ''
+			,miniShow: ''
+			,permissShow: ''
         };
     },
 
@@ -219,7 +252,79 @@ export default {
                 console.error(error);
             });
         },
+
+		homeClick(){
+			this.clearAct();
+			this.homeAct = 'active';
+		},
+
+		empClick(){
+			this.clearAct();
+			this.empAct = 'active';
+		},
 		
+		alClick(){
+			this.clearAct();
+			this.infoAct = 'active';
+			this.alAct = 'active';
+		},
+
+		leaveClick(){
+			this.clearAct();
+			this.infoAct = 'active';
+			this.leaveAct = 'active';
+		},
+
+		transClick(){
+			this.clearAct();
+			this.infoAct = 'active';
+			this.transAct = 'active';
+		},
+
+		lookupClick(){
+			this.clearAct();
+			this.settAct = 'active';
+			this.lookupAct = 'active';
+		},
+
+		permissClick(){
+			this.clearAct();
+			this.settAct = 'active';
+			this.permissAct = 'active';
+		},
+
+		infoClick(){
+			if (this.infoExp){
+				this.infoExp = '';
+			} else {
+				this.settExp = '';
+				this.infoExp = 'is-expanded';
+			}
+		},
+
+		settClick(){
+			if (this.settExp){
+				this.settExp = '';
+			} else {
+				this.infoExp = '';
+				this.settExp ='is-expanded';
+			}
+		},
+
+		clearAct(){
+			this.homeAct ='';
+			this.empAct = '';
+			this.alAct = '';
+			this.leaveAct = '';
+			this.transAct = '';
+			this.lookupAct = '';
+			this.permissAct = '';
+			this.infoAct = '';
+			this.settAct = '';
+
+			this.infoExp = '';
+			this.settExp = '';
+		},
 		// getProfile(){
 		// 	this.$axios.post('api/profile'
 		// 		).then((response) =>{
@@ -237,27 +342,36 @@ export default {
 
 		async getProfile(){
 			const res = await axios.post('api/profile')
-				this.fullname = res.data.fullname;
-				this.name = res.data.name;
-				this.gender = res.data.gender;
-				this.usertype = res.data.usertype;
-				this.username = res.data.username;
-				this.photo = res.data.photo;
-				this.dept = res.data.dept;
 
 
-				if (this.usertype == 'full'){
-					this.dept = 'All Department';
-					this.fuel = true;
-					this.safety = true;
-				} else {
-					if (this.dept == 'Risk'){
-						this.safety = true;
-						this.fuel = false;
-					} else if (this.dept == 'Mining'){
-						this.fuel = true;
-					}
-				}
+				this.fullname = res.data[0].fullname;
+				this.name = res.data[0].name;
+				this.gender = res.data[0].gender;
+				this.username = res.data[0].username;
+				this.photo = res.data[0].photo;
+				this.dept = res.data[0].department;
+				this.sheShow = Boolean(res.data[0].she);
+				this.miniShow = Boolean(res.data[0].mini);
+				this.permissShow = Boolean(res.data[0].permiss);
+
+
+
+
+
+				// if (this.usertype == 'full'){
+				// 	this.dept = 'All Department';
+				// 	this.fuel = true;
+				// 	this.safety = true;
+				// } else {
+				// 	if (this.dept == 'Risk'){
+				// 		this.safety = true;
+				// 		this.fuel = false;
+				// 	} else if (this.dept == 'Mining'){
+				// 		this.fuel = true;
+				// 	}
+				// }
+
+				console.log("Profile-->", res.data);
 
 		}
     },
@@ -270,6 +384,7 @@ export default {
         if(window.Laravel.isLoggedin_laravel){
             this.isSignin = true;
             this.appClass = "main-content app-content";
+			this.homeAct = 'active';
 			this.getProfile();
         } else {
 			this.isSignin = false;

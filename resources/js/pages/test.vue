@@ -172,8 +172,8 @@
                 </button>
                 
                 <div  class="dropdown-menu tx-13">
-                    <div class="dropdown-item cur-pointer">
-                        <i class="fe fe-search me-2"></i><span>Preview</span>
+                    <div class="dropdown-item cur-pointer dddd">
+                        <i class="fe fe-search me-2 dddd"></i><span class="dddd">Preview</span>
                     </div>
                     <div class="dropdown-item cur-pointer">
                         <i class="fe fe-edit me-2"></i><span>Edit</span>
@@ -185,10 +185,6 @@
             </div>
 
 
-<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">USERS TABLE</h4>
-									<i class="mdi mdi-dots-horizontal text-gray"></i>
-								</div>
 
 
             <!-- <div class="dropdown">
@@ -206,11 +202,154 @@
 
             </div> -->
 	
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
+            </div>
+
+            <!-- Default switch -->
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="customSwitches1" v-model="test1" @change='$emit("input", $event.target.checked)'>
+                <label class="custom-control-label" for="customSwitches1">Toggle this switch element</label>
+            </div>
+
+            <!-- <div class='form-check form-switch'>
+                <input class='form-check-input' type='checkbox' id='flexSwitchCheckDefault' v-model="test1" @change='$emit("input", $event.target.checked)'>
+                <label class='form-check-label' for='flexSwitchCheckDefault'>Default switch checkbox input</label>
+            </div> -->
+
+            {{ test1 }}
+
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        Toggle Switches
+                    </div>
+                    <p class="mg-b-20">It is Very Easy to Customize and it uses in your website apllication.</p>
+
+                    <div class="main-toggle-group-demo">
+                        <div class="main-toggle on">
+                            <span></span>
+                        </div>
+                        <div class="main-toggle main-toggle-secondary">
+                            <span></span>
+                        </div>
+                        <div class="custom-control custom-switch">
+                            <span></span>
+                        </div>
+                        <div class="main-toggle main-toggle-dark">
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="main-toggle-group-demo mg-t-10">
+                        <div class="main-toggle on">
+                            <span></span>
+                        </div>
+                        <div class="main-toggle main-toggle-secondary on">
+                            <span></span>
+                        </div>
+                        <div class="main-toggle main-toggle-success on">
+                            <span></span>
+                        </div>
+                        <div class="main-toggle main-toggle-dark on">
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+            
+            <div class="card-footer d-sm-flex">
+                <div class="mt-2 mb-2">
+                    <a href="#" class="me-3" data-bs-toggle="tooltip" title="" data-bs-original-title="Attach"><i class="bx bx-paperclip text-muted tx-22"></i></a>
+                    <a href="javascript:void(0)" class="me-3" data-bs-toggle="tooltip" title="" data-bs-original-title="Link"><i class="bx bx-link text-muted tx-22"></i></a>
+                    <a href="javascript:void(0)" class="me-3" data-bs-toggle="tooltip" title="" data-bs-original-title="Photos"><i class="bx bx-image text-muted tx-22"></i></a>
+                    <a href="javascript:void(0)" class="me-3" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete"><i class="bx bx-trash text-muted tx-22"></i></a>
+                </div>
+            </div>
 
 
+
+            <a href="#"><i class="bx bxs-download tx-18" data-bs-toggle="tooltip" title="" data-bs-original-title="Downloads"></i></a>
+
+
+            <div class="main-profile-social-list">
+                <div class="media">
+                    <div class="media-icon bg-primary-transparent text-primary">
+                        <i class="icon ion-logo-github"></i>
+                    </div>
+                    <div class="media-body">
+                        <span>Github</span> <a href="">github.com/spruko</a>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="media-icon bg-success-transparent text-success">
+                        <i class="icon ion-logo-twitter"></i>
+                    </div>
+                    <div class="media-body">
+                        <span>Twitter</span> <a href="">twitter.com/spruko.me</a>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <div class="media-icon bg-info-transparent text-info">
+                        <i class="icon ion-logo-linkedin"></i>
+                    </div>
+                    <div class="media-body">
+                        <span>Linkedin</span> <a href="">linkedin.com/in/spruko</a>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <div class="media-icon bg-danger-transparent text-danger">
+                        <i class="icon ion-md-link"></i>
+                    </div>
+                    <div class="media-body">
+                        <span>My Portfolio</span> <a href="">spruko.com/</a>
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- <div class="main-content-left main-content-left-mail card-body">
+            <a class="btn btn-primary btn-compose" href="" id="btnCompose">Compose</a>
+            <div class="main-mail-menu">
+                <nav class="nav main-nav-column mg-b-20">
+                    <a class="nav-link" href=""><i class="bx bxs-inbox"></i> Inbox <span>18</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-star"></i> Starred <span>8</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-alarm-snooze"></i> Snoozed <span>6</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-bookmarks"></i> Important <span>15</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-send"></i> Sent Mail <span>24</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-edit"></i> Drafts <span>2</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-message-error"></i> Spam <span>32</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-message-square-detail"></i> Chats <span>14</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-folder-open"></i> All Mail <span>652</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-book-content"></i> Contacts <span>547</span></a>
+                    <a class="nav-link" href=""><i class="bx bx-trash"></i> Trash <span>365</span></a>
+                </nav>
+                <label class="main-content-label main-content-label-sm">Settings</label>
+                <nav class="nav main-nav-column">
+                    <a class="nav-link active" href="#">Email Settings</a>
+                    <a class="nav-link" href="#">Account Information</a>
+                </nav>
+            </div>
+            </div> -->
+
+            <!-- <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="sr-only">Loading...</span>
+            </button>
+            <button class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Loading...
+            </button> -->
 
 
         </div>
+        
+
+
+
+
+
     </div>
 </template>
 
@@ -245,6 +384,10 @@ export default {
             ,newData: []
             ,fileData: []
             ,images: []
+            ,test1: false
+            ,test2: ''
+            ,btnDisabled: false
+            ,test: 'pointer-events: none'
         };
     },
 
@@ -253,11 +396,24 @@ export default {
     },
 
     methods: {
+        add(event) {
+            this.btnDisabled = true; // mutate data and let vue disable the element
+        },
+
+        getValue(){
+            this.$axios.get('/api/test/getVal')
+            .then(res => {
+                this.test1 = res.data[0].value;
+
+                console.log("------>", res.data);
+            })
+
+        },
 
         imageChange(){
             for (let i = 0; i < this.$refs.files.files.length; i++){
                 this.images.push(this.$refs.files.files[i]);
-                console.log(this.images);
+                console.log("----->",this.images);
             }
         },
 
@@ -444,11 +600,22 @@ export default {
 		},
 
       
+      		async getProfile(){
+			const res = await axios.post('api/profile')
+                this.test2 = res.data.permission;
+
+				console.log("Profile-->", res.data);
+
+		}
         
     },
 
     created(){
         this.getFile();
+        this.getValue();
+        this.getProfile();
+        
+    
     },
 };
 </script>
@@ -477,9 +644,10 @@ export default {
         
     }
 
-
-
-
+    .dddd:hover{
+        color: blue;
+        /* font-weight: bold; */
+    }
 
 
 </style>

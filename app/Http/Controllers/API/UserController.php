@@ -16,13 +16,13 @@ class UserController extends Controller
     //
     public function signUp(Request $request){
         try{
-            $userCheck = User::where('username', $request->username);
+            $userCheck = User::where('userid', $request->userid);
             if($userCheck->count()){  /// ກວດຊອບອີເມວໃນຖານຂໍ້ມູນ
                 $success = false;
-                $message = "This username already used!";
+                $message = "This employee already sign up!";
             } else {  // ບໍ່ມີອີເມວ
                 $user = new User();
-                $user->userid = $request->fullname;
+                $user->userid = $request->userid;
                 $user->username = $request->username;
                 $user->password = Hash::make($request->password);
                 $user->save();
@@ -62,9 +62,7 @@ class UserController extends Controller
             'success' => $success,
             'message' => $message
         ];
-
         return response()->json($response);
-
     }
 
     public function signOut(){
@@ -82,29 +80,47 @@ class UserController extends Controller
 
     public function profile(){
         $id = auth()->user()->userid;
-        $data = DB::table('emp_names as a')
-                    ->join('users as b', 'a.id','b.userid')
-                    ->select('a.gender', 'a.name', 'a.surname', 'a.photo', 'b.username', 'b.usertype', 'b.department')
-                    ->where('a.id', $id)
-                    ->first();
-        
-        if ($data->surname != null && $data->surname != ""){
-            $fullname = $data->name." ".$data->surname;
-        } else {
-            $fullname = $data->name;
-        }
+        $profile = DB::select('exec uspProfile ?', [$id]);
 
-        $result =[
-            'fullname' => $fullname,
-            'gender' => $data->gender,
-            'name' => $data->name,
-            'photo' => $data->photo,
-            'username' => $data->username,
-            'usertype' => $data->usertype,
-            'dept' => $data->department,
-        ];
-        return $result;
+        // $profile = DB::table('emp_details as a')
+        //             ->select('a.*')
+        //             ->join(DB::raw('(select userid, max(id) as mxid From emp_details Group by userid) as b'),
+        //                 function($join){
+        //                     $join->on('a.id', 'b.mxid');
+        //                 })
+        //             ->where('a.userid', $id)
+        //             ->first();
+        
+        
+        
+        return $profile;
     }
+
+    // public function profile(){
+    //     $id = auth()->user()->userid;
+    //     $data = DB::table('emp_names as a')
+    //                 ->join('users as b', 'a.id','b.userid')
+    //                 ->select('a.gender', 'a.name', 'a.surname', 'a.photo', 'b.username', 'b.usertype', 'b.department')
+    //                 ->where('a.id', $id)
+    //                 ->first();
+        
+    //     if ($data->surname != null && $data->surname != ""){
+    //         $fullname = $data->name." ".$data->surname;
+    //     } else {
+    //         $fullname = $data->name;
+    //     }
+
+    //     $result =[
+    //         'fullname' => $fullname,
+    //         'gender' => $data->gender,
+    //         'name' => $data->name,
+    //         'photo' => $data->photo,
+    //         'username' => $data->username,
+    //         'usertype' => $data->usertype,
+    //         'dept' => $data->department,
+    //     ];
+    //     return $result;
+    // }
 
 
 }

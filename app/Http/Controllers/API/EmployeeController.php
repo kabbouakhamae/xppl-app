@@ -23,19 +23,30 @@ class EmployeeController extends Controller{
     public function index(Request $request){
         $name = $request->search.'%';
         $namelao = $request->search.'%';
-        // $param3 = '%'.$request->search.'%';
 
-        $usertype = auth()->user()->usertype;
-        if ($usertype != 'full'){
-            $dept = auth()->user()->department;
-        } else {
+        $userid = auth()->user()->userid;
+        $data = DB::table('permission')->where('userid', $userid)->first();
+
+        if ($data->emp_list == 1){
             $dept = '%';
+        } else {
+            
+            $deptData = DB::table('emp_details as a')
+                            ->select('a.department')
+                            ->join(DB::raw('(select max(id) as mxid, userid from emp_details group by userid) as b'),
+                                function($join){
+                                    $join->on('a.id', 'b.mxid');
+                                })
+                            ->where('a.userid', $userid)
+                            ->first();
+
+            $dept = $deptData->department;
         }
 
-        $emp = $this->paginateArray(
+        $empList = $this->paginateArray(
             DB::select('exec uspEmpList ?, ?, ?', [$name, $namelao, $dept])
         );
-        return $emp;
+        return $empList;
     }
 
     public function add(Request $request){

@@ -9,7 +9,7 @@
                             <h5>Sign Up</h5>
                             <div class="form-group multi-color mt-5">
                                 <!-- <label class="mb-0">Name</label>  -->
-                                <Multiselect :options="nameLK" placeholder="Full name" searchable = true v-model="fullname" />
+                                <Multiselect :options="nameLK" placeholder="Full name" searchable = true v-model="userid" />
                             </div>
                             
                             <div class="form-group">
@@ -44,12 +44,12 @@ export default {
     data() {
         return {
             nameLK: []
-            ,fullname: ""
-            ,username: ""
-            ,password1: ""
-            ,password2: ""
+            ,userid: ''
+            ,username: ''
+            ,password1: ''
+            ,password2: ''
             ,showErr: false
-            ,textErr: ""
+            ,textErr: ''
             
         };
     },
@@ -67,7 +67,7 @@ export default {
         },
 
         signUp(){
-            if(this.fullname == null || this.username == "" || this.password1 == ""){
+            if(this.userid == null || this.username == "" || this.password1 == ""){
                 this.showErr = true;
                 this.textErr = "Please fill out all required fields!";
             } else {
@@ -79,7 +79,7 @@ export default {
 
                         /// ທຳການຍິງຂໍ້ມູນ ສົ່ງໄປ Back-end ໂດຍໃຊ້ axios
                         this.$axios.post("api/signUp",{   
-                            fullname: this.fullname
+                            userid: this.userid
                             ,username: this.username
                             ,password: this.password1
                         }).then((response) => {

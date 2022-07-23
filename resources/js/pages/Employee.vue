@@ -84,13 +84,13 @@
                                             <i class="mdi mdi-dots-horizontal pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
                                         </button>       
                                         <div  class="dropdown-menu tx-13">
-                                            <div class="dropdown-item cur-pointer" @click="empPrev(list.id)">
+                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="empPrev(list.id)">
                                                 <i class="fe fe-search me-2"></i><span>Preview</span>
                                             </div>
-                                            <div class="dropdown-item cur-pointer" @click="empEdit(list.id)">
+                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="empEdit(list.id)">
                                                 <i class="fe fe-edit me-2"></i><span>Edit</span>
                                             </div>
-                                            <div class="dropdown-item cur-pointer" @click="empDel(list.id)">
+                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="empDel(list.id)">
                                                 <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
                                             </div>
                                         </div>
@@ -361,10 +361,10 @@
                                                         </button> 
 
                                                         <div class="dropdown-menu tx-13">
-                                                            <div class="dropdown-item cur-pointer" @click="detailEdit(lst.id)">
+                                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="detailEdit(lst.id)">
                                                                 <i class="fe fe-edit me-2"></i><span>Edit</span>
                                                             </div>
-                                                            <div class="dropdown-item cur-pointer" @click="detailDel(lst.id)">
+                                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="detailDel(lst.id)">
                                                                 <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
                                                             </div>
                                                         </div>
@@ -1312,5 +1312,10 @@ export default {
 	.btn-i{
 		border-radius: 50px;
 	}
+
+    .dropdown-hover:hover{
+        color: blue;
+        font-weight: 500;
+    }
 
 </style>

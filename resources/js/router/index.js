@@ -6,6 +6,7 @@ import SignIn from "../pages/SignIn.vue";
 import SignUp from "../pages/SignUp.vue";
 import Employee from "../pages/Employee.vue";
 import test from "../pages/test.vue";
+import Permission from "../pages/Permission.vue";
 
 
 
@@ -32,6 +33,11 @@ const routes =[
         component: Employee
     },
     {
+        name: "permission",
+        path: "/permiss",
+        component: Permission
+    },
+    {
         name: "test-page",
         path: "/test",
         component: test
@@ -44,7 +50,6 @@ const routes =[
 ];
 
 
-
 const router = createRouter({
     history: createWebHistory(),
     routes: routes,
@@ -52,5 +57,6 @@ const router = createRouter({
         window.scrollTo(0,0);
     }
 });
+
 
 export default router;

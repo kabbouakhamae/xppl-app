@@ -24,6 +24,9 @@ Route::post('signIn', [UserController::class, 'signIn']);
 Route::post('signOut', [UserController::class, 'signOut']);
 Route::post('profile', [UserController::class, 'profile']);
 
+Route::post('updatePermiss', [TestController::class, 'updatePermiss']);
+
+
 Route::group(['prefix' => 'employee', 'middlewar' => 'auth:santum'], function(){
     Route::get('/', [EmployeeController::class, 'index']);
     Route::post('/add', [EmployeeController::class, 'add']);
@@ -46,6 +49,7 @@ Route::group(['prefix' => 'test', 'middlewar' => 'auth:santum'], function(){
     Route::post('/images', [TestController::class, 'images']);
     Route::get('/download/{file}', [TestController::class, 'download']);
     Route::post('/deleteFile/{file}', [TestController::class, 'deleteFile']);
+    Route::get('/getVal', [TestController::class, 'getVal']);
 
 });
 
