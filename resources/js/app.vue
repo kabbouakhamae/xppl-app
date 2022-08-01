@@ -69,12 +69,12 @@
 						</div> -->
 
 						<!-- SHE -->
-						<div v-if="sheShow">
+						<div v-if="!!parseInt(loginPermiss.safety)">
 							<!-- <li class="side-item side-item-category mt-4">Safety Dept.</li> -->
 
 							<li class="slide">
 								<a class="side-menu__item" href="#">
-									<span class="side-menu__label"><i class="fa fa-fire-extinguisher text-center wd-20"></i><span class="mx-2">SHE</span></span>
+									<span class="side-menu__label"><i class="fa fa-fire-extinguisher text-center wd-20"></i><span class="mx-2">Safety</span></span>
 									<i class="angle fe fe-chevron-down"></i>
 								</a>
 								<ul class="slide-menu">
@@ -94,7 +94,7 @@
 							</a>
 							<ul class="slide-menu">
 								<li><a class="slide-item" :class="lookupAct" @click="lookupClick()" href="#">Lookup</a></li>
-								<li v-if="permissShow"><router-link class="slide-item" :class="permissAct" @click="permissClick()" to="/permiss">Permission</router-link></li>
+								<li v-if="!!parseInt(loginPermiss.permiss)"><router-link class="slide-item" :class="permissAct" @click="permissClick()" to="/permiss">Permission</router-link></li>
 							</ul>
 						</li>
 
@@ -143,21 +143,21 @@
 
 								<li class="dropdown main-profile-menu nav nav-item nav-link p-0">
 									<a class="profile-user d-flex pt-2" href="">
-										<p class="pt-2 me-2 text-muted text-capitalize">{{ fullname }}</p>
-										<img alt="" v-if="photo" :src="'assets/img/profile/'+ photo">
-										<img alt="" v-if="!photo && gender == 'Male'" src="assets/img/male.png">
-										<img alt="" v-if="!photo && gender != 'Male'" src="assets/img/female.png">
+										<p class="pt-2 me-2 text-muted text-capitalize">{{ loginProfile.name }} {{ loginProfile.surname }}</p>
+										<img alt="" v-if="loginProfile.photo" :src="'assets/img/profile/'+ loginProfile.photo">
+										<img alt="" v-if="!loginProfile.photo && loginProfile.gender == 'Male'" src="assets/img/male.png">
+										<img alt="" v-if="!loginProfile.photo && loginProfile.gender != 'Male'" src="assets/img/female.png">
 									</a>
 									
 									<div class="dropdown-menu">
 										<div class="main-header-profile bg-primary p-3">
 											<div class="d-flex wd-100p">
-												<div v-if="photo" class="main-img-user"><img alt="" :src="'assets/img/profile/'+ photo"></div>
-												<div v-if="!photo && gender == 'Male'" class="main-img-user"><img alt="" src="assets/img/male.png"></div>
-												<div v-if="!photo && gender != 'Male'" class="main-img-user"><img alt="" src="assets/img/female.png"></div>											
+												<div v-if="loginProfile.photo" class="main-img-user"><img alt="" :src="'assets/img/profile/'+ loginProfile.photo"></div>
+												<div v-if="!loginProfile.photo && loginProfile.gender == 'Male'" class="main-img-user"><img alt="" src="assets/img/male.png"></div>
+												<div v-if="!loginProfile.photo && loginProfile.gender != 'Male'" class="main-img-user"><img alt="" src="assets/img/female.png"></div>											
 												<div class="ms-3 my-auto">
-													<h6 class="text-capitalize text-white">{{ username }}</h6>
-													<span class="text-capitalize"> User Type: {{ usertype }}</span>
+													<h6 class="text-capitalize text-white">{{ loginProfile.name }}</h6>
+													<span class="text-capitalize"> Username: {{ loginProfile.username }}</span>
 												</div>
 											</div>
 										</div>
@@ -207,13 +207,6 @@ export default {
         return {
             isSignin: false
             ,appClass: ''
-			,name: ''
-			,fullname: ''
-			,gender: ''
-			,photo: ''
-			,usertype: ''
-			,username: ''
-			,dept: ''
 			,fuel: true
 			,safety: true
 
@@ -233,6 +226,9 @@ export default {
 			,sheShow: ''
 			,miniShow: ''
 			,permissShow: ''
+
+			,loginProfile: []
+			,loginPermiss: []
         };
     },
 
@@ -325,55 +321,17 @@ export default {
 			this.infoExp = '';
 			this.settExp = '';
 		},
-		// getProfile(){
-		// 	this.$axios.post('api/profile'
-		// 		).then((response) =>{
-		// 			this.fullname = response.data.fullname;
-		// 			this.name = response.data.name;
-		// 			this.gender = response.data.gender;
-		// 			this.usertype = response.data.usertype;
-		// 			this.username = response.data.username;
-		// 			this.photo = response.data.photo;
-		// 			this.dept = response.data.dept;
-		// 		}).catch((error)=>{
-		// 			console.log(error);
-		// 		})
-		// },
 
 		async getProfile(){
-			const res = await axios.post('api/profile')
+			const response = await axios.get('api/profile')
+			this.loginProfile = response.data;
+		},
 
+		async getPermiss(){
+			const response = await axios.get('api/permiss')
+			this.loginPermiss = response.data;
+		},
 
-				this.fullname = res.data[0].fullname;
-				this.name = res.data[0].name;
-				this.gender = res.data[0].gender;
-				this.username = res.data[0].username;
-				this.photo = res.data[0].photo;
-				this.dept = res.data[0].department;
-				this.sheShow = Boolean(res.data[0].she);
-				this.miniShow = Boolean(res.data[0].mini);
-				this.permissShow = Boolean(res.data[0].permiss);
-
-
-
-
-
-				// if (this.usertype == 'full'){
-				// 	this.dept = 'All Department';
-				// 	this.fuel = true;
-				// 	this.safety = true;
-				// } else {
-				// 	if (this.dept == 'Risk'){
-				// 		this.safety = true;
-				// 		this.fuel = false;
-				// 	} else if (this.dept == 'Mining'){
-				// 		this.fuel = true;
-				// 	}
-				// }
-
-				console.log("Profile-->", res.data);
-
-		}
     },
 
     created(){
@@ -386,6 +344,7 @@ export default {
             this.appClass = "main-content app-content";
 			this.homeAct = 'active';
 			this.getProfile();
+			this.getPermiss();
         } else {
 			this.isSignin = false;
             this.appClass = '';

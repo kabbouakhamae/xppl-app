@@ -19,18 +19,29 @@ class EmployeeController extends Controller{
             'path' => Paginator::resolveCurrentPath(),
         ]);
     }
-    
+
     public function index(Request $request){
         $name = $request->search.'%';
         $namelao = $request->search.'%';
 
         $userid = auth()->user()->userid;
-        $data = DB::table('permission')->where('userid', $userid)->first();
+        $data = DB::table('permission')->where('userid', $userid)->first(); // Employee view all or view by dept
 
-        if ($data->emp_list == 1){
-            $dept = '%';
+        if ($data->emp_all == 1){
+            $empList = DB::table('emp_names as a')
+                            ->join('emp_details as b', 'a.id', 'b.userid')
+                            ->join(DB::raw('(select max(id) as mxid, userid from emp_details group by userid) as c'),
+                                function($join){
+                                    $join->on('b.id', 'c.mxid');
+                                })
+                            ->orWhere('a.name', 'like', $name)
+                            ->orWhere('a.namelao', 'like', $namelao)
+                            ->select('a.id', 'a.gender', 'a.name', 'a.surname', 'a.namelao', 'a.surnamelao', 'a.country', 'a.province', 'a.phone', 'b.position', 'b.department', 'b.startdate', 'b.status', 'b.empid', 'b.scanid', 'a.photo')
+                            ->orderBy('a.name')
+                            ->paginate(8);
+
         } else {
-            
+            //Find current dept
             $deptData = DB::table('emp_details as a')
                             ->select('a.department')
                             ->join(DB::raw('(select max(id) as mxid, userid from emp_details group by userid) as b'),
@@ -39,13 +50,22 @@ class EmployeeController extends Controller{
                                 })
                             ->where('a.userid', $userid)
                             ->first();
-
             $dept = $deptData->department;
+
+            $empList = DB::table('emp_names as a')
+                            ->join('emp_details as b', 'a.id', 'b.userid')
+                            ->join(DB::raw("(select max(id) as mxid, userid, department from emp_details where department ='{$dept}' group by userid, department) as c"),
+                                function($join){
+                                    $join->on('b.id', 'c.mxid');
+                                })
+                            ->orWhere('a.name', 'like', $name)
+                            ->orWhere('a.namelao', 'like', $namelao)
+                            ->select('a.id', 'a.gender', 'a.name', 'a.surname', 'a.namelao', 'a.surnamelao', 'a.country', 'a.province', 'a.phone', 'b.position', 'b.department', 'b.startdate', 'b.status', 'b.empid', 'b.scanid', 'a.photo')
+                            ->orderBy('a.name')
+                            ->paginate(8);
+
         }
 
-        $empList = $this->paginateArray(
-            DB::select('exec uspEmpList ?, ?, ?', [$name, $namelao, $dept])
-        );
         return $empList;
     }
 
@@ -162,8 +182,8 @@ class EmployeeController extends Controller{
         return $edit;            
     }
 
-    public function preview($userid){
-        $empPrev = DB::select('exec uspEmpPreview ?', [$userid]);
+    public function preview($id){
+        $empPrev = DB::select('exec uspEmpPreview ?', [$id]);
         return $empPrev;
     }
 
@@ -178,88 +198,7 @@ class EmployeeController extends Controller{
         DB::delete('delete from emp_names where id = ?', [$id]);
     }
 
-    public function detail($id){
-        $detail = DB::select('select * from emp_details where userid = ?', [$id]);
-        return $detail;
-    }
-
-    public function detailAdd(Request $request){
-        $check = DB::table('emp_details')
-                        ->where('userid', $request->userid)
-                        ->where('startdate', $request->startdate);
-        
-        if ($check->count()){
-            $success = false;
-            $message = 'Duplicate record!';
-        } else {
-
-            DB::table('emp_details')->insert([
-                'userid' => $request->userid,
-                'startdate' => $request->startdate,
-                'enddate' => $request->enddate,
-                'position' => $request->position,
-                'status' => $request->status,
-                'site' => $request->site,
-                'department' => $request->dept,
-                'section' => $request->section,
-                'crew' => $request->crew,
-                'empid' => $request->empid,
-                'scanid' => $request->scanid,
-                'foodid' => $request->foodid,
-                'roster' => $request->roster,
-                'scantimes' => $request->scantimes,
-                'working_hrs' => $request->hours,
-                'levels' => $request->levels,
-                'contract' => $request->contract,
-                'remarks' => $request->remarks
-            ]);
-
-            $success = true;
-            $message = "Insert completed!";
-        }
-
-        $response = [
-            'success' => $success,
-            'message' => $message
-        ];
-        return response()->json($response);
-    }
-
-    public function detailEdit($id){
-        $detail = DB::table('emp_details')->find($id);
-        return $detail;
-    }
-
-    public function detailUpdate(Request $request){
-        
-        $param = [
-            $request->id,
-            $request->startdate,
-            $request->enddate,
-            $request->position,
-            $request->status,
-            $request->site,
-            $request->dept,
-            $request->section,
-            $request->crew,
-            $request->empid,
-            $request->scanid,
-            $request->foodid,
-            $request->roster,
-            $request->scantimes,
-            $request->hours,
-            $request->levels,
-            $request->contract,
-            $request->remarks
-        ];
-
-        DB::update("exec uspEmpDetailUpdate ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?", $param);
-
-    }
-
-    public function detailDel($id){
-        DB::delete('delete from emp_details where id = ?', [$id]);
-    }
+    
 
 
 }

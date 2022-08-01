@@ -67,6 +67,26 @@ class LookupController extends Controller
         return $name;
     }
 
+    public function relate(){
+        $relate = DB::select("select code as value, code as label from lookup_code where category = 'Relationship' and used = 'y'");
+        return $relate;
+    }
+
+    public function bank(){
+        $bank = DB::select("select code as value, code as label from lookup_code where category = 'Bank Name' and used = 'y'");
+        return $bank;
+    }
+
+    public function card(){
+        $card = DB::select("select code as value, code as label from lookup_code where category = 'Card Type' and used = 'y'");
+        return $card;
+    }
+
+    public function year(){
+        $card = DB::select("select code as value, code as label from lookup_code where category = 'year' and used = 'y'");
+        return $card;
+    }
+
 
 
 }

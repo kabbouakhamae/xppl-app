@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <div class="d-flex my-xl-auto right-content">
-                            <button v-if="btnEmpNew" type="button" class="btn btn-primary btn-icon btn-sm wd-38 ht-38 rounded-circle" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus"></i></button>
+                            <button type="button" class="btn btn-primary btn-icon btn-sm wd-38 ht-38 rounded-circle" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus"></i></button>
                         </div>
                     </div>
 
@@ -30,7 +30,7 @@
                                     <th class="wd-80"><span>Image</span></th>
                                     <th style="width: 50px"><span>Name</span></th>
                                     <th>
-                                        <div v-if="this.$store.getters.usertype == 'full'">Position / Dept.</div>
+                                        <div v-if="!!parseInt(loginPermiss.emp_all)">Position / Dept.</div>
                                         <div v-else>Position</div>
                                     </th>
                                     <th>Phone Number</th>
@@ -41,7 +41,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="tr-hover" v-for="list in empList.data" :key="list.id">
+                                <tr class="tr-hover" v-for="list in empData.data" :key="list.id">
                                     <td>
                                         <div class="pos-relative">
                                             <img v-if="list.photo" alt="" class="rounded-circle avatar-md me-2 cur-pointer" :src="'assets/img/profile/'+ list.photo" @click="empPrev(list.id)">                                   
@@ -52,12 +52,12 @@
                                         <!-- <span v-if="list.status == 'Current' || list.status == 'Temporary'"><span class="pulse-danger" style="left: 38px; top: 38px"></span></span> -->
                                     </td>
                                     <td>
-                                        {{ list.fullname }} <br>
-                                        <span class="noto-lao"> {{ list.fulllao }} </span>
+                                        {{ list.name }} {{ list.surname }} <br>
+                                        <span class="phet-lao">{{ list.namelao }} {{ list.surnamelao }}</span>
                                     </td>
                                     <td> 
                                         {{ list.position }}
-                                        <div v-if="this.$store.getters.usertype == 'full'">{{ list.department }}</div>
+                                        <div v-if="!!parseInt(loginPermiss.emp_all)">{{ list.department }}</div>
                                     </td>
                                     <td> 
                                         <i v-if="list.phone" class="fa fa-tty me-1"></i> {{ list.phone}} 
@@ -68,22 +68,25 @@
                                     </td>
                                     <td>
                                         <div v-if="list.empid">
-                                            <i class="far fa-address-card me-1"></i> {{ list.empid }}
+                                            <!-- <i class="far fa-address-card me-1"></i> -->
+                                            ID: {{ list.empid }}
                                         </div>
                                         <div v-if="list.scanid">
-                                            <i class="cf cf-cloak me-1"></i> {{ list.scanid }}
+                                            <!-- <i class="cf cf-cloak me-1"></i> {{ list.scanid }} -->
+                                            <!-- <img width="15" src="assets/img/scan.jpg">  -->
+                                            Scan: {{ list.scanid }}
+
                                         </div>
                                     </td>
                                     <td> 
                                         {{ timeago(list.startdate) }} <br>
                                         {{ list.status }}
-                                        <!-- <span v-if="list.status == 'Current'" class="pos-relative">{{ list.status }}<span class="pulse-danger" style="left: 50px; top: 0px"></span></span> -->
                                     </td>
                                     <td>        
-                                        <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Tools">
+                                        <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
                                             <i class="mdi mdi-dots-horizontal pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
                                         </button>       
-                                        <div  class="dropdown-menu tx-13">
+                                        <div class="dropdown-menu tx-13">
                                             <div class="dropdown-item cur-pointer dropdown-hover" @click="empPrev(list.id)">
                                                 <i class="fe fe-search me-2"></i><span>Preview</span>
                                             </div>
@@ -94,29 +97,25 @@
                                                 <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
                                             </div>
                                         </div>
-                                        <!-- <a href="#" class="btn btn-sm btn-primary" style="padding: 7px 9px" title="Preview employee" @click="empPrev(list.id)"><i class="fe fe-search"></i></a>
-                                        <a href="#" class="btn btn-sm btn-info btn-b" style="padding: 7px 9px" title="Edit employee" @click="empEdit(list.id)"><i class="fe fe-edit"></i></a> 
-                                        <a href="#" class="btn btn-sm btn-danger" style="padding: 7px 9px" title="Delete employee" @click="empDel(list.id)"><i class="fe fe-trash-2"></i></a> -->
-                                        <!-- las la-pen -->
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <pagination :pagination="empList" @paginate="getEmpList($event)" :offset="2" ></pagination>
+                        <pagination :pagination="empData" @paginate="getEmpData($event)" :offset="2" ></pagination>
                     </div>
                 </div> <!-- End employee list -->
 
                 <!-- Add and Edit employee -->
                 <div v-if="showAdd">
                     <div class="row">
-                        <div class="col-xxl-2 mt-2">
+                        <div class="col-xxl-2">
                             <div style="height: 200px; width: 100%;">
                                 <img class="cur-pointer" style="width: 160px; height: 200px; border: solid 1px #cccc;" title="Choose an Image" :src="photoPrev" @click="chooseImage">
                                 <!-- <img class="cur-pointer" style="width: 160px; height: 200px; border: solid 1px #cccc;" title="Choose an Image" src="assets/img/no.jpg" @click="chooseImage"> -->
                                 <input class="d-none" ref="fileInput" type="file" accept="image/*"  @change="onSeclected">
                             </div> 
-                            <label class="rdiobox mt-4 ms-2 cur-pointer"><input name="rdio" type="radio" value="Male" checked="" v-model="data.gender"><span>Male</span></label>
-                            <label class="rdiobox mb-4 ms-2 cur-pointer"><input name="rdio" type="radio" value="Female" v-model="data.gender"><span>Female</span></label>                         
+                            <label class="rdiobox mt-4 ms-2 cur-pointer"><input name="rdio" type="radio" value="Male" checked="" v-model="empForm.gender"><span>Male</span></label>
+                            <label class="rdiobox mb-4 ms-2 cur-pointer"><input name="rdio" type="radio" value="Female" v-model="empForm.gender"><span>Female</span></label>                         
                         </div>
 
                         <div class="col-xxl-10">
@@ -125,19 +124,19 @@
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Name Eng  <span class=" text-danger">*</span></label>
-                                        <input type="text" class="form-control" placeholder="Name..." v-model="data.name">
+                                        <input type="text" class="form-control" placeholder="Name..." v-model="empForm.name">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Surname Eng</label>
-                                        <input type="text" class="form-control" placeholder="Surname..." v-model="data.surname">
+                                        <input type="text" class="form-control" placeholder="Surname..." v-model="empForm.surname">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-12">
                                     <div class="form-group">
                                         <label class="mb-0">Phone Number</label>
-                                        <input type="text" class="form-control" placeholder="Phone numbers..." v-model="data.phone">
+                                        <input type="text" class="form-control" placeholder="Phone numbers..." v-model="empForm.phone">
                                     </div>
                                 </div>
                             </div>
@@ -147,25 +146,25 @@
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Name Lao  <span class=" text-danger">*</span></label>
-                                        <input type="text" class="form-control noto-lao" placeholder="ຊື່..." v-model="data.namelao">
+                                        <input type="text" class="form-control phet-lao" placeholder="ຊື່..." v-model="empForm.namelao">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Surname Lao</label>
-                                        <input type="text" class="form-control noto-lao" placeholder="ນາມສະກຸນ..." v-model="data.surnamelao">
+                                        <input type="text" class="form-control phet-lao" placeholder="ນາມສະກຸນ..." v-model="empForm.surnamelao">
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4">
                                     <div class="form-group">
                                         <label class="mb-0">Birthday</label>
-                                        <input type="date" class="form-control" v-model="data.birthday">
+                                        <input type="date" class="form-control" v-model="empForm.birthday">
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-8 col-md-8 col-sm-8">
                                     <div class="form-group">
                                         <label class="mb-0">Email</label>
-                                        <input type="eamil" class="form-control" placeholder="Email..." v-model="data.email">
+                                        <input type="eamil" class="form-control" placeholder="Email..." v-model="empForm.email">
                                     </div>
                                 </div>
                             </div>
@@ -174,27 +173,27 @@
                             <h6 class="text-muted mt-2">Employee Address</h6>
                             <div class="row">
                                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-4">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Country  <span class=" text-danger">*</span></label> 
-                                        <Multiselect v-model="data.country" placeholder="Select" searchable="true" :options="countryLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.country" placeholder="Select" searchable="true" :options="lkCountry"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-8 col-md-6 col-sm-8">
                                     <div class="form-group">
                                         <label class="mb-0">Province</label>
-                                        <input type="text" class="form-control" placeholder="Province..." v-model="data.province">
+                                        <input type="text" class="form-control phet-lao" placeholder="Province..." v-model="empForm.province">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">District</label>
-                                        <input type="text" class="form-control" placeholder="District..." v-model="data.district">
+                                        <input type="text" class="form-control phet-lao" placeholder="District..." v-model="empForm.district">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Village</label>
-                                        <input type="text" class="form-control" placeholder="Village..." v-model="data.village">
+                                        <input type="text" class="form-control phet-lao" placeholder="Village..." v-model="empForm.village">
                                     </div>
                                 </div>
                             </div>
@@ -207,31 +206,31 @@
                                     <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">Start Date  <span class=" text-danger">*</span></label>
-                                            <input type="date" class="form-control" v-model="data.startdate">
+                                            <input type="date" class="form-control" v-model="empForm.startdate">
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">End Date</label>
-                                            <input type="date" class="form-control" v-model="data.enddate">
+                                            <input type="date" class="form-control" v-model="empForm.enddate">
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12">
-                                        <div class="form-group multi-color">
+                                        <div class="form-group">
                                             <label class="mb-0">Position  <span class=" text-danger">*</span></label> 
-                                            <Multiselect v-model="data.position" placeholder="Select" searchable="true" :options="positionLK"/>
+                                            <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" searchable="true" :options="lkPosition"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-6">
-                                        <div class="form-group multi-color">
+                                        <div class="form-group">
                                             <label class="mb-0">Contract Type</label> 
-                                            <Multiselect v-model="data.contract" placeholder="Select" :options="contractLK"/>
+                                            <Multiselect class="multi-color" v-model="empForm.contract" placeholder="Select" :options="lkContract"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-6">
-                                        <div class="form-group multi-color">
+                                        <div class="form-group">
                                             <label class="mb-0">Levels</label> 
-                                            <Multiselect v-model="data.levels" placeholder="Select" :options="levelsLK"/>
+                                            <Multiselect class="multi-color" v-model="empForm.levels" placeholder="Select" :options="lkLevels"/>
                                         </div>
                                     </div>
                                 </div>
@@ -240,64 +239,64 @@
                                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">Employee ID</label>
-                                            <input type="text" class="form-control" placeholder="Employee id..." v-model="data.empid">
+                                            <input type="text" class="form-control" placeholder="Employee id..." v-model="empForm.empid">
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">Scan ID  <span class=" text-danger">*</span></label>
-                                            <input type="number" class="form-control" placeholder="Scan id..." v-model="data.scanid">
+                                            <input type="number" class="form-control" placeholder="Scan id..." v-model="empForm.scanid">
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">Food ID</label>
-                                            <input type="text" class="form-control" placeholder="Food id..." v-model="data.foodid">
+                                            <input type="text" class="form-control" placeholder="Food id..." v-model="empForm.foodid">
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6">
-                                        <div class="form-group multi-color">
+                                        <div class="form-group">
                                             <label class="mb-0">Roster  <span class=" text-danger">*</span></label> 
-                                            <Multiselect v-model="data.roster" placeholder="Select" :options="rosterLK"/>
+                                            <Multiselect class="multi-color" v-model="empForm.roster" placeholder="Select" :options="lkRoster"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-4 col-sm-4 col-6">
-                                        <div class="form-group multi-color">
+                                        <div class="form-group">
                                             <label class="mb-0">Scan Times  <span class=" text-danger">*</span></label> 
-                                            <Multiselect v-model="data.scantimes" placeholder="Select" :options="scantimesLK"/>
+                                            <Multiselect class="multi-color" v-model="empForm.scantimes" placeholder="Select" :options="lkScantimes"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-4 col-sm-4 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">Working hrs  <span class=" text-danger">*</span></label>
-                                            <input type="number" class="form-control" placeholder="Working hrs..." v-model="data.hours">
+                                            <input type="number" class="form-control" placeholder="Working hrs..." v-model="empForm.hours">
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Row6 -->
                                 <div class="row">
                                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
-                                        <div class="form-group multi-color">
+                                        <div class="form-group">
                                             <label class="mb-0">Site  <span class=" text-danger">*</span></label> 
-                                            <Multiselect v-model="data.site" placeholder="Select" :options="siteLK"/>
+                                            <Multiselect class="multi-color" v-model="empForm.site" placeholder="Select" :options="lkSite"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-9 col-md-8 col-sm-8">
-                                        <div class="form-group multi-color">
+                                        <div class="form-group">
                                             <label class="mb-0">Department  <span class=" text-danger">*</span></label> 
-                                            <Multiselect v-model="data.dept" placeholder="Select" searchable="true" :options="deptLK"/>
+                                            <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" searchable="true" :options="lkDept"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group multi-color">
+                                        <div class="form-group">
                                             <label class="mb-0">Section</label> 
-                                            <Multiselect v-model="data.section" placeholder="Select" searchable="true" :options="sectionLK"/>
+                                            <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" searchable="true" :options="lkSection"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="form-group multi-color">
+                                        <div class="form-group">
                                             <label class="mb-0">Crew</label> 
-                                            <Multiselect v-model="data.crew" placeholder="Select" searchable="true" :options="crewLK"/>
+                                            <Multiselect class="multi-color" v-model="empForm.crew" placeholder="Select" searchable="true" :options="lkCrew"/>
                                         </div>
                                     </div>
                                 </div>
@@ -306,70 +305,72 @@
                     </div>
                     
                     <!-- Tabs -->
-                    <div class="panel panel-primary tabs-style-1 mt-4" v-if="showTab">
+                    <div class="panel panel-primary tabs-style-2 mt-4" v-if="showTab">
                         <div class=" tab-menu-heading">
                             <div class="tabs-menu1">
-                                <!-- Tabs -->
                                 <ul class="nav panel-tabs main-nav-line">
-                                    <li class="nav-item"><a href="#tab1" class="nav-link active" data-bs-toggle="tab">Employee Detail</a></li>
-                                    <li class="nav-item"><a href="#tab2" class="nav-link" data-bs-toggle="tab">Emergency Contact</a></li>
-                                    <li class="nav-item"><a href="#tab3" class="nav-link" data-bs-toggle="tab">Bank Acount</a></li>
+                                    <li><a href="#tab1" class="nav-link active" style="padding: 4px 18px" data-bs-toggle="tab">Employee Detail</a></li>
+					                <li><a href="#tab2" class="nav-link" :class="actTab" style="padding: 4px 18px" data-bs-toggle="tab">Contact Person</a></li>
+					                <li><a href="#tab3" class="nav-link" :class="actTab" style="padding: 4px 18px" data-bs-toggle="tab">Bank Acount</a></li>
+					                <li><a href="#tab4" class="nav-link" :class="actTab" style="padding: 4px 18px" data-bs-toggle="tab">Personal Cards</a></li>
+					                <li><a href="#tab5" class="nav-link" :class="actTab" style="padding: 4px 18px" data-bs-toggle="tab">Annual Leave</a></li>
+					                <li><a href="#tab6" class="nav-link" :class="actTab" style="padding: 4px 18px" data-bs-toggle="tab">Document and File</a></li>
                                 </ul>
                             </div>
                         </div>
                        
-                        <div class="panel-body tabs-menu-body main-content-body-right border-top-0 border">
+                       <!-- Details -->
+                        <div class="panel-body tabs-menu-body main-content-body-right" style="padding: 6px 0px">
                             <div class="tab-content">
-                                <div class="tab-pane active overflow-auto" id="tab1" style="height: 270px">
-                                    <!-- <div class=" d-flex justify-content-start">
-                                        <button class="btn btn-icon btn-sm cur-pointer btn-i mt-0" @click="detailNew()"><i class="fa fa-plus-circle text-primary"></i></button>
-                                    </div> -->
-   
-                                    <div class="table-responsive mt-1">
+                                <div class="tab-pane overflow-auto active" id="tab1" style="height: 270px">
+                                    <div class="table-responsive">
                                         <table class="table main-table-reference text-nowrap">
                                             <thead>
                                                 <tr>
-                                                    <th class="cur-pointer text-center" style="padding: 8px 10px" @click="detailNew()" title="Add"><i class="fa fa-plus-circle tx-13 text-primary"></i></th>
-                                                    <th style="letter-spacing: 0px">Site</th>
-                                                    <th style="letter-spacing: 0px">Start Date</th>
-                                                    <th style="letter-spacing: 0px">End Date</th>
-                                                    <th style="letter-spacing: 0px">Status</th>
-                                                    <th style="letter-spacing: 0px">Position</th>
-                                                    <th style="letter-spacing: 0px">Department</th>
-                                                    <th style="letter-spacing: 0px">Section</th>
-                                                    <th style="letter-spacing: 0px">Crew</th>
-                                                    <th style="letter-spacing: 0px">Employee ID</th>
-                                                    <th style="letter-spacing: 0px">Scan ID</th>
-                                                    <th style="letter-spacing: 0px">Food ID</th>
-                                                    <th style="letter-spacing: 0px">Roster</th>
-                                                    <th style="letter-spacing: 0px">Scan Times</th>
-                                                    <th style="letter-spacing: 0px">Hours</th>
-                                                    <th style="letter-spacing: 0px">Levels</th>
-                                                    <th style="letter-spacing: 0px">Contract</th>
-                                                    <th style="letter-spacing: 0px">Remarks</th>
+                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="detailNew()" title="Add new detail">
+                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
+                                                            </button> 
+                                                        </div>
+                                                    </th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Site</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Start Date</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">End Date</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Status</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Position</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Department</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Section</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Crew</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Employee ID</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Scan ID</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Food ID</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Roster</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Scan Times</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Hours</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Levels</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Contract</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Remarks</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
-                                                <tr class="tr-hover" v-for="lst in detail" :key="lst.id">
-                                                    <!-- <td style="padding: 4px 10px"> 
-                                                        <i class="fa fa-edit cur-pointer text-info" @click="detailEdit(lst.id)" title="Edit"></i>
-                                                        <i class="far fa-trash-alt cur-pointer text-danger ms-2" @click="detailDel(lst.id)" title="Delete"></i>
-                                                    </td> -->
-                                                    <td style="padding: 0px 4px">
-                                                        <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Tools">
-                                                            <i class="mdi mdi-dots-horizontal"></i>
-                                                        </button> 
-
-                                                        <div class="dropdown-menu tx-13">
-                                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="detailEdit(lst.id)">
-                                                                <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                            </div>
-                                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="detailDel(lst.id)">
-                                                                <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                                                <tr class="tr-hover" v-for="lst in detailData" :key="lst.id">
+                                                    <td style="padding: 0px 4px; vertical-align: middle">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Tools">
+                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                            </button> 
+                                                            <div class="dropdown-menu tx-13">
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="detailEdit(lst.id)">
+                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
+                                                                </div>
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="detailDel(lst.id)">
+                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.site }} </td>
+                                                    <td class="text-center" style="padding: 4px 10px"> {{ lst.site }} </td>
                                                     <td style="padding: 4px 10px"> {{ dateTime(lst.startdate) }} </td>
                                                     <td style="padding: 4px 10px"> {{ dateTime(lst.enddate) }} </td>
                                                     <td style="padding: 4px 10px"> {{ lst.status }} </td>
@@ -385,30 +386,242 @@
                                                     <td style="padding: 4px 10px"> {{ lst.working_hrs }} </td>
                                                     <td style="padding: 4px 10px"> {{ lst.levels }} </td>
                                                     <td style="padding: 4px 10px"> {{ lst.contract }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.remarks }} </td>
+                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                </tr>                                                  
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Contract person -->
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab2" style="height: 270px">
+                                    <div class="table-responsive">
+                                        <table class="table main-table-reference text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="contractNew()" title="Add new contract">
+                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
+                                                            </button> 
+                                                        </div>
+                                                    </th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Contract Person</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Relationship</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Phone</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 60%">Address</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                <tr class="tr-hover" v-for="lst in contractData" :key="lst.id">
+                                                    <td style="padding: 0px 4px; vertical-align: middle">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
+                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                            </button> 
+                                                            <div class="dropdown-menu tx-13">
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="contractEdit(lst.id)">
+                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
+                                                                </div>
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="contractDel(lst.id)">
+                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.person }} </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.relationship }} </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.phone }} </td>
+                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.address }} </td>
                                                 </tr>                                                
                                             </tbody>
                                         </table>
                                     </div>
-                                    
                                 </div>
-                                <div class="tab-pane" id="tab2" style="height: 270px">
-                                    
-
-
+                                
+                                <!-- Bank Account -->
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab3" style="height: 270px">
+                                    <div class="table-responsive">
+                                        <table class="table main-table-reference text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="bankNew()" title="Add new bank info">
+                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
+                                                            </button> 
+                                                        </div>
+                                                    </th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Bank Name</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Branch</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Account Name</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Account No</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 60%">Remarks</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                <tr class="tr-hover" v-for="lst in bankData" :key="lst.id">
+                                                    <td style="padding: 0px 4px; vertical-align: middle">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
+                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                            </button> 
+                                                            <div class="dropdown-menu tx-13">
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="bankEdit(lst.id)">
+                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
+                                                                </div>
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="bankDel(lst.id)">
+                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.bank_name }} </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.branch }} </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.account_name }} </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.account_no }} </td>
+                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                </tr>                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div class="tab-pane" id="tab3" style="height: 270px">
-                                    
 
+                                <!-- Personal cards -->
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab4" style="height: 270px">
+                                    <div class="table-responsive">
+                                        <table class="table main-table-reference text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="cardNew()" title="Add new bank info">
+                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
+                                                            </button> 
+                                                        </div>
+                                                    </th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Card Type</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Card ID</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Expire Date</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 60%">Remarks</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                <tr class="tr-hover" v-for="lst in cardData" :key="lst.id">
+                                                    <td style="padding: 0px 4px; vertical-align: middle">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
+                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                            </button> 
+                                                            <div class="dropdown-menu tx-13">
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="cardEdit(lst.id)">
+                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
+                                                                </div>
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="cardDel(lst.id)">
+                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.cardtype }} </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.cardid }} </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.expiredate }} </td>
+                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                </tr>                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
 
+                                <!-- Annual Leave -->
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab5" style="height: 270px">
+                                    <div class="table-responsive">
+                                        <table class="table main-table-reference text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="alNew()" title="Add new bank info">
+                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
+                                                            </button> 
+                                                        </div>
+                                                    </th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Year</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Remain</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 80%">Remarks</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                <tr class="tr-hover" v-for="lst in alData" :key="lst.id">
+                                                    <td style="padding: 0px 4px; vertical-align: middle">
+                                                        <div class="d-flex justify-content-center">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
+                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                            </button> 
+                                                            <div class="dropdown-menu tx-13">
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="alEdit(lst.id)">
+                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
+                                                                </div>
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="alDel(lst.id)">
+                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.years }} </td>
+                                                    <td style="padding: 4px 10px"> {{ lst.remain }} </td>
+                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                </tr> 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
 
+                                <!-- Document and Files -->
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab6" style="height: 270px">
+                                    <div class="table-responsive">
+                                        <table class="table main-table-reference text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th style="padding: 0px 0px; height: 26px">                                                    
+                                                        <div class="ms-1 d-flex justify-content-start align-items-center">
+                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="fileNew()" title="Add new files">
+                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
+                                                                <input class="d-none" ref="fileInput2" type="file" multiple  @change="fileAdd" >
+                                                            </button>                                                        
+                                                            <div class="" style="letter-spacing: 0px; padding: 4px 10px">File Name</div>
+                                                        </div>
+                                                    </th>
+                                                    <!-- <th style="letter-spacing: 0px; padding: 4px 10px">Description</th> -->
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 80%">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                <tr class="tr-hover" v-for="lst in fileData" :key="lst.id">
+                                                    <td style="padding: 4px 10px"> {{ lst.filename }} </td>
+                                                    <!-- <td style="padding: 4px 10px"> {{ lst.filedescr }} </td> -->
+
+                                                    <td style="padding: 0px 10px; vertical-align: middle;"> 
+                                                        <div class="d-flex justify-content-start">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Download file" @click="fileDownload(lst.filename)">
+                                                                <i class="bx bxs-download text-primary" style="font-size: 16px"></i>
+                                                            </button> 
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete file" @click="fileDel(lst.filename)">
+                                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                                            </button> 
+                                                        </div>
+                                                    </td>
+                                                </tr>                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div> <!-- EndTabs -->
 
                     <div class="d-flex justify-content-end mt-2">
-                        <button v-if="btnEmpUpdate" type="button" class="btn btn-info btn-b" :class="btnEmpUpdateShow" @click="empUpdate()"><i class="fe fe-check-circle"></i> 
+                        <button v-if="btnEmpUpd" type="button" class="btn btn-info btn-b" :class="btnEmpUpdShow" @click="empUpdate()"><i class="fe fe-check-circle"></i> 
                             <span class="mx-1">Update</span>
                         </button>
                         <button v-if="btnEmpAdd" type="button" class="btn btn-primary" :class="btnEmpAddShow" @click="empAdd()"><i class="fe fe-plus"></i> 
@@ -435,7 +648,7 @@
                         </div>
                         <div class="modal-body">
                             <h1>Preview</h1>
-                            {{ countryLK }}
+                            {{ lkCountry }}
 
                         </div>
                         <div class="modal-footer">
@@ -458,112 +671,112 @@
                             <!-- Row1 -->
                             <div class="row">
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Site  <span class=" text-danger">*</span></label> 
-                                        <Multiselect v-model="data.site" placeholder="Select" :options="siteLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.site" placeholder="Select" :options="lkSite"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Start Date  <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" placeholder="Working hrs..." v-model="data.startdate">
+                                        <input type="date" class="form-control" placeholder="Working hrs..." v-model="empForm.startdate">
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">End Date</label>
-                                        <input type="date" class="form-control" placeholder="Working hrs..." v-model="data.enddate">
+                                        <input type="date" class="form-control" placeholder="Working hrs..." v-model="empForm.enddate">
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Status  <span class=" text-danger">*</span></label> 
-                                        <Multiselect v-model="data.status" placeholder="Select" :options="statusLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.status" placeholder="Select" :options="lkStatus"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Position  <span class=" text-danger">*</span></label> 
-                                        <Multiselect v-model="data.position" placeholder="Select" :options="positionLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" :options="lkPosition"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Department  <span class=" text-danger">*</span></label> 
-                                        <Multiselect v-model="data.dept" placeholder="Select" :options="deptLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" :options="lkDept"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Section</label> 
-                                        <Multiselect v-model="data.section" placeholder="Select" :options="sectionLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" :options="lkSection"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Crew</label> 
-                                        <Multiselect v-model="data.crew" placeholder="Select" :options="crewLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.crew" placeholder="Select" :options="lkCrew"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Employee ID</label>
-                                        <input type="text" class="form-control" placeholder="Employee id..." v-model="data.empid">
+                                        <input type="text" class="form-control" placeholder="Employee id..." v-model="empForm.empid">
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Scan ID <span class=" text-danger">*</span></label>
-                                        <input type="number" class="form-control" placeholder="Scan id..." v-model="data.scanid">
+                                        <input type="number" class="form-control" placeholder="Scan id..." v-model="empForm.scanid">
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Food ID</label>
-                                        <input type="text" class="form-control" placeholder="Food id..." v-model="data.foodid">
+                                        <input type="text" class="form-control" placeholder="Food id..." v-model="empForm.foodid">
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Roster  <span class=" text-danger">*</span></label> 
-                                        <Multiselect v-model="data.roster" placeholder="Select" :options="rosterLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.roster" placeholder="Select" :options="lkRoster"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Scan Times  <span class=" text-danger">*</span></label> 
-                                        <Multiselect v-model="data.scantimes" placeholder="Select" :options="scantimesLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.scantimes" placeholder="Select" :options="lkScantimes"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Working hrs  <span class=" text-danger">*</span></label>
-                                        <input type="number" class="form-control" placeholder="Working hrs..." v-model="data.hours">
+                                        <input type="number" class="form-control" placeholder="Working hrs..." v-model="empForm.hours">
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Levels</label> 
-                                        <Multiselect v-model="data.levels" placeholder="Select" :options="levelsLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.levels" placeholder="Select" :options="lkLevels"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-6">
-                                    <div class="form-group multi-color">
+                                    <div class="form-group">
                                         <label class="mb-0">Contract Type</label> 
-                                        <Multiselect v-model="data.contract" placeholder="Select" :options="contractLK"/>
+                                        <Multiselect class="multi-color" v-model="empForm.contract" placeholder="Select" :options="lkContract"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-10">
                                     <div class="form-group">
                                         <label class="mb-0">Remarks</label>
-                                        <input type="text" class="form-control" placeholder="Remarks..." v-model="data.remarks">
+                                        <input type="text" class="form-control phet-lao" placeholder="Remarks..." v-model="empForm.remarks">
                                     </div>
                                 </div>
                             </div>
                             
                         </div>
                         <div class="modal-footer">
-                            <button v-if="btnDetailUpdate" type="button" class="btn btn-info btn-b" :class="btnDetailShow" @click="detailUpdate()"><i class="fe fe-check-circle"></i> 
+                            <button v-if="btnDetailUpd" type="button" class="btn btn-info btn-b" :class="btnDetailShow" @click="detailUpdate()"><i class="fe fe-check-circle"></i> 
                                 <span class="mx-1">Update</span>
                             </button>
                             <button v-if="btnDetailAdd" type="button" class="btn btn-primary" :class="btnDetailShow" @click="detailAdd()"><i class="fe fe-plus"></i> 
@@ -577,6 +790,209 @@
                 </div>                                              
             </div> <!-- End of modal add edit detail -->
 
+            <!-- Modal contract -->
+            <div class="modal fade" id="contract" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="contractLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title text-muted main-content-label">Contract Person</h6>
+                            <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-7 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Full Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control phet-lao" placeholder="Full name..." v-model="contForm.person">
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Relationship <span class=" text-danger">*</span></label> 
+                                        <Multiselect class="multi-color" v-model="contForm.relate" placeholder="Select" searchable="true"  :options="lkRelate"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Phone  <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" placeholder="Phone number..." v-model="contForm.phone">
+                                    </div>
+                                </div>
+                                <div class="col-lg-7 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Address</label>
+                                        <input type="text" class="form-control phet-lao" placeholder="Address..." v-model="contForm.address">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button v-if="btnContUpd" type="button" class="btn btn-info btn-b" :class="btnContAddShow" @click="contractUpdate()"><i class="fe fe-check-circle"></i> 
+                                <span class="mx-1">Update</span>
+                            </button>
+                            <button v-if="btnContAdd" type="button" class="btn btn-primary" :class="btnContAddShow" @click="contractAdd()"><i class="fe fe-plus"></i> 
+                                <span class="mx-1">Add</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
+                                <span class="mx-1">Close</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>                                              
+            </div> <!-- End of modal contract -->
+
+            <!-- Modal bank info -->
+            <div class="modal fade" id="bank" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="bankLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title text-muted main-content-label">Bank Info.</h6>
+                            <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Bank Name <span class=" text-danger">*</span></label> 
+                                        <Multiselect class="multi-color" v-model="bankForm.bankname" placeholder="Select" searchable="true"  :options="lkBank"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Branch</label>
+                                        <input type="text" class="form-control" placeholder="Branch..." v-model="bankForm.branch">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Account Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" placeholder="Account name..." v-model="bankForm.accname">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Account No <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" placeholder="Account no..." v-model="bankForm.accno">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Remarks</label>
+                                        <input type="text" class="form-control phet-lao" placeholder="Remarks..." v-model="bankForm.remarks">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button v-if="btnBankUpd" type="button" class="btn btn-info btn-b" :class="btnBankAddShow" @click="bankUpdate()"><i class="fe fe-check-circle"></i> 
+                                <span class="mx-1">Update</span>
+                            </button>
+                            <button v-if="btnBankAdd" type="button" class="btn btn-primary" :class="btnBankAddShow" @click="bankAdd()"><i class="fe fe-plus"></i> 
+                                <span class="mx-1">Add</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
+                                <span class="mx-1">Close</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>                                              
+            </div> <!-- End of modal contract -->
+
+            <!-- Modal Personal Cards -->
+            <div class="modal fade" id="cards" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cardLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title text-muted main-content-label">Personal Cards</h6>
+                            <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Card Type <span class=" text-danger">*</span></label> 
+                                        <Multiselect class="multi-color" v-model="cardForm.cardtype" placeholder="Select" :options="lkCard"/>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Card ID <span class=" text-danger">*</span></label>
+                                        <input type="text" class="form-control" placeholder="Card id..." v-model="cardForm.cardid">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Expire Date</label>
+                                        <input type="date" class="form-control" placeholder="Expire date..." v-model="cardForm.expire">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Remarks</label>
+                                        <input type="text" class="form-control phet-lao" placeholder="Remarks..." v-model="cardForm.remarks">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button v-if="btnCardUpd" type="button" class="btn btn-info btn-b" :class="btnCardAddShow" @click="cardUpdate()"><i class="fe fe-check-circle"></i> 
+                                <span class="mx-1">Update</span>
+                            </button>
+                            <button v-if="btnCardAdd" type="button" class="btn btn-primary" :class="btnCardAddShow" @click="cardAdd()"><i class="fe fe-plus"></i> 
+                                <span class="mx-1">Add</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
+                                <span class="mx-1">Close</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>                                              
+            </div>
+
+            <!-- Modal Annual Leave -->
+            <div class="modal fade" id="al" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="alLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title text-muted main-content-label">Annual Leave</h6>
+                            <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6 col-6">
+                                    <div class="form-group">
+                                        <label class="mb-0">Year <span class=" text-danger">*</span></label> 
+                                        <Multiselect class="multi-color" v-model="alForm.years" placeholder="Select" :options="lkYear"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-6">
+                                    <div class="form-group">
+                                        <label class="mb-0">Remain <span class=" text-danger">*</span></label>
+                                        <input type="number" class="form-control" placeholder="Card id..." v-model="alForm.remain">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="mb-0">Remarks</label>
+                                        <input type="text" class="form-control phet-lao" placeholder="Remarks..." v-model="alForm.remarks">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button v-if="btnAlUpd" type="button" class="btn btn-info btn-b" :class="btnAlAddShow" @click="alUpdate()"><i class="fe fe-check-circle"></i> 
+                                <span class="mx-1">Update</span>
+                            </button>
+                            <button v-if="btnAlAdd" type="button" class="btn btn-primary" :class="btnAlAddShow" @click="alAdd()"><i class="fe fe-plus"></i> 
+                                <span class="mx-1">Add</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
+                                <span class="mx-1">Close</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>                                              
+            </div>
         </div>
     </div>
 </template>
@@ -587,67 +1003,59 @@ export default {
 
     data() {
         return {
-            showList: true
+            lkCountry: []
+            ,lkPosition: []
+            ,lkStatus: []
+            ,lkContract: []
+            ,lkLevels: []
+            ,lkRoster: []
+            ,lkScantimes: []
+            ,lkSite: []
+            ,lkDept: []
+            ,lkSection: []
+            ,lkCrew: []
+            ,lkRelate: []
+            ,lkBank: []
+            ,lkCard: []
+            ,lkYear: []
+
+            ,detailData: []
+            ,empData: []
+            ,contractData: []
+            ,bankData: []
+            ,cardData: []
+            ,alData: []
+            ,fileData: []
+            ,loginPermiss: []
+
+            ,showList: true
             ,showAdd: ''
             ,showDetail: ''
             ,showTab: ''
-            ,btnClear: false
             ,search: ''
-            ,btnEmpUpdate: ''
-            ,btnEmpNew: false
+            ,btnClear: false
+            ,btnEmpUpd: ''
             ,btnEmpAdd: ''
-            ,btnDetailUpdate: ''
+            ,btnDetailUpd: ''
             ,btnDetailAdd: ''
+            ,btnContUpd: ''
+            ,btnContAdd: ''
+            ,btnBankUpd: ''
+            ,btnBankAdd: ''
+            ,btnCardUpd: ''
+            ,btnCardAdd: ''
+            ,btnAlUpd: ''
+            ,btnAlAdd: ''
+            ,actTab: ''
 
-            ,empList: []
-            ,countryLK: []
-            ,positionLK: []
-            ,statusLK: []
-            ,contractLK: []
-            ,levelsLK: []
-            ,rosterLK: []
-            ,scantimesLK: []
-            ,siteLK: []
-            ,deptLK: []
-            ,sectionLK: []
-            ,crewLK: []
-            ,detail: []
 
-            ,data: {
-                id: ''
-                ,userid: ''
-                ,gender: 'Male'
-                ,name: ''
-                ,surname: ''
-                ,namelao: ''
-                ,surnamelao: ''
-                ,phone: ''
-                ,birthday: ''
-                ,email: ''
-                ,country: ''
-                ,province: ''
-                ,district: ''
-                ,village: ''
-                ,startdate: ''
-                ,enddate: ''
-                ,position: ''
-                ,status: 'Current'
-                ,contract: ''
-                ,levels: ''
-                ,empid: ''
-                ,scanid: ''
-                ,foodid: ''
-                ,roster: ''
-                ,scantimes: ''
-                ,hours: '9'
-                ,site: ''
-                ,dept: ''
-                ,section: ''
-                ,crew: ''
-                ,photo: ''
-                ,remarks: ''
-            }
             ,photoPrev: window.location.origin + '/assets/img/no.jpg'
+            ,empForm: { id: '', userid: '', gender: 'Male', name: '', surname: '', namelao: '', surnamelao: '', phone: '', birthday: '', email: '', country: '', province: '', district: '', village: '', startdate: '', enddate: '', position: '', status: 'Current', contract: '', levels: '', empid: '', scanid: '', foodid: '', roster: '', scantimes: '', hours: '9', site: '', dept: '', section: '', crew: '', photo: '', remarks: ''}
+            ,contForm: { id: '', userid: '', person: '', relate: '', phone: '', address: '' }
+            ,bankForm: { id: '', userid: '', bankname: '', branch: '', accname: '', accno: '', remarks: '' }
+            ,cardForm: { id: '', userid: '', cardtype: '', cardid: '', expire: '', remarks: '' }
+            ,alForm: { id: '', userid: '', years: '', remain: '', remarks: '' }
+            
 
         };
     },
@@ -656,25 +1064,17 @@ export default {
         
     },
 
-    // watch:{
-	// 	search(){
-	// 		if(this.search == ''){
-	// 			this.getEmpList();
-	// 		}
-	// 	}
-	// },
-
     computed:{
         btnEmpAddShow(){
-            if(this.data.name == '' || this.data.namelao == '' || this.data.country == null || this.data.startdate == '' || this.data.scanid == '' || this.data.roster == null || this.data.scantimes == null || this.data.hours == '' || this.data.site == null || this.data.dept == null ){
+            if(this.empForm.name == '' || this.empForm.namelao == '' || this.empForm.country == null || this.empForm.startdate == '' || this.empForm.scanid == '' || this.empForm.roster == null || this.empForm.scantimes == null || this.empForm.hours == '' || this.empForm.site == null || this.empForm.dept == null ){
                 return 'disabled'
             } else {
                 return ''
             }
         },
         
-        btnEmpUpdateShow(){
-            if (this.data.name == '' || this.data.namelao == '' || this.data.country == null){
+        btnEmpUpdShow(){
+            if (this.empForm.name == '' || this.empForm.namelao == '' || this.empForm.country == null){
                 return 'disabled'
             } else {
                 return ''
@@ -682,7 +1082,39 @@ export default {
         },
 
         btnDetailShow(){
-            if (this.data.site == null || this.data.startdate == '' || this.data.status == null || this.data.scanid == '' || this.data.roster == null || this.data.scantimes == null || this.data.hours == '' || this.data.dept == null){
+            if (this.empForm.site == null || this.empForm.startdate == '' || this.empForm.status == null || this.empForm.scanid == '' || this.empForm.roster == null || this.empForm.scantimes == null || this.empForm.hours == '' || this.empForm.dept == null){
+                return 'disabled'
+            } else {
+                return ''
+            }
+        },
+
+        btnContAddShow(){
+            if (this.contForm.person == '' || this.contForm.relate == null || this.contForm.phone == ''){
+                return 'disabled'
+            } else {
+                return ''
+            }
+        },
+
+        btnBankAddShow(){
+            if (this.bankForm.bankname == null || this.bankForm.accname == '' || this.bankForm.accno == ''){
+                return 'disabled'
+            } else {
+                return ''
+            }
+        },
+
+        btnCardAddShow(){
+            if (this.cardForm.cardtype == null || this.cardForm.cardid == ''){
+                return 'disabled'
+            } else {
+                return ''
+            }
+        },
+
+        btnAlAddShow(){
+            if (this.alForm.years == null || this.alForm.remain == ''){
                 return 'disabled'
             } else {
                 return ''
@@ -692,9 +1124,9 @@ export default {
 
     methods: {
         
-        async getEmpList(page){
+        async getEmpData(page){
 			const response = await axios.get(`/api/employee?page=${page}&search=${this.search}`)
-            this.empList = response.data;
+            this.empData = response.data;
 
             if (response.data[0].photo){
                 this.photoPrev = window.location.origin + '/assets/img/profile/' + response.data[0].photo
@@ -704,33 +1136,33 @@ export default {
         },
 
         empNew(){
-            // if(this.$store.getters.usertype == 'user'){
-            //     this.$swal.fire({
-            //         text: "You don't have permission to add employee!",
-            //         icon: 'error',
-            //         showCancelButton: false,
-            //         showConfirmButton: false,
-            //         allowOutsideClick: false,
-            //         timerProgressBar: true,
-            //         timer: 1000
-            //     })
-            // } else {
+            if(this.loginPermiss.emp_add == 0){
+                this.$swal.fire({
+                    text: "You don't have permission to add employee!",
+                    icon: 'error',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    timer: 1000
+                })
+            } else {
                 this.showList = false;
                 this.showAdd = true;
                 this.showDetail = true;
                 this.showTab = false;
-                this.btnEmpUpdate = false;
+                this.btnEmpUpd = false;
                 this.btnEmpAdd = true;
-                this.empClear();
-                this.detailClear();
-            // }
+                this.empFormClear();
+                this.detailFormClear();
+            }
         },
 
-        empPrev(userid){
+        empPrev(id){
             $('#empPreview').modal('show');
 
             this.$axios.get('/sanctum/csrf-cookie').then((response)=>{
-                this.$axios.post(`/api/employee/prev/${userid}`)
+                this.$axios.post(`/api/employee/preview/${id}`)
                 .then((response)=>{
                     this.prevData = response.data;
                 }).catch((error)=>{
@@ -740,7 +1172,7 @@ export default {
         },
 
        async empEdit(id){
-            if(this.$store.getters.usertype == 'user'){
+            if(this.loginPermiss.emp_edit == 0){
                 this.$swal.fire({
                     text: "You don't have permission to edit employee!",
                     icon: 'error',
@@ -752,34 +1184,50 @@ export default {
                 })
             } else {
 
-                this.empClear();
+                this.empFormClear();
                 const response = await axios.post(`/api/employee/edit/${id}`)
-                    this.data.userid = response.data.id;
-                    this.data.gender = response.data.gender;
-                    this.data.name = response.data.name;
-                    this.data.surname = response.data.surname;
-                    this.data.phone = response.data.phone;
-                    this.data.namelao = response.data.namelao;
-                    this.data.surnamelao = response.data.surnamelao;
-                    this.data.birthday = response.data.birthday;
-                    this.data.email = response.data.email;
-                    this.data.country = response.data.country;
-                    this.data.province = response.data.province;
-                    this.data.district = response.data.district;
-                    this.data.village = response.data.village;
+                    this.userid = response.data.id;
+
+                    this.empForm.userid = response.data.id;
+                    this.contForm.userid = response.data.id;
+                    this.bankForm.userid = response.data.id;
+                    this.cardForm.userid = response.data.id;
+                    this.alForm.userid = response.data.id;
+
+                    this.empForm.gender = response.data.gender;
+                    this.empForm.name = response.data.name;
+                    this.empForm.surname = response.data.surname;
+                    this.empForm.phone = response.data.phone;
+                    this.empForm.namelao = response.data.namelao;
+                    this.empForm.surnamelao = response.data.surnamelao;
+                    this.empForm.birthday = response.data.birthday;
+                    this.empForm.email = response.data.email;
+                    this.empForm.country = response.data.country;
+                    this.empForm.province = response.data.province;
+                    this.empForm.district = response.data.district;
+                    this.empForm.village = response.data.village;
 
                     if (response.data.photo){
                         this.photoPrev = window.location.origin + '/assets/img/profile/' + response.data.photo
                     } else {
                         this.photoPrev = window.location.origin + '/assets/img/no.jpg'
                     }
+
                     this.getDetail(id);
+                    this.getContract(id);
+                    this.getBank(id);
+                    this.getCard(id);
+                    this.getAl(id);
+                    this.getFiles(id);
+
+                    this.actTab = '';
                     this.showList = false;
                     this.showAdd = true;
                     this.showDetail = false;
                     this.showTab = true;
                     this.btnEmpAdd = false;
-                    this.btnEmpUpdate = true;
+                    this.btnEmpUpd = true;
+
             }
         },
 
@@ -790,42 +1238,42 @@ export default {
 
         empAdd(){
             let fd = new FormData();
-                fd.append('gender', this.data.gender);
-                fd.append('name', this.data.name);
-                fd.append('surname', this.data.surname);
-                fd.append('namelao', this.data.namelao);
-                fd.append('surnamelao', this.data.surnamelao);
-                fd.append('phone', this.data.phone);
-                fd.append('birthday', this.data.birthday);
-                fd.append('email', this.data.email);
-                fd.append('country', this.data.country);
-                fd.append('province', this.data.province);
-                fd.append('district', this.data.district);
-                fd.append('village', this.data.village);
-                fd.append('startdate', this.data.startdate);
-                fd.append('enddate', this.data.enddate);
-                fd.append('position', this.data.position);
-                fd.append('status', this.data.status);
-                fd.append('contract', this.data.contract);
-                fd.append('levels', this.data.levels);
-                fd.append('empid', this.data.empid);
-                fd.append('scanid', this.data.scanid);
-                fd.append('foodid', this.data.foodid);
-                fd.append('roster', this.data.roster);
-                fd.append('scantimes', this.data.scantimes);
-                fd.append('hours', this.data.hours);
-                fd.append('site', this.data.site);
-                fd.append('dept', this.data.dept);
-                fd.append('section', this.data.section);
-                fd.append('crew', this.data.crew);
-                fd.append('photo', this.data.photo);
+                fd.append('gender', this.empForm.gender);
+                fd.append('name', this.empForm.name);
+                fd.append('surname', this.empForm.surname);
+                fd.append('namelao', this.empForm.namelao);
+                fd.append('surnamelao', this.empForm.surnamelao);
+                fd.append('phone', this.empForm.phone);
+                fd.append('birthday', this.empForm.birthday);
+                fd.append('email', this.empForm.email);
+                fd.append('country', this.empForm.country);
+                fd.append('province', this.empForm.province);
+                fd.append('district', this.empForm.district);
+                fd.append('village', this.empForm.village);
+                fd.append('startdate', this.empForm.startdate);
+                fd.append('enddate', this.empForm.enddate);
+                fd.append('position', this.empForm.position);
+                fd.append('status', this.empForm.status);
+                fd.append('contract', this.empForm.contract);
+                fd.append('levels', this.empForm.levels);
+                fd.append('empid', this.empForm.empid);
+                fd.append('scanid', this.empForm.scanid);
+                fd.append('foodid', this.empForm.foodid);
+                fd.append('roster', this.empForm.roster);
+                fd.append('scantimes', this.empForm.scantimes);
+                fd.append('hours', this.empForm.hours);
+                fd.append('site', this.empForm.site);
+                fd.append('dept', this.empForm.dept);
+                fd.append('section', this.empForm.section);
+                fd.append('crew', this.empForm.crew);
+                fd.append('photo', this.empForm.photo);
 
             this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
-                this.$axios.post('api/employee/add', fd, {headers:{"Content-Type": "multipart/form-date"}})
+                this.$axios.post('/api/employee/add', fd, {headers:{"Content-Type": "multipart/form-date"}})
                 .then((response)=>{
                     if(response.data.success){
 
-                        this.getEmpList();
+                        this.getEmpData();
                         this.showAdd = false;
                         this.showList = true;
 
@@ -850,26 +1298,26 @@ export default {
             }).then((result)=>{
                 if(result.isConfirmed){
                     let fd = new FormData();
-                        fd.append('id', this.data.userid);
-                        fd.append('gender', this.data.gender);
-                        fd.append('name', this.data.name);
-                        fd.append('surname', this.data.surname);
-                        fd.append('namelao', this.data.namelao);
-                        fd.append('surnamelao', this.data.surnamelao);
-                        fd.append('phone', this.data.phone);
-                        fd.append('birthday', this.data.birthday);
-                        fd.append('email', this.data.email);
-                        fd.append('country', this.data.country);
-                        fd.append('province', this.data.province);
-                        fd.append('district', this.data.district);
-                        fd.append('village', this.data.village);
-                        fd.append('photo', this.data.photo);
+                        fd.append('id', this.userid);
+                        fd.append('gender', this.empForm.gender);
+                        fd.append('name', this.empForm.name);
+                        fd.append('surname', this.empForm.surname);
+                        fd.append('namelao', this.empForm.namelao);
+                        fd.append('surnamelao', this.empForm.surnamelao);
+                        fd.append('phone', this.empForm.phone);
+                        fd.append('birthday', this.empForm.birthday);
+                        fd.append('email', this.empForm.email);
+                        fd.append('country', this.empForm.country);
+                        fd.append('province', this.empForm.province);
+                        fd.append('district', this.empForm.district);
+                        fd.append('village', this.empForm.village);
+                        fd.append('photo', this.empForm.photo);
                     
                     this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
-                        this.$axios.post('api/employee/update', fd, {headers:{"Content-Type": "multipart/form-date"}})
+                        this.$axios.post('/api/employee/update', fd, {headers:{"Content-Type": "multipart/form-date"}})
                         .then((response)=>{
 
-                            this.getEmpList();
+                            this.getEmpData();
                             this.showAdd = false;
                             this.showList = true;
 
@@ -882,7 +1330,7 @@ export default {
         },
 
         empDel(id){
-            if (this.$store.getters.usertype == 'user' || this.$store.getters.usertype == 'admin'){
+            if (this.loginPermiss.emp_del == 0){
                 this.$swal.fire({
                     text: "You don't have permission to delete employee!",
                     icon: 'error',
@@ -891,10 +1339,8 @@ export default {
                     allowOutsideClick: false,
                     timerProgressBar: true,
                     timer: 1000
-
                 })
             } else {
-
                 this.$swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -913,7 +1359,7 @@ export default {
 
                                 this.search = '';
                                 this.btnClear = false;
-                                this.getEmpList();
+                                this.getEmpData();
 
                                 this.$swal.fire({
                                     title: 'Deleted!',
@@ -935,127 +1381,81 @@ export default {
         },
 
         async getDetail(id){
-            const response = await axios.post(`api/employee/detail/${id}`)
-            this.detail = response.data;
+            const response = await axios.post(`/api/detail/data/${id}`)
+            this.detailData = response.data;
         },
 
         detailNew(){
             $('#detailAddEdit').modal('show');
-            this.detailClear();
-            this.btnDetailUpdate = false;
+            this.detailFormClear();
+            this.btnDetailUpd = false;
             this.btnDetailAdd = true;
 
         },
 
         detailAdd(){
-            let fd = new FormData();
-                fd.append('userid', this.data.userid);
-                fd.append('site', this.data.site);
-                fd.append('startdate', this.data.startdate);
-                fd.append('enddate', this.data.enddate);
-                fd.append('status', this.data.status);
-                fd.append('position', this.data.position);
-                fd.append('dept', this.data.dept);
-                fd.append('section', this.data.section);
-                fd.append('crew', this.data.crew);
-                fd.append('empid', this.data.empid);
-                fd.append('scanid', this.data.scanid);
-                fd.append('foodid', this.data.foodid);
-                fd.append('roster', this.data.roster);
-                fd.append('scantimes', this.data.scantimes);
-                fd.append('hours', this.data.hours);
-                fd.append('levels', this.data.levels);
-                fd.append('contract', this.data.contract);
-                fd.append('remarks', this.data.remarks);
+            this.$axios.post('/api/detail/add', this.empForm)
+            .then((response)=>{
+                if(response.data.success){
 
-            this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
-                this.$axios.post('api/employee/detailAdd', fd, {headers:{"Content-Type": "multipart/form-date"}})
-                .then((response)=>{
-                    if(response.data.success){
+                    $('#detailAddEdit').modal('hide');
+                    this.getDetail(this.empForm.userid);
 
-                        $('#detailAddEdit').modal('hide');
-                        this.getDetail(this.data.userid);
-                        this.getEmpList();
-
-                    } else {
-                        alert(response.data.message)
-                    }
-                }).catch((error)=>{
-                    console.log(error);
-                })
-            });
+                } else {
+                    alert(response.data.message)
+                }
+            }).catch((error)=>{
+                console.log(error);
+            })
         },
 
         detailEdit(id){
             $('#detailAddEdit').modal('show');
-            this.$axios.post(`/api/employee/detailEdit/${id}`)
+            this.$axios.post(`/api/detail/edit/${id}`)
             .then((response)=>{
 
-                this.detailClear();
+                this.detailFormClear();
                 this.btnDetailAdd = false;
-                this.btnDetailUpdate = true;
+                this.btnDetailUpd = true;
 
-                this.data.id = response.data.id;
-                this.data.site = response.data.site;
-                this.data.startdate = response.data.startdate;
-                this.data.enddate = response.data.enddate;
-                this.data.status = response.data.status;
-                this.data.position = response.data.position;
-                this.data.dept = response.data.department;
-                this.data.section = response.data.section;
-                this.data.crew = response.data.crew;
-                this.data.empid = response.data.empid;
-                this.data.scanid = response.data.scanid;
-                this.data.foodid = response.data.foodid;
-                this.data.roster = response.data.roster;
-                this.data.scantimes = response.data.scantimes;
-                this.data.hours = response.data.working_hrs;
-                this.data.levels = response.data.levels;
-                this.data.contract = response.data.contract;
-                this.data.remarks = response.data.remarks;
+                this.empForm.id = response.data.id;
+                this.empForm.site = response.data.site;
+                this.empForm.startdate = response.data.startdate;
+                this.empForm.enddate = response.data.enddate;
+                this.empForm.status = response.data.status;
+                this.empForm.position = response.data.position;
+                this.empForm.dept = response.data.department;
+                this.empForm.section = response.data.section;
+                this.empForm.crew = response.data.crew;
+                this.empForm.empid = response.data.empid;
+                this.empForm.scanid = response.data.scanid;
+                this.empForm.foodid = response.data.foodid;
+                this.empForm.roster = response.data.roster;
+                this.empForm.scantimes = response.data.scantimes;
+                this.empForm.hours = response.data.working_hrs;
+                this.empForm.levels = response.data.levels;
+                this.empForm.contract = response.data.contract;
+                this.empForm.remarks = response.data.remarks;
 
             }).catch((error)=>{
                 console.log(error);
             })
         },
 
-        detailUpdate(id){
-            let fd = new FormData();
-                fd.append('id', this.data.id);
-                fd.append('site', this.data.site);
-                fd.append('startdate', this.data.startdate);
-                fd.append('enddate', this.data.enddate);
-                fd.append('status', this.data.status);
-                fd.append('position', this.data.position);
-                fd.append('dept', this.data.dept);
-                fd.append('section', this.data.section);
-                fd.append('crew', this.data.crew);
-                fd.append('empid', this.data.empid);
-                fd.append('scanid', this.data.scanid);
-                fd.append('foodid', this.data.foodid);
-                fd.append('roster', this.data.roster);
-                fd.append('scantimes', this.data.scantimes);
-                fd.append('hours', this.data.hours);
-                fd.append('levels', this.data.levels);
-                fd.append('contract', this.data.contract);
-                fd.append('remarks', this.data.remarks);
-            
-            this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
-                this.$axios.post('api/employee/detailUpdate', fd, {headers:{"Content-Type": "multipart/form-date"}})
-                .then((response)=>{
+        detailUpdate(){
+            this.$axios.post('/api/detail/update', this.empForm)
+            .then((response)=>{
 
-                    $('#detailAddEdit').modal('hide');
-                    this.getDetail(this.data.userid);
-                    this.getEmpList();
+                $('#detailAddEdit').modal('hide');
+                this.getDetail(this.empForm.userid);
 
-                }).catch((error)=>{
-                    console.log(error);
-                })
-            });
+            }).catch((error)=>{
+                console.log(error);
+            })
         },
 
         detailDel(id){
-            if (this.$store.getters.usertype == 'user' || this.$store.getters.usertype == 'admin'){
+            if (this.loginPermiss.detail_del == 0){
                 this.$swal.fire({
                     text: "You don't have permission to delete!",
                     icon: 'error',
@@ -1066,7 +1466,6 @@ export default {
                     timer: 1000
                 })
             } else {
-
                 this.$swal.fire({
                     text: "Do you want to delete this record?",
                     icon: 'question',
@@ -1079,11 +1478,10 @@ export default {
                 }).then((result)=>{
                     if(result.isConfirmed){
                         this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
-                            this.$axios.post(`/api/employee/detailDel/${id}`)
+                            this.$axios.post(`/api/detail/delete/${id}`)
                             .then((response)=>{
 
-                                this.getDetail(this.data.userid);
-                                this.getEmpList();
+                                this.getDetail(this.userid);
 
                             }).catch((error)=>{
                                 console.log(error);
@@ -1095,20 +1493,493 @@ export default {
 
         },
 
+        async getContract(id){
+            const response = await axios.post(`/api/contract/data/${id}`)
+            this.contractData = response.data;
+        },
+
+        contractNew(){
+            $('#contract').modal('show');
+            this.contFormClear();
+            this.getRelateLK();
+            this.btnContUpd = false;
+            this.btnContAdd = true;
+        },
+
+        contractAdd(){
+            this.$axios.post('/api/contract/add', this.contForm)
+            .then((res) => {
+                 if(res.data.success){
+
+                    $('#contract').modal('hide');
+                    this.getContract(this.contForm.userid);
+
+                } else {
+                    alert(res.data.message)
+                }
+            }).catch ((err) =>{
+                console.log(err);
+            })
+        },
+
+        contractEdit(id){
+            $('#contract').modal('show');
+            this.$axios.post(`/api/contract/edit/${id}`)
+            .then((res)=>{
+
+                this.contFormClear();
+                this.getRelateLK();
+                this.btnContAdd = false;
+                this.btnContUpd = true;
+
+                this.contForm.id = res.data.id;
+                this.contForm.person = res.data.person;
+                this.contForm.relate = res.data.relationship;
+                this.contForm.phone = res.data.phone;
+                this.contForm.address = res.data.address;
+
+            }).catch((error)=>{
+                console.log(error);
+            })
+        },
+
+        contractUpdate(){
+            this.$axios.post('/api/contract/update', this.contForm)
+            .then((response)=>{
+
+                $('#contract').modal('hide');
+                this.getContract(this.contForm.userid);
+
+            }).catch((error)=>{
+                console.log(error);
+            })
+        },
+
+        contractDel(id){
+            if (this.loginPermiss.cont_del == 0){
+                this.$swal.fire({
+                    text: "You don't have permission to delete!",
+                    icon: 'error',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    timer: 1000
+                })
+            } else {
+                this.$swal.fire({
+                    text: "Do you want to delete this record?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fe fe-trash-2"></i> <span class="font-weight-light">Delete</span>',
+                    cancelButtonText: '<i class="fe fe-x"></i> <span class="font-weight-light">Cancel</span>',
+                    confirmButtonColor: '#d33',
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        this.$axios.post(`/api/contract/delete/${id}`)
+                        .then((response)=>{
+
+                            this.getContract(this.userid);
+
+                        }).catch((error)=>{
+                            console.log(error);
+                        })
+                    }
+                });
+            }
+        },
+
+        async getBank(id){
+            const response = await axios.post(`/api/bank/data/${id}`)
+            this.bankData = response.data;
+        },
+
+        bankNew(){
+            $('#bank').modal('show');
+            this.bankFormClear();
+            this.getBankLK();
+            this.btnBankUpd = false;
+            this.btnBankAdd = true;
+        },
+
+        bankAdd(){
+            this.$axios.post('/api/bank/add', this.bankForm)
+            .then((res) => {
+                 if(res.data.success){
+
+                    $('#bank').modal('hide');
+                    this.getBank(this.userid);
+
+                } else {
+                    alert(res.data.message)
+                }
+            }).catch ((err) => {
+                console.log(err);
+            })
+        },
+
+        bankEdit(id){
+            $('#bank').modal('show');
+            this.$axios.post(`/api/bank/edit/${id}`)
+            .then((res)=>{
+
+                this.bankFormClear();
+                this.getBankLK();
+                this.btnBankAdd = false;
+                this.btnBankUpd = true;
+
+                this.bankForm.id = res.data.id;
+                this.bankForm.bankname = res.data.bank_name;
+                this.bankForm.branch = res.data.branch;
+                this.bankForm.accname = res.data.account_name;
+                this.bankForm.accno = res.data.account_no;
+                this.bankForm.remarks = res.data.remarks;
+
+            }).catch((error)=>{
+                console.log(error);
+            })
+        },
+
+        bankUpdate(){
+            this.$axios.post('/api/bank/update', this.bankForm)
+            .then((response)=>{
+
+                $('#bank').modal('hide');
+                this.getBank(this.userid);
+
+            }).catch((error)=>{
+                console.log(error);
+            })
+        },
+
+        bankDel(id){
+            if (this.loginPermiss.bank_del == 0){
+                this.$swal.fire({
+                    text: "You don't have permission to delete!",
+                    icon: 'error',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    timer: 1000
+                })
+            } else {
+                this.$swal.fire({
+                    text: "Do you want to delete this record?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fe fe-trash-2"></i> <span class="font-weight-light">Delete</span>',
+                    cancelButtonText: '<i class="fe fe-x"></i> <span class="font-weight-light">Cancel</span>',
+                    confirmButtonColor: '#d33',
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        this.$axios.post(`/api/bank/delete/${id}`)
+                        .then((response)=>{
+
+                            this.getBank(this.userid);
+
+                        }).catch((error)=>{
+                            console.log(error);
+                        })
+                    }
+                });
+            }
+        },
+
+        async getCard(id){
+            const response = await axios.post(`/api/card/data/${id}`)
+            this.cardData = response.data;
+        },
+
+        cardNew(){
+            $('#cards').modal('show');
+            this.cardFormClear();
+            this.getCardLK();
+            this.btnCardUpd = false;
+            this.btnCardAdd = true;
+        },
+        
+        cardAdd(){
+            this.$axios.post('/api/card/add', this.cardForm)
+            .then((res) => {
+                 if(res.data.success){
+                    $('#cards').modal('hide');
+                    this.getCard(this.cardForm.userid);
+                } else {
+                    alert(res.data.message)
+                }
+            }).catch ((err) =>{
+                console.log(err);
+            })
+        },
+
+        cardEdit(id){
+            $('#cards').modal('show');
+            this.$axios.post(`/api/card/edit/${id}`)
+            .then((res)=>{
+
+                this.cardFormClear();
+                this.getCardLK();
+                this.btnCardAdd = false;
+                this.btnCardUpd = true;
+
+                this.cardForm.id = res.data.id;
+                this.cardForm.cardtype = res.data.cardtype;
+                this.cardForm.cardid = res.data.cardid;
+                this.cardForm.expire = res.data.expiredate;
+                this.cardForm.remarks = res.data.remarks;
+
+            }).catch((error)=>{
+                console.log(error);
+            })
+        },
+
+        cardUpdate(){
+            this.$axios.post('/api/card/update', this.cardForm)
+            .then((response)=>{
+                $('#cards').modal('hide');
+                this.getCard(this.cardForm.userid);
+            }).catch((error)=>{
+                console.log(error);
+            })
+        },
+
+        cardDel(id){
+            if (this.loginPermiss.card_del == 0){
+                this.$swal.fire({
+                    text: "You don't have permission to delete!",
+                    icon: 'error',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    timer: 1000
+                })
+            } else {
+                this.$swal.fire({
+                    text: "Do you want to delete this record?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fe fe-trash-2"></i> <span class="font-weight-light">Delete</span>',
+                    cancelButtonText: '<i class="fe fe-x"></i> <span class="font-weight-light">Cancel</span>',
+                    confirmButtonColor: '#d33',
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        this.$axios.post(`/api/card/delete/${id}`)
+                        .then((response)=>{
+
+                            this.getCard(this.cardForm.userid);
+
+                        }).catch((error)=>{
+                            console.log(error);
+                        })
+                    }
+                });
+            }
+        },
+
+        async getAl(id){
+            const response = await axios.post(`/api/annual/data/${id}`)
+            this.alData = response.data;
+        },
+
+        alNew(){
+            $('#al').modal('show');
+            this.alFormClear();
+            this.getYearLK();
+            this.btnAlUpd = false;
+            this.btnAlAdd = true;
+        },
+        
+        alAdd(){
+            this.$axios.post('/api/annual/add', this.alForm)
+            .then((res) => {
+                 if(res.data.success){
+
+                    $('#al').modal('hide');
+                    this.getAl(this.alForm.userid);
+
+                } else {
+                    alert(res.data.message)
+                }
+            }).catch ((err) =>{
+                console.log(err);
+            })
+        },
+
+        alEdit(id){
+            $('#al').modal('show');
+            this.$axios.post(`/api/annual/edit/${id}`)
+            .then((res)=>{
+
+                this.alFormClear();
+                this.getYearLK();
+                this.btnAlAdd = false;
+                this.btnAlUpd = true;
+
+                this.alForm.id = res.data.id;
+                this.alForm.years = res.data.years;
+                this.alForm.remain = res.data.remain;
+                this.alForm.remarks = res.data.remarks;
+
+            }).catch((error)=>{
+                console.log(error);
+            })
+        },
+
+        alUpdate(){
+            this.$axios.post('/api/annual/update', this.alForm)
+            .then((response)=>{
+
+                $('#al').modal('hide');
+                this.getAl(this.alForm.userid);
+
+            }).catch((error)=>{
+                console.log(error);
+            })
+        },
+
+        alDel(id){
+            if (this.loginPermiss.al_del == 0){
+                this.$swal.fire({
+                    text: "You don't have permission to delete!",
+                    icon: 'error',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    timer: 1000
+                })
+            } else {
+                this.$swal.fire({
+                    text: "Do you want to delete this record?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fe fe-trash-2"></i> <span class="font-weight-light">Delete</span>',
+                    cancelButtonText: '<i class="fe fe-x"></i> <span class="font-weight-light">Cancel</span>',
+                    confirmButtonColor: '#d33',
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        this.$axios.post(`/api/annual/delete/${id}`)
+                        .then((response)=>{
+
+                            this.getAl(this.alForm.userid);
+
+                        }).catch((error)=>{
+                            console.log(error);
+                        })
+                    }
+                });
+            }
+        },
+
+        async getFiles(id){
+            const response = await axios.post(`/api/file/data/${id}`)
+            this.fileData = response.data;
+        },
+
+
+        fileNew(){
+            this.$refs.fileInput2.click();
+        },
+
+        fileAdd(){
+            let fd = new FormData();
+            for (let i = 0; i < this.$refs.fileInput2.files.length; i++){
+                
+                let file = this.$refs.fileInput2.files[i];
+                    fd.append('files[' + i + ']', file);
+                    fd.append('userid', this.empForm.userid);
+            }
+            this.$swal.fire({
+                text: "Do you want to add selected file?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fe fe-plus"></i> <span class="font-weight-light">Add</span>',
+                cancelButtonText: '<i class="fe fe-x"></i> <span class="font-weight-light">Cancel</span>',
+                allowEnterKey: false,
+                allowOutsideClick: false,
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    this.$axios.post('/api/file/add', fd, {headers:{"Content-Type": "multipart/form-date"}})
+                    .then(response => {   
+                        // if(response.data.success){
+
+                            this.getFiles(this.empForm.userid);
+
+                        // } else {
+                        //     alert(response.data.message)
+                        // }
+                    }).catch (err => {
+                        console.log(err);
+                    });
+                }
+            });
+        },
+        
+        fileDownload(file){
+            const url = `/api/file/download/${file}`;
+            window.location.href = url;
+        },
+
+        fileDel(file){
+            if (this.loginPermiss.file_del == 0){
+                this.$swal.fire({
+                    text: "You don't have permission to delete!",
+                    icon: 'error',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    timer: 1000
+                })
+            } else {
+                this.$swal.fire({
+                    text: "Do you want to delete this file?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fe fe-trash-2"></i> <span class="font-weight-light">Delete</span>',
+                    cancelButtonText: '<i class="fe fe-x"></i> <span class="font-weight-light">Cancel</span>',
+                    confirmButtonColor: '#d33',
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        this.$axios.post(`api/file/delete/${file}`)
+                        .then((response)=>{
+
+                            this.getFiles(this.empForm.userid);
+
+                        }).catch((error)=>{
+                            console.log(error);
+                        })
+                    }
+                });
+            }
+        },
+
         searchChange(){
             if(this.search.length >0){
                 this.btnClear = true;
-                this.getEmpList();
+                this.getEmpData();
             } else {
                 this.btnClear = false;
-                this.getEmpList();
+                this.getEmpData();
             }
         },
 
         searchClear(){
             this.search = '';
             this.btnClear = false,
-            this.getEmpList();
+            this.getEmpData();
         },
 
         chooseImage(){
@@ -1116,96 +1987,146 @@ export default {
         },
 
         onSeclected(event){
-            this.data.photo = event.target.files[0];
+            this.empForm.photo = event.target.files[0];
             let reader = new FileReader();
-            reader.readAsDataURL(this.data.photo);
+            reader.readAsDataURL(this.empForm.photo);
             reader.addEventListener("load", function(){
                 this.photoPrev = reader.result;
             }.bind(this), false);
 		},
 
-        empClear(){
-            let f = this.data;
-            f.gender = 'Male';
-            f.name = '';
-            f.surname = '';
-            f.namelao = '';
-            f.surnamelao = '';
-            f.phone = '';
-            f.birthday = '';
-            f.email = '';
-            f.country = '';
-            f.province = '';
-            f.district = '';
-            f.village = '';
-            f.photo = '';
-            this.photoPrev = window.location.origin + '/assets/img/no.jpg'
+        empFormClear(){
+            let f = this.empForm;
+                f.gender = 'Male';
+                f.name = '';
+                f.surname = '';
+                f.namelao = '';
+                f.surnamelao = '';
+                f.phone = '';
+                f.birthday = '';
+                f.email = '';
+                f.country = '';
+                f.province = '';
+                f.district = '';
+                f.village = '';
+                f.photo = '';
+                this.photoPrev = window.location.origin + '/assets/img/no.jpg'
         },
 
-        detailClear(){
-            let f = this.data;
-            f.startdate = '';
-            f.enddate = '';
-            f.position = '';
-            f.contract = '';
-            f.levels = '';
-            f.empid = '';
-            f.scanid = '';
-            f.foodid = '';
-            f.roster = '';
-            f.scantimes = '';
-            f.hours = '9';
-            f.site = '';
-            f.dept = '';
-            f.section = '';
-            f.crew = '';
-            f.remarks = '';
+        detailFormClear(){
+            let f = this.empForm;
+                f.startdate = '';
+                f.enddate = '';
+                f.position = '';
+                f.contract = '';
+                f.levels = '';
+                f.empid = '';
+                f.scanid = '';
+                f.foodid = '';
+                f.roster = '';
+                f.scantimes = '';
+                f.hours = '9';
+                f.site = '';
+                f.dept = '';
+                f.section = '';
+                f.crew = '';
+                f.remarks = '';
+        },
+
+        contFormClear(){
+            let f = this.contForm;
+                f.person = '';
+                f.relate = '';
+                f.phone = '';
+                f.address = '';
+        },
+
+        bankFormClear(){
+            let f = this.bankForm;
+                f.bankname = '';
+                f.branch = '';
+                f.accname = '';
+                f.accno = '';
+                f.remarks = '';
+        },
+
+        cardFormClear(){
+            let f = this.cardForm;
+                f.cardtype = '';
+                f.cardid = '';
+                f.expire = '';
+                f.remarks = '';
+        },
+
+        alFormClear(){
+            let f = this.alForm;
+                f.year = '';
+                f.remain = '';
+                f.remarks = '';
         },
 
         async getLookup(){
             const country = await axios.get('/api/lookup/country')
-            this.countryLK = country.data;
+            this.lkCountry = country.data;
 
             const position = await axios.get('/api/lookup/position')
-            this.positionLK = position.data;
+            this.lkPosition = position.data;
 
             const status = await axios.get('/api/lookup/status')
-            this.statusLK = status.data;
+            this.lkStatus = status.data;
 
             const contract = await axios.get('/api/lookup/contract')
-            this.contractLK = contract.data;
+            this.lkContract = contract.data;
             
             const levels = await axios.get('/api/lookup/levels')
-            this.levelsLK = levels.data;
+            this.lkLevels = levels.data;
             
             const roster = await axios.get('/api/lookup/roster')
-            this.rosterLK = roster.data;
+            this.lkRoster = roster.data;
             
             const scantimes = await axios.get('/api/lookup/scantimes')
-            this.scantimesLK = scantimes.data;
+            this.lkScantimes = scantimes.data;
             
             const site = await axios.get('/api/lookup/site')
-            this.siteLK = site.data;
+            this.lkSite = site.data;
             
             const dept = await axios.get('/api/lookup/dept')
-            this.deptLK = dept.data;
+            this.lkDept = dept.data;
             
             const section = await axios.get('/api/lookup/section')
-            this.sectionLK = section.data;
+            this.lkSection = section.data;
             
             const crew = await axios.get('/api/lookup/crew')
-            this.crewLK = crew.data;
+            this.lkCrew = crew.data;
         },
 
-        userType(){
-            if(this.$store.getters.usertype == 'admin'){
-                this.btnEdit = '';
-                this.btnEmpNew = true;
-            } else if(this.$store.getters.usertype == 'full'){
-                this.btnEmpNew = true;
-                this.btnEdit = '';
-                this.btnDel ='';
-            }
+        getRelateLK(){
+            this.$axios.get('/api/lookup/relate').then((res) => {
+                this.lkRelate = res.data;
+            })
+        },
+
+        getBankLK(){
+            this.$axios.get('/api/lookup/bank').then((res) => {
+                this.lkBank = res.data;
+            })
+        },
+
+        getCardLK(){
+            this.$axios.get('/api/lookup/card').then((res) => {
+                this.lkCard = res.data;
+            })
+        },
+
+        getYearLK(){
+            this.$axios.get('/api/lookup/year').then((res) => {
+                this.lkYear = res.data;
+            })
+        },
+
+        async getPermiss(){
+            const response = await axios.get('/api/permiss')
+            this.loginPermiss = response.data;
         },
 
         formatNumber(value) {
@@ -1227,9 +2148,9 @@ export default {
     },
 
     created(){
-        this.$store.commit('setUsertype', window.Laravel.user.usertype); // Update store
-        this.userType();
-        this.getEmpList();
+        // this.$store.commit('setUsertype', window.Laravel.user.usertype); // Update store
+        this.getPermiss();
+        this.getEmpData();
         this.getLookup();
     },
 
@@ -1264,6 +2185,10 @@ export default {
     .emp-image:hover {
         background: #E0E0E0;
         color: blueviolet ;
+    }
+
+    .multi-color{
+        color: #4D5875;
     }
 
     .bad{
@@ -1316,6 +2241,11 @@ export default {
     .dropdown-hover:hover{
         color: blue;
         font-weight: 500;
+    }
+
+    .btn-add:hover{
+        background: #DDE1E5;
+        border-radius: 50px;
     }
 
 </style>

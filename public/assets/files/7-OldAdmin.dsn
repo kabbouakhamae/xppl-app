@@ -1,0 +1,7 @@
+[ODBC]
+DRIVER=SQL Server
+UID=sa
+DATABASE=FingerScan1
+WSID=XPPL-CHAMLONG-N
+APP=Microsoft Office
+SERVER=192.168.9.1

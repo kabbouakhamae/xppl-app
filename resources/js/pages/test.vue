@@ -74,7 +74,16 @@
             <button class="mt-5" @click="addFile()">Add File</button>
 
 
-            {{ addData }}
+            <div class="ms-1 d-flex justify-content-start align-items-center mt-4">
+                <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" title="Add new bank info" @click="selFiles()">
+                    <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
+                    <input class="d-none" ref="fileInput" type="file" multiple  @change="fileChange" >
+                </button> 
+                <div class="" style="letter-spacing: 0px; padding: 4px 10px">File Name</div>
+            </div>
+
+
+            <!-- {{ addData }} -->
             <div class="table-responsive mt-5">
                 <table class="table-hover mb-0 text-md-nowrap bd-gray-100 bd-1">
                     <thead>
@@ -120,6 +129,14 @@
             </div>
 
 
+<!-- 
+            <div class="mt-4 wd-100 border ht-50 d-flex justify-content-center align-items-center">
+                <button class="btn btn-icon btn-sm btn-primary rounded-circle wd-25 ht-25"  title="Tools">
+                    <i class="mdi mdi-dots-horizontal"></i>
+                </button> 
+            </div> -->
+
+ 
 
                 <!-- <div class="table-responsive mg-t-25">
                     <table class="table main-table-reference table-hover text-nowrap mg-b-0 mg-t-10">
@@ -142,6 +159,8 @@
                         </tbody>
                     </table>
                 </div> -->
+
+
 
             <!-- <i class="fa fa-minus-circle cursor-pointer text-warning"></i>
             <i class="fa fa-plus-circle cursor-pointer text-info"></i> |  
@@ -166,7 +185,7 @@
             </div> -->
 
 
-            <div>
+            <!-- <div>
                 <button class="btn btn-icon btn-sm btn-i wd-30 ht-30" data-bs-toggle="dropdown">
                     <i class="mdi mdi-dots-vertical"></i>
                 </button>
@@ -182,7 +201,7 @@
                         <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
                     </div>
 		        </div>
-            </div>
+            </div> -->
 
 
 
@@ -202,16 +221,16 @@
 
             </div> -->
 	
-            <div class="form-check form-switch">
+            <!-- <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
                 <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
-            </div>
+            </div> -->
 
             <!-- Default switch -->
-            <div class="custom-control custom-switch">
+            <!-- <div class="custom-control custom-switch">
                 <input type="checkbox" class="custom-control-input" id="customSwitches1" v-model="test1" @change='$emit("input", $event.target.checked)'>
                 <label class="custom-control-label" for="customSwitches1">Toggle this switch element</label>
-            </div>
+            </div> -->
 
             <!-- <div class='form-check form-switch'>
                 <input class='form-check-input' type='checkbox' id='flexSwitchCheckDefault' v-model="test1" @change='$emit("input", $event.target.checked)'>
@@ -220,7 +239,7 @@
 
             {{ test1 }}
 
-                <div class="card-body">
+                <!-- <div class="card-body">
                     <div class="main-content-label mg-b-5">
                         Toggle Switches
                     </div>
@@ -254,17 +273,19 @@
                             <span></span>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
             
-            <div class="card-footer d-sm-flex">
+            <!-- <div class="card-footer d-sm-flex">
                 <div class="mt-2 mb-2">
                     <a href="#" class="me-3" data-bs-toggle="tooltip" title="" data-bs-original-title="Attach"><i class="bx bx-paperclip text-muted tx-22"></i></a>
                     <a href="javascript:void(0)" class="me-3" data-bs-toggle="tooltip" title="" data-bs-original-title="Link"><i class="bx bx-link text-muted tx-22"></i></a>
                     <a href="javascript:void(0)" class="me-3" data-bs-toggle="tooltip" title="" data-bs-original-title="Photos"><i class="bx bx-image text-muted tx-22"></i></a>
                     <a href="javascript:void(0)" class="me-3" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete"><i class="bx bx-trash text-muted tx-22"></i></a>
                 </div>
-            </div>
+            </div> -->
+
+            <div class="p-0 border wd-100 ht-100 text-center fw-bold d-flex justify-content-center align-items-center " >File Name</div>
 
 
 
@@ -309,7 +330,7 @@
             </div>
 
 
-        <!-- <div class="main-content-left main-content-left-mail card-body">
+            <!-- <div class="main-content-left main-content-left-mail card-body">
             <a class="btn btn-primary btn-compose" href="" id="btnCompose">Compose</a>
             <div class="main-mail-menu">
                 <nav class="nav main-nav-column mg-b-20">
@@ -343,13 +364,77 @@
             </button> -->
 
 
+            <div class="card-body">
+                <div class="main-content-left main-content-left-mail">
+                    <a class="btn btn-main-primary btn-compose" href="" id="btnCompose">Compose</a>
+                    <div class="main-mail-menu">
+                        <nav class="nav main-nav-column mg-b-20">
+                            <a class="nav-link active" href=""><i class="bx bxs-inbox"></i> Inbox <span>20</span></a> 
+                            <a class="nav-link" href=""><i class="bx bx-star"></i> Starred <span>3</span></a> 
+                            <a class="nav-link" href=""><i class="bx bx-bookmarks"></i> Important <span>10</span></a> 
+                            <a class="nav-link" href=""><i class="bx bx-send"></i> Sent Mail <span>8</span></a> 
+                            <a class="nav-link" href=""><i class="bx bx-edit"></i> Drafts <span>15</span></a> 
+                            <a class="nav-link" href=""><i class="bx bx-message-error"></i> Spam <span>128</span></a> 
+                            <a class="nav-link" href=""><i class="bx bx-trash"></i> Trash <span>6</span></a>
+                        
+                        </nav><label class="main-content-label main-content-label-sm">Label</label>
+                        <nav class="nav main-nav-column mg-b-20">
+                            <a class="nav-link" href="#"><i class="bx bx-folder-open"></i> Social <span>10</span></a> <a class="nav-link" href="#"><i class="bx bx-folder"></i> Promotions <span>22</span></a> <a class="nav-link" href="#"><i class="bx bx-folder-plus"></i> Updates <span>17</span></a>
+                        </nav><label class="main-content-label main-content-label-sm">Tags</label>
+                        <nav class="nav main-nav-column">
+                            <a class="nav-link" href="#"><i class="bx bxl-twitter"></i> Twitter <span>2</span></a> <a class="nav-link" href="#"><i class="bx bxl-github"></i> Github <span>32</span></a> <a class="nav-link" href="#"><i class="bx bxl-google-plus"></i> Google <span>7</span></a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+ <div class="d-flex pos-relative" style="width: 50px; margin-left: 150px">
+        <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
+            <i class="mdi mdi-dots-vertical"></i>
+        </button> 
+
+        <!-- <div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow" x-placement="bottom-end" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 55px);" data-popper-placement="bottom-start"> -->
+        <div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow">
+            <div class="dropdown-item cur-pointer dropdown-hover">
+                <i class="fe fe-edit me-2"></i><span>Edit</span>
+            </div>
+            <div class="dropdown-item cur-pointer dropdown-hover">
+                <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+            </div>
         </div>
-        
+    </div>
+
+<div class="d-flex pos-relative" style="width: 45px; margin-left: 500px">
+
+        <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
+            <i class="mdi mdi-dots-horizontal pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
+        </button>    
+
+        <div  class="dropdown-menu dropdown-menu-left dropdown-menu-arrow tx-13 pos-absolute">
+            <div class="dropdown-item cur-pointer dropdown-hover" @click="empPrev(list.id)">
+                <i class="fe fe-search me-2"></i><span>Preview</span>
+            </div>
+            <div class="dropdown-item cur-pointer dropdown-hover" @click="empEdit(list.id)">
+                <i class="fe fe-edit me-2"></i><span>Edit</span>
+            </div>
+
+            <div class="dropdown-item cur-pointer dropdown-hover" @click="empDel(list.id)">
+                <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+            </div>
+        </div>
+
+
+</div>
 
 
 
 
 
+        </div>
     </div>
 </template>
 
@@ -388,6 +473,7 @@ export default {
             ,test2: ''
             ,btnDisabled: false
             ,test: 'pointer-events: none'
+            ,files: []
         };
     },
 
@@ -415,6 +501,15 @@ export default {
                 this.images.push(this.$refs.files.files[i]);
                 console.log("----->",this.images);
             }
+        },
+
+        fileChange(){
+
+            for (let i = 0; i < this.$refs.fileInput.files.length; i++){
+                this.files.push(this.$refs.fileInput.files[i]);
+                console.log("Files:", this.files);
+            }
+
         },
 
         uploadImages(){
@@ -557,7 +652,9 @@ export default {
         },
 
 
-
+        selFiles(){
+            this.$refs.fileInput.click()
+        },
 
 
 
@@ -644,9 +741,12 @@ export default {
         
     }
 
-    .dddd:hover{
-        color: blue;
-        /* font-weight: bold; */
+    .dd{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+
     }
 
 

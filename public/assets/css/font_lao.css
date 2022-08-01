@@ -27,6 +27,13 @@ table, td,table{
   font-style: normal;
 }
 
+.say-lao {
+  font-family: 'Saysettha OT';
+  src: url("fonts/Saysettha OT.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .phet-lao {
   font-family: 'Phetsarath OT';
   src: url("fonts/PHETSARATHOT.ttf");

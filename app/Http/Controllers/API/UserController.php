@@ -80,47 +80,68 @@ class UserController extends Controller
 
     public function profile(){
         $id = auth()->user()->userid;
-        $profile = DB::select('exec uspProfile ?', [$id]);
-
-        // $profile = DB::table('emp_details as a')
-        //             ->select('a.*')
-        //             ->join(DB::raw('(select userid, max(id) as mxid From emp_details Group by userid) as b'),
-        //                 function($join){
-        //                     $join->on('a.id', 'b.mxid');
-        //                 })
-        //             ->where('a.userid', $id)
-        //             ->first();
-        
-        
-        
+        $profile = DB::table('emp_names as a')
+                        ->join('users as b', 'a.id', 'b.userid')
+                        ->join('emp_details as c', 'a.id', 'c.userid')
+                        ->join(DB::raw('(select max(id) as mxid, userid from emp_details group by userid) as d'),
+                            function($query){
+                                $query->on('c.id', 'd.mxid');
+                            })
+                        ->where('a.id', $id)
+                        ->select('a.gender', 'a.name', 'a.surname', 'a.photo', 'c.department', 'b.username')
+                        ->first();
         return $profile;
     }
 
-    // public function profile(){
-    //     $id = auth()->user()->userid;
-    //     $data = DB::table('emp_names as a')
-    //                 ->join('users as b', 'a.id','b.userid')
-    //                 ->select('a.gender', 'a.name', 'a.surname', 'a.photo', 'b.username', 'b.usertype', 'b.department')
-    //                 ->where('a.id', $id)
-    //                 ->first();
+    public function permiss(){
+        $id = auth()->user()->userid;
+        $permiss = DB::table('permission')->where('userid', $id)->first();
         
-    //     if ($data->surname != null && $data->surname != ""){
-    //         $fullname = $data->name." ".$data->surname;
-    //     } else {
-    //         $fullname = $data->name;
-    //     }
+        return $permiss;
+    }
+    
+    public function username(Request $request){
+        $name = $request->search.'%';
+        $userList = DB::table('emp_names as a')
+                        ->join('permission as b', 'a.id', 'b.userid')
+                        ->where('a.name', 'like', $name)
+                        ->select('a.id', 'a.name', 'a.surname')
+                        ->orderBy('a.name')
+                        ->get();
 
-    //     $result =[
-    //         'fullname' => $fullname,
-    //         'gender' => $data->gender,
-    //         'name' => $data->name,
-    //         'photo' => $data->photo,
-    //         'username' => $data->username,
-    //         'usertype' => $data->usertype,
-    //         'dept' => $data->department,
-    //     ];
-    //     return $result;
-    // }
+        return $userList;
+    }
+    
+
+    public function permissEdit($id){
+        $permissData = DB::table('permission')->where('userid', $id)->first();
+
+        return $permissData;
+    }
+
+    public function permissUpdate(Request $request){   
+        DB::table('permission')
+            ->where('id', $request->id)
+            ->update([
+                'permiss' => $request->permiss,
+                'geo' => $request->geo,
+                'mining' => $request->mining,
+                'safety' => $request->safety,
+                'lk_add' => $request->lkAdd,
+                'lk_edit' => $request->lkEdit,
+                'lk_del' => $request->lkDel,
+                'emp_all' => $request->empAll,
+                'emp_add' => $request->empAdd,
+                'emp_edit' => $request->empEdit,
+                'emp_del' => $request->empDel,
+                'detail_del' => $request->detailDel,
+                'cont_del' => $request->contDel,
+                'bank_del' => $request->bankDel,
+                'card_del' => $request->cardDel,
+                'al_del' => $request->alDel,
+                'file_del' => $request->fileDel
+            ]);
+    }
 
 
 }

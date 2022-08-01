@@ -6,6 +6,12 @@ use App\Http\Controllers\API\DepartmentController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\LookupController;
 use App\Http\Controllers\API\EmployeeController;
+use App\Http\Controllers\API\EmpDetailController;
+use App\Http\Controllers\API\EmpContController;
+use App\Http\Controllers\API\EmpBankController;
+use App\Http\Controllers\API\EmpCardController;
+use App\Http\Controllers\API\EmpAnnualController;
+use App\Http\Controllers\API\EmpFileController;
 use App\Http\Controllers\API\TestController;
 
 /*
@@ -22,9 +28,11 @@ use App\Http\Controllers\API\TestController;
 Route::post('signUp', [UserController::class, 'signUp']);
 Route::post('signIn', [UserController::class, 'signIn']);
 Route::post('signOut', [UserController::class, 'signOut']);
-Route::post('profile', [UserController::class, 'profile']);
-
-Route::post('updatePermiss', [TestController::class, 'updatePermiss']);
+Route::get('profile', [UserController::class, 'profile']);
+Route::get('permiss', [UserController::class, 'permiss']);
+Route::get('username', [UserController::class, 'username']);
+Route::post('permissUpdate', [UserController::class, 'permissUpdate']);
+Route::post('permissEdit/{id}', [UserController::class, 'permissEdit']);
 
 
 Route::group(['prefix' => 'employee', 'middlewar' => 'auth:santum'], function(){
@@ -34,23 +42,55 @@ Route::group(['prefix' => 'employee', 'middlewar' => 'auth:santum'], function(){
     Route::post('/edit/{id}', [EmployeeController::class, 'edit']);
     Route::post('/delete/{id}', [EmployeeController::class, 'delete']);
     Route::post('/preview/{id}', [EmployeeController::class, 'preview']);
-    Route::post('/detail/{id}', [EmployeeController::class, 'detail']);
-    Route::post('/detailEdit/{id}', [EmployeeController::class, 'detailEdit']);
-    Route::post('/detailDel/{id}', [EmployeeController::class, 'detailDel']);
-    Route::post('/detailAdd', [EmployeeController::class, 'detailAdd']);
-    Route::post('/detailUpdate', [EmployeeController::class, 'detailUpdate']);
 });
 
+Route::group(['prefix' => 'detail', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/data/{id}', [EmpDetailController::class, 'data']);
+    Route::post('/add', [EmpDetailController::class, 'add']);
+    Route::post('/edit/{id}', [EmpDetailController::class, 'edit']);
+    Route::post('/update', [EmpDetailController::class, 'update']);
+    Route::post('/delete/{id}', [EmpDetailController::class, 'delete']);
+});
 
+Route::group(['prefix' => 'contract', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/data/{id}', [EmpContController::class, 'data']);
+    Route::post('/add', [EmpContController::class, 'add']);
+    Route::post('/edit/{id}', [EmpContController::class, 'edit']);
+    Route::post('/update', [EmpContController::class, 'update']);
+    Route::post('/delete/{id}', [EmpContController::class, 'delete']);
+});
 
-Route::group(['prefix' => 'test', 'middlewar' => 'auth:santum'], function(){
-    Route::post('/addfile', [TestController::class, 'addfile']);
-    Route::get('/file', [TestController::class, 'file']);
-    Route::post('/images', [TestController::class, 'images']);
-    Route::get('/download/{file}', [TestController::class, 'download']);
-    Route::post('/deleteFile/{file}', [TestController::class, 'deleteFile']);
-    Route::get('/getVal', [TestController::class, 'getVal']);
+Route::group(['prefix' => 'bank', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/data/{id}', [EmpBankController::class, 'data']);
+    Route::post('/add', [EmpBankController::class, 'add']);
+    Route::post('/edit/{id}', [EmpBankController::class, 'edit']);
+    Route::post('/update', [EmpBankController::class, 'update']);
+    Route::post('/delete/{id}', [EmpBankController::class, 'delete']);
+});
 
+Route::group(['prefix' => 'card', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/data/{id}', [EmpCardController::class, 'data']);
+    Route::post('/add', [EmpCardController::class, 'add']);
+    Route::post('/edit/{id}', [EmpCardController::class, 'edit']);
+    Route::post('/update', [EmpCardController::class, 'update']);
+    Route::post('/delete/{id}', [EmpCardController::class, 'delete']);
+});
+
+Route::group(['prefix' => 'annual', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/data/{id}', [EmpAnnualController::class, 'data']);
+    Route::post('/add', [EmpAnnualController::class, 'add']);
+    Route::post('/edit/{id}', [EmpAnnualController::class, 'edit']);
+    Route::post('/update', [EmpAnnualController::class, 'update']);
+    Route::post('/delete/{id}', [EmpAnnualController::class, 'delete']);
+});
+
+Route::group(['prefix' => 'file', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/data/{id}', [EmpFileController::class, 'data']);
+    Route::post('/add', [EmpFileController::class, 'add']);
+    Route::get('/download/{file}', [EmpFileController::class, 'download']);
+    // Route::post('/edit/{id}', [EmpFileController::class, 'edit']);
+    // Route::post('/update', [EmpFileController::class, 'update']);
+    Route::post('/delete/{file}', [EmpFileController::class, 'delete']);
 });
 
 Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
@@ -66,8 +106,22 @@ Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
     Route::get('/section', [LookupController::class, 'section']);
     Route::get('/crew', [LookupController::class, 'crew']);
     Route::get('/name', [LookupController::class, 'name']);
+    Route::get('/relate', [LookupController::class, 'relate']);
+    Route::get('/bank', [LookupController::class, 'bank']);
+    Route::get('/card', [LookupController::class, 'card']);
+    Route::get('/year', [LookupController::class, 'year']);
 });
 
+
+Route::group(['prefix' => 'test', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/addfile', [TestController::class, 'addfile']);
+    Route::get('/file', [TestController::class, 'file']);
+    Route::post('/images', [TestController::class, 'images']);
+    Route::get('/download/{file}', [TestController::class, 'download']);
+    Route::post('/deleteFile/{file}', [TestController::class, 'deleteFile']);
+    Route::get('/getVal', [TestController::class, 'getVal']);
+
+});
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

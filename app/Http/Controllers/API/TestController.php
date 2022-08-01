@@ -107,14 +107,5 @@ class TestController extends Controller
         return $value;
     }
 
-    public function updatePermiss(Request $request)
-    {   
-        DB::table('permission')
-            ->where('id', 2)
-            ->update([
-                'permission' => $request->permiss,
-                'she' => $request->she
-            ]);
-    }
 
 }
