@@ -1,21 +1,25 @@
 
 import { createWebHistory, createRouter } from "vue-router";
 
-import home from "../pages/home.vue";
+import Home from "../pages/Home.vue";
 import SignIn from "../pages/SignIn.vue";
 import SignUp from "../pages/SignUp.vue";
 import Employee from "../pages/Employee.vue";
-import test from "../pages/test.vue";
 import Permission from "../pages/Permission.vue";
+import Annual from "../pages/Annual.vue";
+import Transport from "../pages/Transport.vue";
+import FuelCons from "../pages/FuelCons.vue";
+import FuelReport from "../pages/FuelReport.vue";
+import test from "../pages/test.vue";
 
 
 
 
 const routes =[
     {
-        name: "home-page",
+        name: "Home",
         path: "/",
-        component: home
+        component: Home
     },
     {
         name: "signin",
@@ -37,6 +41,28 @@ const routes =[
         path: "/permiss",
         component: Permission
     },
+    {
+        name: "annual",
+        path: "/annual",
+        component: Annual
+    },
+    {
+        name: "transport",
+        path: "/transport",
+        component: Transport
+    },
+    {
+        name: "fuelcons",
+        path: "/fuelcons",
+        component: FuelCons
+    },
+    {
+        name: "fuelreport",
+        path: "/fuelreport",
+        component: FuelReport
+    },
+
+
     {
         name: "test-page",
         path: "/test",

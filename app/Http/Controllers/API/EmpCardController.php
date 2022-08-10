@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class EmpCardController extends Controller
 {
     public function data($id){
-        $data = DB::table('emp_personal_cards')
+        $data = DB::table('emp_cards')
                     ->where('userid', $id)
                     ->get();
         
@@ -17,7 +17,7 @@ class EmpCardController extends Controller
     }
 
     public function add(Request $request){
-        $check = DB::table('emp_personal_cards')
+        $check = DB::table('emp_cards')
                     ->where('userid', $request->userid)
                     ->where('cardtype', $request->cardtype);
         
@@ -26,7 +26,7 @@ class EmpCardController extends Controller
             $message = 'Duplicate record!';
         } else {
 
-            DB::table('emp_personal_cards')->insert([
+            DB::table('emp_cards')->insert([
                 'userid' => $request->userid,
                 'cardtype' => $request->cardtype,
                 'cardid' => $request->cardid,
@@ -46,12 +46,12 @@ class EmpCardController extends Controller
     }
 
     public function edit($id){
-        $contract = DB::table('emp_personal_cards')->find($id);
+        $contract = DB::table('emp_cards')->find($id);
         return $contract;
     }
 
     public function update(Request $request){
-        DB::table('emp_personal_cards')
+        DB::table('emp_cards')
             ->where('id', $request->id)
             ->update([
                 'cardtype' => $request->cardtype,
@@ -62,7 +62,7 @@ class EmpCardController extends Controller
     }
 
     public function delete($id){
-        DB::delete('delete from emp_personal_cards where id = ?', [$id]);
+        DB::delete('delete from emp_cards where id = ?', [$id]);
     }
 
 }

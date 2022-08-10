@@ -83,8 +83,13 @@ class LookupController extends Controller
     }
 
     public function year(){
-        $card = DB::select("select code as value, code as label from lookup_code where category = 'year' and used = 'y'");
-        return $card;
+        $year = DB::select("select code as value, code as label from lookup_code where category = 'year' and used = 'y'");
+        return $year;
+    }
+
+    public function month(){
+        $month = DB::select("select code as value, code as label from lookup_code where category = 'month' order by id");
+        return $month;
     }
 
 

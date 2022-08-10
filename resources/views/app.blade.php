@@ -43,11 +43,6 @@
     <link href="assets/css/skin-modes.css" rel="stylesheet" />
 
 
-
-
-
-
-
 </head>
 <body class="main-body app sidebar-mini">
 
@@ -139,13 +134,10 @@
 
     <!-- custom js -->
     <script src="assets/js/custom.js"></script>
-
-
-
+    
 
     <!-- <div id="app"></div> ດຶງຂໍ້ມູນທັງໝົດຈາກ #app ຈາກ app.js ມາສະແດງຜົນ -->
-    	
-
+    
     <script src="{{ mix('js/app.js') }}" type="text/javascript" ></script> <!-- ດຶງມາຈາກຟາຍ mix ຢູ່ public ຫຼັງຈາກ complie -->
 
 

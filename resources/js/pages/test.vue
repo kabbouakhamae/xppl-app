@@ -1,6 +1,6 @@
 <template>
-    <div class="card mt-4">
-        <div class="card-body">
+    <div class="card">
+        <div class="card-body overflow-auto" style="height: 85vh">
             
 
 
@@ -408,33 +408,139 @@
         </div>
     </div>
 
-<div class="d-flex pos-relative" style="width: 45px; margin-left: 500px">
+    <div class="d-flex pos-relative" style="width: 45px; margin-left: 500px">
 
-        <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
-            <i class="mdi mdi-dots-horizontal pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
-        </button>    
+            <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
+                <i class="mdi mdi-dots-horizontal pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
+            </button>    
 
-        <div  class="dropdown-menu dropdown-menu-left dropdown-menu-arrow tx-13 pos-absolute">
-            <div class="dropdown-item cur-pointer dropdown-hover" @click="empPrev(list.id)">
-                <i class="fe fe-search me-2"></i><span>Preview</span>
-            </div>
-            <div class="dropdown-item cur-pointer dropdown-hover" @click="empEdit(list.id)">
-                <i class="fe fe-edit me-2"></i><span>Edit</span>
+            <div  class="dropdown-menu dropdown-menu-left dropdown-menu-arrow tx-13 pos-absolute">
+                <div class="dropdown-item cur-pointer dropdown-hover" @click="empPrev(list.id)">
+                    <i class="fe fe-search me-2"></i><span>Preview</span>
+                </div>
+                <div class="dropdown-item cur-pointer dropdown-hover" @click="empEdit(list.id)">
+                    <i class="fe fe-edit me-2"></i><span>Edit</span>
+                </div>
+
+                <div class="dropdown-item cur-pointer dropdown-hover" @click="empDel(list.id)">
+                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                </div>
             </div>
 
-            <div class="dropdown-item cur-pointer dropdown-hover" @click="empDel(list.id)">
-                <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-            </div>
+
         </div>
 
 
-</div>
+            <div class="col-xl-12">
+                <div class="card">
 
-
-
-
-
+                    <div class="card-body">
+                        <div class="table-responsive hoverable-table">
+                            <div id="example-delete_wrapper" class="dataTables_wrapper dt-bootstrap5"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example-delete_length"><label><select name="example-delete_length" aria-controls="example-delete" class="form-select form-select-sm select2"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select></label></div></div><div class="col-sm-12 col-md-6"><div id="example-delete_filter" class="dataTables_filter"><label><input type="search" class="form-control form-control-sm" placeholder="Search..." aria-controls="example-delete"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="example-delete" class="table text-md-nowrap dataTable dtr-inline" role="grid" aria-describedby="example-delete_info" style="width: 1581px;">
+                                <thead>
+                                    <tr role="row">
+                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 268px;" aria-sort="ascending" aria-label="Name: activate to sort column descending">Name</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 397px;" aria-label="Position: activate to sort column ascending">Position</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 201px;" aria-label="Office: activate to sort column ascending">Office</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 104px;" aria-label="Age: activate to sort column ascending">Age</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 214px;" aria-label="Start date: activate to sort column ascending">Start date</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 157px;" aria-label="Salary: activate to sort column ascending">Salary</th></tr>
+                                </thead>
+                                <tbody>
+                                
+                                    <tr class="odd">
+                                        <td class="dtr-control sorting_1" tabindex="0">Airi Satou</td>
+                                        <td>Accountant</td>
+                                        <td>Tokyo</td>
+                                        <td>33</td>
+                                        <td>2008/11/28</td>
+                                        <td>$162,700</td>
+                                    </tr>
+                                    <tr class="odd selected">
+                                        <td class="sorting_1 dtr-control">Angelica Ramos</td>
+                                        <td>Chief Executive Officer (CEO)</td>
+                                        <td>London</td>
+                                        <td>47</td>
+                                        <td>2009/10/09</td>
+                                        <td>$1,200,000</td>
+                                    </tr>
+                                    <tr class="odd">
+                                        <td class="dtr-control sorting_1" tabindex="0">Ashton Cox</td>
+                                        <td>Junior Technical Author</td>
+                                        <td>San Francisco</td>
+                                        <td>66</td>
+                                        <td>2009/01/12</td>
+                                        <td>$86,000</td>
+                                    </tr>
+                                    <tr class="even selected">
+                                        <td class="sorting_1 dtr-control">Bradley Greer</td>
+                                        <td>Software Engineer</td>
+                                        <td>London</td>
+                                        <td>41</td>
+                                        <td>2012/10/13</td>
+                                        <td>$132,000</td>
+                                    </tr>
+                                  
+                                    </tbody>
+                                <tfoot>
+                                    <tr><th rowspan="1" colspan="1">Name</th><th rowspan="1" colspan="1">Position</th><th rowspan="1" colspan="1">Office</th><th rowspan="1" colspan="1">Age</th><th rowspan="1" colspan="1">Start date</th><th rowspan="1" colspan="1">Salary</th></tr>
+                                </tfoot>
+                            </table>
+                            </div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="example-delete_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="example-delete_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="example-delete_previous"><a href="#" aria-controls="example-delete" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="example-delete" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="example-delete_next"><a href="#" aria-controls="example-delete" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+    <!-- <div class="col-lg-4">
+        <div aria-label="Basic example" class="btn-group" role="group">
+            <button class="btn btn-secondary pd-x-25" type="button">Left</button> 
+            <button class="btn btn-primary pd-x-25" type="button">Center</button>
+            <button class="btn btn-secondary pd-x-25" type="button">Right</button>
+        </div>
+    </div> -->
+
+    <div class="col-lg-4">
+        <div aria-label="Basic example" class="btn-group" role="group">
+            <button class="btn btn-secondary pd-x-10" type="button">Left</button> 
+            <button class="btn btn-secondary pd-x-10" type="button">Right</button>
+        </div>
+    </div>
+
+
+    <div class="col-lg-4 m-5">
+        <div class="dropdown btn-group" role="group">
+            <button aria-expanded="false" class="btn btn-primary dropdown-toggle-split" style="height: 39.5px" data-bs-toggle="dropdown" id="dropdownMenuButton1" type="button">{{ mon }}<i class="fas fa-caret-down ms-2"></i></button>
+            <div class="dropdown-menu dropdown-menu-right overflow-auto" aria-labelledby="dropdownMenuDate1" x-placement="bottom-end" style="height: 210px">
+                <a class="dropdown-item">January</a>
+                <a class="dropdown-item">February</a>
+                <a class="dropdown-item">March</a>
+                <a class="dropdown-item">April</a>
+                <a class="dropdown-item">June</a>
+                <a class="dropdown-item">July</a>
+                <a class="dropdown-item">August</a>
+                <a class="dropdown-item">September</a>
+                <a class="dropdown-item">October</a>
+                <a class="dropdown-item">November</a>
+                <a class="dropdown-item">December</a>
+            </div>
+
+            <button aria-expanded="false" class="btn btn-primary dropdown-toggle-split rounded-right" style="height: 39.5px" data-bs-toggle="dropdown" id="dropdownMenuButton2" type="button">2022<i class="fas fa-caret-down ms-2"></i></button>
+            <div class="dropdown-menu dropdown-menu-right overflow-auto" aria-labelledby="dropdownMenuDate2" x-placement="bottom-end" style="height: 210px">
+                <a class="dropdown-item">2021</a>
+                <a class="dropdown-item">2022</a>
+                <a class="dropdown-item">2023</a>
+                <a class="dropdown-item">2024</a>
+            </div>
+        </div>
+    </div>
+
+
+    {{ mon }}
+
+
+    
     </div>
 </template>
 
@@ -474,6 +580,8 @@ export default {
             ,btnDisabled: false
             ,test: 'pointer-events: none'
             ,files: []
+
+            ,mon: ''
         };
     },
 
@@ -482,6 +590,16 @@ export default {
     },
 
     methods: {
+
+        getMon(){
+            // this.mon = (new Date().getMonth()+1)
+            // this.mon = ("0" + ((new Date()).getMonth() + 1)).slice(-2) /* month 2 digit */
+
+            // this.mon = new Date().toLocaleString('en-us', { month: 'short' }); /* Jun */
+            this.mon = new Date().toLocaleString('en-us', { month: 'long' }); /* June */
+
+        },
+
         add(event) {
             this.btnDisabled = true; // mutate data and let vue disable the element
         },
@@ -661,7 +779,7 @@ export default {
         chooseImage () {
             this.$refs.fileInput.click()
         },
-        
+
         onSelectFile () {
             const input = this.$refs.fileInput
             const files = input.files
@@ -711,6 +829,7 @@ export default {
         this.getFile();
         this.getValue();
         this.getProfile();
+        this.getMon();
         
     
     },
@@ -748,6 +867,10 @@ export default {
         
 
     }
+
+    /* table.dataTable tbody tr.selected {
+	    background-color: #B0BED9;
+    } */
 
 
 </style>

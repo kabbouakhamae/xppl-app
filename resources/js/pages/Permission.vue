@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="!!parseInt(loginPermiss.permiss)" class="card mt-4">
+        <div v-if="!!parseInt(loginPermiss.permiss)" class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="wd-250" style="min-width: 250px">
@@ -17,13 +17,14 @@
                                     </tr>
                                 </thead>
                                 <tbody> 
-                                    <tr v-for="lst in userList" :key="lst.id">
-                                        <td style="border: none; padding: 4px 10px" @click="permissEdit(lst.id)" > {{ lst.name }} {{ lst.surname }}  </td>
+                                    <tr v-for="(lst, key) in userList" :key="lst.id" @click="permissEdit(key, lst.id)" :style="key === selectedRow ? 'background-color: #ecf0fa; border-left: 1px solid #0162e8;' : ''">
+                                        <td style="border: none; padding: 4px 10px" > {{ lst.name }} {{ lst.surname }}  </td>
                                     </tr>                                                
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
                     <div class="col-xl-2 col-3">
                         <h6 class="text-muted">Setting</h6>
                         <div class="custom-control custom-switch">
@@ -51,7 +52,7 @@
                         <h6 class=" text-muted">Employee</h6>
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="empAll" v-model="permissData.empAll" @change='$emit("input", $event.target.checked)'>
-                            <label class="custom-control-label cur-pointer" for="empAll">View all employee</label>
+                            <label class="custom-control-label cur-pointer" for="empAll">View all</label>
                         </div>
                         <div class="custom-control custom-switch mt-2">
                             <input type="checkbox" class="custom-control-input" id="empAdd" v-model="permissData.empAdd" @change='$emit("input", $event.target.checked)'>
@@ -72,7 +73,7 @@
                             </div>
                             <div class="custom-control custom-switch mt-2 ms-4">
                                 <input type="checkbox" class="custom-control-input" id="contDel" v-model="permissData.contDel" @change='$emit("input", $event.target.checked)'>
-                                <label class="custom-control-label cur-pointer" for="contDel">Contract person delete</label>
+                                <label class="custom-control-label cur-pointer" for="contDel">Contact person delete</label>
                             </div>
                             <div class="custom-control custom-switch mt-2 ms-4">
                                 <input type="checkbox" class="custom-control-input" id="bankDel" v-model="permissData.bankDel" @change='$emit("input", $event.target.checked)'>
@@ -105,29 +106,30 @@ export default {
 
     data() {
         return {
-            loginPermiss: []
-            ,userList: []
-            ,permissData: {
-                id: ''
-                ,permiss: ''
-                ,geo: ''
-                ,mining: ''
-                ,safety: ''
-                ,lkAdd: ''
-                ,lkEdit: ''
-                ,lkDel: ''
-                ,empAll: ''
-                ,empAdd: ''
-                ,empEdit: ''
-                ,empDel: ''
-                ,detailDel: ''
-                ,contDel: ''
-                ,bankDel: ''
-                ,cardDel: ''
-                ,alDel: ''
-                ,fileDel: ''
-            }
-            ,search: ''
+            loginPermiss: [],
+            userList: [],
+            permissData: {
+                id: '',
+                permiss: '',
+                geo: '',
+                mining: '',
+                safety: '',
+                lkAdd: '',
+                lkEdit: '',
+                lkDel: '',
+                empAll: '',
+                empAdd: '',
+                empEdit: '',
+                empDel: '',
+                detailDel: '',
+                contDel: '',
+                bankDel: '',
+                cardDel: '',
+                alDel: '',
+                fileDel: ''
+            },
+            search: '',
+            selectedRow: null,
         };
     },
 
@@ -150,7 +152,8 @@ export default {
             })
         },
 
-        permissEdit(id){
+        permissEdit(key, id){
+            this.selectedRow = key;
             this.$axios.post(`/api/permissEdit/${id}`).then((res) => {
             
             this.resetForm();
@@ -226,7 +229,8 @@ export default {
             this.search = '';
             this.btnClear = false,
             this.getUsername();
-        }
+        },
+            
     },
 
     created(){

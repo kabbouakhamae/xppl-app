@@ -5,20 +5,20 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Pagination\LengthAwarePaginator;
+// use Illuminate\Pagination\Paginator;
+// use Illuminate\Pagination\LengthAwarePaginator;
 
 class EmployeeController extends Controller{
 
-    public function paginateArray($data, $perPage = 8){
-        $page = Paginator::resolveCurrentPage();
-        $total = count($data);
-        $results = array_slice($data, ($page - 1) * $perPage, $perPage);
+    // public function paginateArray($data, $perPage = 8){
+    //     $page = Paginator::resolveCurrentPage();
+    //     $total = count($data);
+    //     $results = array_slice($data, ($page - 1) * $perPage, $perPage);
 
-        return new LengthAwarePaginator($results, $total, $perPage, $page, [
-            'path' => Paginator::resolveCurrentPath(),
-        ]);
-    }
+    //     return new LengthAwarePaginator($results, $total, $perPage, $page, [
+    //         'path' => Paginator::resolveCurrentPath(),
+    //     ]);
+    // }
 
     public function index(Request $request){
         $name = $request->search.'%';
@@ -38,10 +38,10 @@ class EmployeeController extends Controller{
                             ->orWhere('a.namelao', 'like', $namelao)
                             ->select('a.id', 'a.gender', 'a.name', 'a.surname', 'a.namelao', 'a.surnamelao', 'a.country', 'a.province', 'a.phone', 'b.position', 'b.department', 'b.startdate', 'b.status', 'b.empid', 'b.scanid', 'a.photo')
                             ->orderBy('a.name')
-                            ->paginate(8);
+                            ->paginate(10);
 
         } else {
-            //Find current dept
+            //Find by current dept
             $deptData = DB::table('emp_details as a')
                             ->select('a.department')
                             ->join(DB::raw('(select max(id) as mxid, userid from emp_details group by userid) as b'),
@@ -62,8 +62,7 @@ class EmployeeController extends Controller{
                             ->orWhere('a.namelao', 'like', $namelao)
                             ->select('a.id', 'a.gender', 'a.name', 'a.surname', 'a.namelao', 'a.surnamelao', 'a.country', 'a.province', 'a.phone', 'b.position', 'b.department', 'b.startdate', 'b.status', 'b.empid', 'b.scanid', 'a.photo')
                             ->orderBy('a.name')
-                            ->paginate(8);
-
+                            ->paginate(10);
         }
 
         return $empList;
@@ -157,24 +156,23 @@ class EmployeeController extends Controller{
         } else {
             $filename = 'no pic';
         }
-
-        $param = [
-            $request->id,
-            $request->gender,
-            $request->name,
-            $request->surname,
-            $request->phone,
-            $request->namelao,
-            $request->surnamelao,
-            $request->birthday,
-            $request->email,
-            $request->country,
-            $request->province,
-            $request->district,
-            $request->village,
-            $filename
-        ];
-        DB::update("exec uspEmpUpdate ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?", $param);
+            $param = [
+                $request->id,
+                $request->gender,
+                $request->name,
+                $request->surname,
+                $request->phone,
+                $request->namelao,
+                $request->surnamelao,
+                $request->birthday,
+                $request->email,
+                $request->country,
+                $request->province,
+                $request->district,
+                $request->village,
+                $filename
+            ];
+            DB::update("exec uspEmpUpdate ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?", $param);
     }
 
     public function edit($id){

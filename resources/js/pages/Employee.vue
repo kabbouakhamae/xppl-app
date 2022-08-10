@@ -1,30 +1,25 @@
 <template>
     <div>
-        <div class="card mt-4">
+        <div class="card">
             <div class="card-body">
                 <div v-if="showList">
-                    <div class="d-flex justify-content-between">
-                        <h4 class="card-title mg-b-0">Employee List</h4>
-                        <!-- <i class="mdi mdi-dots-horizontal text-gray"></i> -->
-                    </div>
-
-                    <!-- Search and add button -->
-                    <div class="breadcrumb-header justify-content-between my-0">
-                        <div class="col-md-4 px-0">
-                            <div class="pos-relative">
-                                <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
-                                <i class="fe fe-search search-i text-muted"></i>
-                                <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
-                            </div>
+                    <div class="breadcrumb-header justify-content-between mb-2 mt-0" >
+                        <div class="d-flex">
+                            <h4 class="card-title text-muted mb-0 my-auto">Employee List</h4>
                         </div>
                         <div class="d-flex my-xl-auto right-content">
-                            <button type="button" class="btn btn-primary btn-icon btn-sm wd-38 ht-38 rounded-circle" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus"></i></button>
+                            <div class="pos-relative">
+                                <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
+                                    <i class="fe fe-search search-i text-muted"></i>
+                                <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
+                            </div>
+                            <button type="button" class="btn ripple btn-primary ms-1" style="padding: 0px; width: 39px; height: 39.5px" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-20"></i></button>
                         </div>
                     </div>
 
                     <!-- Employee table -->
                     <div class="table-responsive userlist-table">
-                        <table class="table card-table table-vcenter text-nowrap mb-0 mt-2 bd bd-gray-100">
+                        <table class="table card-table text-nowrap mb-0">
                             <thead class="bg-gray-100">
                                 <tr>
                                     <th class="wd-80"><span>Image</span></th>
@@ -42,7 +37,7 @@
                             </thead>
                             <tbody>
                                 <tr class="tr-hover" v-for="list in empData.data" :key="list.id">
-                                    <td>
+                                    <td style="padding: 6px 12px">
                                         <div class="pos-relative">
                                             <img v-if="list.photo" alt="" class="rounded-circle avatar-md me-2 cur-pointer" :src="'assets/img/profile/'+ list.photo" @click="empPrev(list.id)">                                   
                                             <img v-if="!list.photo && list.gender == 'Male'" alt="" class="rounded-circle avatar-md me-2 cur-pointer" src="assets/img/male.png" @click="empPrev(list.id)">
@@ -51,38 +46,37 @@
                                         </div>
                                         <!-- <span v-if="list.status == 'Current' || list.status == 'Temporary'"><span class="pulse-danger" style="left: 38px; top: 38px"></span></span> -->
                                     </td>
-                                    <td>
+                                    <td style="padding: 6px 12px">
                                         {{ list.name }} {{ list.surname }} <br>
-                                        <span class="phet-lao">{{ list.namelao }} {{ list.surnamelao }}</span>
+                                        <span class="noto-lao">{{ list.namelao }} {{ list.surnamelao }}</span>
                                     </td>
-                                    <td> 
+                                    <td style="padding: 6px 12px"> 
                                         {{ list.position }}
                                         <div v-if="!!parseInt(loginPermiss.emp_all)">{{ list.department }}</div>
                                     </td>
-                                    <td> 
+                                    <td style="padding: 6px 12px"> 
                                         <i v-if="list.phone" class="fa fa-tty me-1"></i> {{ list.phone}} 
                                     </td>
-                                    <td>
+                                    <td style="padding: 6px 12px">
                                         <img width="20" class="me-1" :src="'assets/img/flags/'+ list.country + '.png'" alt="" >
                                         {{ list.country }} <br>
                                     </td>
-                                    <td>
+                                    <td style="padding: 6px 12px">
                                         <div v-if="list.empid">
                                             <!-- <i class="far fa-address-card me-1"></i> -->
-                                            ID: {{ list.empid }}
+                                            {{ list.empid }}
                                         </div>
                                         <div v-if="list.scanid">
                                             <!-- <i class="cf cf-cloak me-1"></i> {{ list.scanid }} -->
                                             <!-- <img width="15" src="assets/img/scan.jpg">  -->
                                             Scan: {{ list.scanid }}
-
                                         </div>
                                     </td>
-                                    <td> 
+                                    <td style="padding: 6px 12px"> 
                                         {{ timeago(list.startdate) }} <br>
                                         {{ list.status }}
                                     </td>
-                                    <td>        
+                                    <td style="padding: 6px 12px">        
                                         <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
                                             <i class="mdi mdi-dots-horizontal pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
                                         </button>       
@@ -101,7 +95,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <pagination :pagination="empData" @paginate="getEmpData($event)" :offset="2" ></pagination>
+                        <pagination :pagination="empData" @paginate="getEmpData($event)" :offset="2"></pagination>
                     </div>
                 </div> <!-- End employee list -->
 
@@ -146,13 +140,13 @@
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Name Lao  <span class=" text-danger">*</span></label>
-                                        <input type="text" class="form-control phet-lao" placeholder="ຊື່..." v-model="empForm.namelao">
+                                        <input type="text" class="form-control noto-lao" placeholder="ຊື່..." v-model="empForm.namelao">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Surname Lao</label>
-                                        <input type="text" class="form-control phet-lao" placeholder="ນາມສະກຸນ..." v-model="empForm.surnamelao">
+                                        <input type="text" class="form-control noto-lao" placeholder="ນາມສະກຸນ..." v-model="empForm.surnamelao">
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4">
@@ -322,8 +316,8 @@
                        <!-- Details -->
                         <div class="panel-body tabs-menu-body main-content-body-right" style="padding: 6px 0px">
                             <div class="tab-content">
-                                <div class="tab-pane overflow-auto active" id="tab1" style="height: 270px">
-                                    <div class="table-responsive">
+                                <div class="tab-pane overflow-auto active" id="tab1">
+                                    <div class="table-responsive" style="height: 270px">
                                         <table class="table main-table-reference text-nowrap">
                                             <thead>
                                                 <tr>
@@ -349,7 +343,7 @@
                                                     <th style="letter-spacing: 0px; padding: 4px 10px">Scan Times</th>
                                                     <th style="letter-spacing: 0px; padding: 4px 10px">Hours</th>
                                                     <th style="letter-spacing: 0px; padding: 4px 10px">Levels</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Contract</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">contact</th>
                                                     <th style="letter-spacing: 0px; padding: 4px 10px">Remarks</th>
                                                 </tr>
                                             </thead>
@@ -357,7 +351,7 @@
                                                 <tr class="tr-hover" v-for="lst in detailData" :key="lst.id">
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Tools">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
                                                                 <i class="mdi mdi-dots-horizontal"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
@@ -370,69 +364,69 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td class="text-center" style="padding: 4px 10px"> {{ lst.site }} </td>
-                                                    <td style="padding: 4px 10px"> {{ dateTime(lst.startdate) }} </td>
-                                                    <td style="padding: 4px 10px"> {{ dateTime(lst.enddate) }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.status }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.position }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.department }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.section }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.crew }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.empid }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.scanid }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.foodid }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.roster }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.scantimes }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.working_hrs }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.levels }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.contract }} </td>
-                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                    <td class="text-center" style="padding: 3px 10px"> {{ lst.site }} </td>
+                                                    <td style="padding: 3px 10px"> {{ dateTime(lst.startdate) }} </td>
+                                                    <td style="padding: 3px 10px"> {{ dateTime(lst.enddate) }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.status }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.position }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.department }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.section }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.crew }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.empid }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.scanid }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.foodid }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.roster }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.scantimes }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.working_hrs }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.levels }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.contact }} </td>
+                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.remarks }} </td>
                                                 </tr>                                                  
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
 
-                                <!-- Contract person -->
-                                <div class="tab-pane overflow-auto" :class="actTab" id="tab2" style="height: 270px">
-                                    <div class="table-responsive">
+                                <!-- contact person -->
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab2">
+                                    <div class="table-responsive" style="height: 270px">
                                         <table class="table main-table-reference text-nowrap">
                                             <thead>
                                                 <tr>
                                                     <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
                                                         <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="contractNew()" title="Add new contract">
+                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="contactNew()" title="Add new contact">
                                                                 <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
                                                             </button> 
                                                         </div>
                                                     </th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Contract Person</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Relationship</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">contact Person</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">relate</th>
                                                     <th style="letter-spacing: 0px; padding: 4px 10px">Phone</th>
                                                     <th style="letter-spacing: 0px; padding: 4px 10px; width: 60%">Address</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
-                                                <tr class="tr-hover" v-for="lst in contractData" :key="lst.id">
+                                                <tr class="tr-hover" v-for="lst in contData" :key="lst.id">
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-center">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
                                                                 <i class="mdi mdi-dots-horizontal"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="contractEdit(lst.id)">
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="contactEdit(lst.id)">
                                                                     <i class="fe fe-edit me-2"></i><span>Edit</span>
                                                                 </div>
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="contractDel(lst.id)">
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="contactDel(lst.id)">
                                                                     <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.person }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.relationship }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.phone }} </td>
-                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.address }} </td>
+                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.name }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.relate }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.phone }} </td>
+                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.address }} </td>
                                                 </tr>                                                
                                             </tbody>
                                         </table>
@@ -440,8 +434,8 @@
                                 </div>
                                 
                                 <!-- Bank Account -->
-                                <div class="tab-pane overflow-auto" :class="actTab" id="tab3" style="height: 270px">
-                                    <div class="table-responsive">
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab3">
+                                    <div class="table-responsive" style="height: 270px">
                                         <table class="table main-table-reference text-nowrap">
                                             <thead>
                                                 <tr>
@@ -476,11 +470,11 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.bank_name }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.branch }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.account_name }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.account_no }} </td>
-                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.bank_name }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.branch }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.acct_name }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.acct_no }} </td>
+                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.remarks }} </td>
                                                 </tr>                                                
                                             </tbody>
                                         </table>
@@ -488,8 +482,8 @@
                                 </div>
 
                                 <!-- Personal cards -->
-                                <div class="tab-pane overflow-auto" :class="actTab" id="tab4" style="height: 270px">
-                                    <div class="table-responsive">
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab4">
+                                    <div class="table-responsive" style="height: 270px">
                                         <table class="table main-table-reference text-nowrap">
                                             <thead>
                                                 <tr>
@@ -523,10 +517,10 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.cardtype }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.cardid }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.expiredate }} </td>
-                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.cardtype }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.cardid }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.expiredate }} </td>
+                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.remarks }} </td>
                                                 </tr>                                                
                                             </tbody>
                                         </table>
@@ -534,8 +528,8 @@
                                 </div>
 
                                 <!-- Annual Leave -->
-                                <div class="tab-pane overflow-auto" :class="actTab" id="tab5" style="height: 270px">
-                                    <div class="table-responsive">
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab5">
+                                    <div class="table-responsive" style="height: 270px">
                                         <table class="table main-table-reference text-nowrap">
                                             <thead>
                                                 <tr>
@@ -568,9 +562,9 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.years }} </td>
-                                                    <td style="padding: 4px 10px"> {{ lst.remain }} </td>
-                                                    <td style="padding: 4px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.years }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.remain }} </td>
+                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.remarks }} </td>
                                                 </tr> 
                                             </tbody>
                                         </table>
@@ -578,8 +572,8 @@
                                 </div>
 
                                 <!-- Document and Files -->
-                                <div class="tab-pane overflow-auto" :class="actTab" id="tab6" style="height: 270px">
-                                    <div class="table-responsive">
+                                <div class="tab-pane overflow-auto" :class="actTab" id="tab6">
+                                    <div class="table-responsive" style="height: 270px">
                                         <table class="table main-table-reference text-nowrap">
                                             <thead>
                                                 <tr>
@@ -587,7 +581,7 @@
                                                         <div class="ms-1 d-flex justify-content-start align-items-center">
                                                             <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="fileNew()" title="Add new files">
                                                                 <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                                                <input class="d-none" ref="fileInput2" type="file" multiple  @change="fileAdd" >
+                                                                <input class="d-none" ref="fileInput2" type="file" multiple  @change="fileAdd()" >
                                                             </button>                                                        
                                                             <div class="" style="letter-spacing: 0px; padding: 4px 10px">File Name</div>
                                                         </div>
@@ -598,9 +592,7 @@
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in fileData" :key="lst.id">
-                                                    <td style="padding: 4px 10px"> {{ lst.filename }} </td>
-                                                    <!-- <td style="padding: 4px 10px"> {{ lst.filedescr }} </td> -->
-
+                                                    <td style="padding: 3px 10px"> {{ lst.filename }} </td>
                                                     <td style="padding: 0px 10px; vertical-align: middle;"> 
                                                         <div class="d-flex justify-content-start">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Download file" @click="fileDownload(lst.filename)">
@@ -636,13 +628,13 @@
             </div>
 
             <!-- Modal employee preview -->
-            <div class="modal fade" id="empPreview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="empPreviewLabel" aria-hidden="true">
+            <div class="modal fade effect-scale" id="empPreview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="empPreviewLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl"> <!-- modal-dialog-centered  -->
                     <div class="modal-content">
                         <div class="modal-header">
                             <!-- <h5 class="modal-title" id="staticBackdropLabel">Sign In</h5> -->
                             <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                            <h6 class="modal-title text-muted main-content-label">Employee Info.</h6>
+                            <h6 class="modal-title text-muted">Employee Info.</h6>
                             <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
 
                         </div>
@@ -660,11 +652,11 @@
             </div> <!-- End of modal employee preview -->
 
             <!-- Modal add edit detail -->
-            <div class="modal fade" id="detailAddEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="detailAddEditLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl">
+            <div class="modal fade effect-scale" id="detailAddEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="detailAddEditLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h6 class="modal-title text-muted main-content-label">Employee detail</h6>
+                            <h6 class="modal-title text-muted">Employee details</h6>
                             <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
                         </div>
                         <div class="modal-body">
@@ -697,25 +689,25 @@
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">Position  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" :options="lkPosition"/>
+                                        <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" searchable="true" :options="lkPosition"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">Department  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" :options="lkDept"/>
+                                        <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" searchable="true" :options="lkDept"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">Section</label> 
-                                        <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" :options="lkSection"/>
+                                        <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" searchable="true" :options="lkSection"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Crew</label> 
-                                        <Multiselect class="multi-color" v-model="empForm.crew" placeholder="Select" :options="lkCrew"/>
+                                        <Multiselect class="multi-color" v-model="empForm.crew" placeholder="Select" searchable="true" :options="lkCrew"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-6">
@@ -762,7 +754,7 @@
                                 </div>
                                 <div class="col-xl-2 col-lg-6">
                                     <div class="form-group">
-                                        <label class="mb-0">Contract Type</label> 
+                                        <label class="mb-0">contact Type</label> 
                                         <Multiselect class="multi-color" v-model="empForm.contract" placeholder="Select" :options="lkContract"/>
                                     </div>
                                 </div>
@@ -782,7 +774,7 @@
                             <button v-if="btnDetailAdd" type="button" class="btn btn-primary" :class="btnDetailShow" @click="detailAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
                             </button>
-                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
                                 <span class="mx-1">Close</span>
                             </button>
                         </div>
@@ -790,12 +782,12 @@
                 </div>                                              
             </div> <!-- End of modal add edit detail -->
 
-            <!-- Modal contract -->
-            <div class="modal fade" id="contract" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="contractLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+            <!-- Modal contact -->
+            <div class="modal fade effect-scale" id="contact" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="contactLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h6 class="modal-title text-muted main-content-label">Contract Person</h6>
+                            <h6 class="modal-title text-muted">Contact Person</h6>
                             <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
                         </div>
                         <div class="modal-body">
@@ -803,12 +795,12 @@
                                 <div class="col-lg-7 col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">Full Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control phet-lao" placeholder="Full name..." v-model="contForm.person">
+                                        <input type="text" class="form-control phet-lao" placeholder="Full name..." v-model="contForm.name">
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-md-12">
                                     <div class="form-group">
-                                        <label class="mb-0">Relationship <span class=" text-danger">*</span></label> 
+                                        <label class="mb-0">relate <span class=" text-danger">*</span></label> 
                                         <Multiselect class="multi-color" v-model="contForm.relate" placeholder="Select" searchable="true"  :options="lkRelate"/>
                                     </div>
                                 </div>
@@ -827,26 +819,26 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-if="btnContUpd" type="button" class="btn btn-info btn-b" :class="btnContAddShow" @click="contractUpdate()"><i class="fe fe-check-circle"></i> 
+                            <button v-if="btnContUpd" type="button" class="btn btn-info btn-b" :class="btnContAddShow" @click="contactUpdate()"><i class="fe fe-check-circle"></i> 
                                 <span class="mx-1">Update</span>
                             </button>
-                            <button v-if="btnContAdd" type="button" class="btn btn-primary" :class="btnContAddShow" @click="contractAdd()"><i class="fe fe-plus"></i> 
+                            <button v-if="btnContAdd" type="button" class="btn btn-primary" :class="btnContAddShow" @click="contactAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
                             </button>
-                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
                                 <span class="mx-1">Close</span>
                             </button>
                         </div>
                     </div>
                 </div>                                              
-            </div> <!-- End of modal contract -->
+            </div> <!-- End of modal contact -->
 
             <!-- Modal bank info -->
-            <div class="modal fade" id="bank" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="bankLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+            <div class="modal fade effect-scale" id="bank" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="bankLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h6 class="modal-title text-muted main-content-label">Bank Info.</h6>
+                            <h6 class="modal-title text-muted">Bank Account</h6>
                             <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
                         </div>
                         <div class="modal-body">
@@ -866,13 +858,13 @@
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">Account Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" placeholder="Account name..." v-model="bankForm.accname">
+                                        <input type="text" class="form-control" placeholder="Account name..." v-model="bankForm.acctname">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">Account No <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" placeholder="Account no..." v-model="bankForm.accno">
+                                        <input type="text" class="form-control" placeholder="Account no..." v-model="bankForm.acctno">
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -890,20 +882,20 @@
                             <button v-if="btnBankAdd" type="button" class="btn btn-primary" :class="btnBankAddShow" @click="bankAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
                             </button>
-                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
                                 <span class="mx-1">Close</span>
                             </button>
                         </div>
                     </div>
                 </div>                                              
-            </div> <!-- End of modal contract -->
+            </div> <!-- End of modal contact -->
 
             <!-- Modal Personal Cards -->
-            <div class="modal fade" id="cards" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cardLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
+            <div class="modal fade effect-scale" id="cards" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cardLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h6 class="modal-title text-muted main-content-label">Personal Cards</h6>
+                            <h6 class="modal-title text-muted">Personal Cards</h6>
                             <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
                         </div>
                         <div class="modal-body">
@@ -941,7 +933,7 @@
                             <button v-if="btnCardAdd" type="button" class="btn btn-primary" :class="btnCardAddShow" @click="cardAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
                             </button>
-                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
                                 <span class="mx-1">Close</span>
                             </button>
                         </div>
@@ -950,11 +942,11 @@
             </div>
 
             <!-- Modal Annual Leave -->
-            <div class="modal fade" id="al" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="alLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md">
+            <div class="modal fade effect-scale" id="al" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="alLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h6 class="modal-title text-muted main-content-label">Annual Leave</h6>
+                            <h6 class="modal-title text-muted">Annual Leave</h6>
                             <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
                         </div>
                         <div class="modal-body">
@@ -986,7 +978,7 @@
                             <button v-if="btnAlAdd" type="button" class="btn btn-primary" :class="btnAlAddShow" @click="alAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
                             </button>
-                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fe fe-x"></i> 
                                 <span class="mx-1">Close</span>
                             </button>
                         </div>
@@ -1021,7 +1013,7 @@ export default {
 
             ,detailData: []
             ,empData: []
-            ,contractData: []
+            ,contData: []
             ,bankData: []
             ,cardData: []
             ,alData: []
@@ -1051,8 +1043,8 @@ export default {
 
             ,photoPrev: window.location.origin + '/assets/img/no.jpg'
             ,empForm: { id: '', userid: '', gender: 'Male', name: '', surname: '', namelao: '', surnamelao: '', phone: '', birthday: '', email: '', country: '', province: '', district: '', village: '', startdate: '', enddate: '', position: '', status: 'Current', contract: '', levels: '', empid: '', scanid: '', foodid: '', roster: '', scantimes: '', hours: '9', site: '', dept: '', section: '', crew: '', photo: '', remarks: ''}
-            ,contForm: { id: '', userid: '', person: '', relate: '', phone: '', address: '' }
-            ,bankForm: { id: '', userid: '', bankname: '', branch: '', accname: '', accno: '', remarks: '' }
+            ,contForm: { id: '', userid: '', name: '', relate: '', phone: '', address: '' }
+            ,bankForm: { id: '', userid: '', bankname: '', branch: '', acctname: '', acctno: '', remarks: '' }
             ,cardForm: { id: '', userid: '', cardtype: '', cardid: '', expire: '', remarks: '' }
             ,alForm: { id: '', userid: '', years: '', remain: '', remarks: '' }
             
@@ -1090,7 +1082,7 @@ export default {
         },
 
         btnContAddShow(){
-            if (this.contForm.person == '' || this.contForm.relate == null || this.contForm.phone == ''){
+            if (this.contForm.name == '' || this.contForm.relate == null || this.contForm.phone == ''){
                 return 'disabled'
             } else {
                 return ''
@@ -1098,7 +1090,7 @@ export default {
         },
 
         btnBankAddShow(){
-            if (this.bankForm.bankname == null || this.bankForm.accname == '' || this.bankForm.accno == ''){
+            if (this.bankForm.bankname == null || this.bankForm.acctname == '' || this.bankForm.acctno == ''){
                 return 'disabled'
             } else {
                 return ''
@@ -1122,8 +1114,7 @@ export default {
         }
     },
 
-    methods: {
-        
+    methods: {    
         async getEmpData(page){
 			const response = await axios.get(`/api/employee?page=${page}&search=${this.search}`)
             this.empData = response.data;
@@ -1144,7 +1135,7 @@ export default {
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     timerProgressBar: true,
-                    timer: 1000
+                    timer: 1500
                 })
             } else {
                 this.showList = false;
@@ -1180,7 +1171,7 @@ export default {
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     timerProgressBar: true,
-                    timer: 1000
+                    timer: 1500
                 })
             } else {
 
@@ -1214,7 +1205,7 @@ export default {
                     }
 
                     this.getDetail(id);
-                    this.getContract(id);
+                    this.getContact(id);
                     this.getBank(id);
                     this.getCard(id);
                     this.getAl(id);
@@ -1254,7 +1245,7 @@ export default {
                 fd.append('enddate', this.empForm.enddate);
                 fd.append('position', this.empForm.position);
                 fd.append('status', this.empForm.status);
-                fd.append('contract', this.empForm.contract);
+                fd.append('contact', this.empForm.contract);
                 fd.append('levels', this.empForm.levels);
                 fd.append('empid', this.empForm.empid);
                 fd.append('scanid', this.empForm.scanid);
@@ -1338,7 +1329,7 @@ export default {
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     timerProgressBar: true,
-                    timer: 1000
+                    timer: 1500
                 })
             } else {
                 this.$swal.fire({
@@ -1369,7 +1360,7 @@ export default {
                                     showConfirmButton: false,
                                     allowOutsideClick: false,
                                     timerProgressBar: true,
-                                    timer: 1000
+                                    timer: 1500
                                 })
                             }).catch((error)=>{
                                 console.log(error);
@@ -1463,7 +1454,7 @@ export default {
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     timerProgressBar: true,
-                    timer: 1000
+                    timer: 1500
                 })
             } else {
                 this.$swal.fire({
@@ -1493,26 +1484,26 @@ export default {
 
         },
 
-        async getContract(id){
-            const response = await axios.post(`/api/contract/data/${id}`)
-            this.contractData = response.data;
+        async getContact(id){
+            const response = await axios.post(`/api/contact/data/${id}`)
+            this.contData = response.data;
         },
 
-        contractNew(){
-            $('#contract').modal('show');
+        contactNew(){
+            $('#contact').modal('show');
             this.contFormClear();
             this.getRelateLK();
             this.btnContUpd = false;
             this.btnContAdd = true;
         },
 
-        contractAdd(){
-            this.$axios.post('/api/contract/add', this.contForm)
+        contactAdd(){
+            this.$axios.post('/api/contact/add', this.contForm)
             .then((res) => {
                  if(res.data.success){
 
-                    $('#contract').modal('hide');
-                    this.getContract(this.contForm.userid);
+                    $('#contact').modal('hide');
+                    this.getContact(this.contForm.userid);
 
                 } else {
                     alert(res.data.message)
@@ -1522,9 +1513,9 @@ export default {
             })
         },
 
-        contractEdit(id){
-            $('#contract').modal('show');
-            this.$axios.post(`/api/contract/edit/${id}`)
+        contactEdit(id){
+            $('#contact').modal('show');
+            this.$axios.post(`/api/contact/edit/${id}`)
             .then((res)=>{
 
                 this.contFormClear();
@@ -1533,8 +1524,8 @@ export default {
                 this.btnContUpd = true;
 
                 this.contForm.id = res.data.id;
-                this.contForm.person = res.data.person;
-                this.contForm.relate = res.data.relationship;
+                this.contForm.name = res.data.name;
+                this.contForm.relate = res.data.relate;
                 this.contForm.phone = res.data.phone;
                 this.contForm.address = res.data.address;
 
@@ -1543,19 +1534,19 @@ export default {
             })
         },
 
-        contractUpdate(){
-            this.$axios.post('/api/contract/update', this.contForm)
+        contactUpdate(){
+            this.$axios.post('/api/contact/update', this.contForm)
             .then((response)=>{
 
-                $('#contract').modal('hide');
-                this.getContract(this.contForm.userid);
+                $('#contact').modal('hide');
+                this.getContact(this.contForm.userid);
 
             }).catch((error)=>{
                 console.log(error);
             })
         },
 
-        contractDel(id){
+        contactDel(id){
             if (this.loginPermiss.cont_del == 0){
                 this.$swal.fire({
                     text: "You don't have permission to delete!",
@@ -1564,7 +1555,7 @@ export default {
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     timerProgressBar: true,
-                    timer: 1000
+                    timer: 1500
                 })
             } else {
                 this.$swal.fire({
@@ -1578,10 +1569,10 @@ export default {
                     allowOutsideClick: false,
                 }).then((result)=>{
                     if(result.isConfirmed){
-                        this.$axios.post(`/api/contract/delete/${id}`)
+                        this.$axios.post(`/api/contact/delete/${id}`)
                         .then((response)=>{
 
-                            this.getContract(this.userid);
+                            this.getContact(this.userid);
 
                         }).catch((error)=>{
                             console.log(error);
@@ -1633,8 +1624,8 @@ export default {
                 this.bankForm.id = res.data.id;
                 this.bankForm.bankname = res.data.bank_name;
                 this.bankForm.branch = res.data.branch;
-                this.bankForm.accname = res.data.account_name;
-                this.bankForm.accno = res.data.account_no;
+                this.bankForm.acctname = res.data.acct_name;
+                this.bankForm.acctno = res.data.acct_no;
                 this.bankForm.remarks = res.data.remarks;
 
             }).catch((error)=>{
@@ -1663,7 +1654,7 @@ export default {
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     timerProgressBar: true,
-                    timer: 1000
+                    timer: 1500
                 })
             } else {
                 this.$swal.fire({
@@ -1757,7 +1748,7 @@ export default {
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     timerProgressBar: true,
-                    timer: 1000
+                    timer: 1500
                 })
             } else {
                 this.$swal.fire({
@@ -1854,7 +1845,7 @@ export default {
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     timerProgressBar: true,
-                    timer: 1000
+                    timer: 1500
                 })
             } else {
                 this.$swal.fire({
@@ -1911,13 +1902,9 @@ export default {
                 if(result.isConfirmed){
                     this.$axios.post('/api/file/add', fd, {headers:{"Content-Type": "multipart/form-date"}})
                     .then(response => {   
-                        // if(response.data.success){
 
                             this.getFiles(this.empForm.userid);
 
-                        // } else {
-                        //     alert(response.data.message)
-                        // }
                     }).catch (err => {
                         console.log(err);
                     });
@@ -1939,7 +1926,7 @@ export default {
                     showConfirmButton: false,
                     allowOutsideClick: false,
                     timerProgressBar: true,
-                    timer: 1000
+                    timer: 1500
                 })
             } else {
                 this.$swal.fire({
@@ -2018,7 +2005,7 @@ export default {
                 f.startdate = '';
                 f.enddate = '';
                 f.position = '';
-                f.contract = '';
+                f.contact = '';
                 f.levels = '';
                 f.empid = '';
                 f.scanid = '';
@@ -2035,7 +2022,7 @@ export default {
 
         contFormClear(){
             let f = this.contForm;
-                f.person = '';
+                f.name = '';
                 f.relate = '';
                 f.phone = '';
                 f.address = '';
@@ -2045,8 +2032,8 @@ export default {
             let f = this.bankForm;
                 f.bankname = '';
                 f.branch = '';
-                f.accname = '';
-                f.accno = '';
+                f.acctname = '';
+                f.acctno = '';
                 f.remarks = '';
         },
 

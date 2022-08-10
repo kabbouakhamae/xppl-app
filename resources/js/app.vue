@@ -17,7 +17,7 @@
 	
 					</div>
 					<ul class="side-menu">
-						<li class="side-item side-item-category">{{ dept }}</li>
+						<li class="side-item side-item-category"></li>
 						<li class="slide" @click="homeClick()">
 							<router-link class="side-menu__item " :class="homeAct"  to="/">
 								<span class="side-menu__label"><i class="fa fa-home text-center wd-20"></i><span class="mx-2">Home</span></span>
@@ -37,41 +37,34 @@
 							</router-link>
 						</li>
 
-						
-
                         <li class="slide" :class="infoExp" @click="infoClick()">
 							<a class="side-menu__item" :class="infoAct" href="#">
 								<span class="side-menu__label"><i class="fa fa-info text-center wd-20"></i><span class="mx-2">Other Info</span></span>
 								<i class="angle fe fe-chevron-down"></i>
 							</a>
 							<ul class="slide-menu">
-								<li><router-link class="slide-item" :class="alAct" @click="alClick()" to="/annualLeave">Annual Leave</router-link></li>
+								<li><router-link class="slide-item" :class="alAct" @click="alClick()" to="/annual">Annual Leave</router-link></li>
 								<li><router-link class="slide-item" :class="leaveAct" @click="leaveClick()" to="/leaveInfo">Leave Info</router-link></li>
 								<li><router-link class="slide-item" :class="transAct" @click="transClick()" to="/transport">Daily Transport</router-link></li>			
 							</ul>
 						</li>
 
 						<!-- Fuel -->
-                        <!-- <div v-if="fuel">
-							<li class="side-item side-item-category mt-4">Fuel</li>
-							<li class="slide" :class="consump_exp" @click="consump_click">
-								<a class="side-menu__item" :class="consump_act" href="#">
-									<span class="side-menu__label"><i class="fas fa-tachometer-alt text-center wd-20"></i><span class="mx-2">Fuel Consumption</span></span>
-									<i class="angle fe fe-chevron-down"></i>
-								</a>
-								<ul class="slide-menu">
-									<li><a class="slide-item" @click="consumpsub_click" href="#">Register</a></li>
-									<li><a class="slide-item" @click="consumpsub_click" href="#">Draggablecards</a></li>
-									<li><a class="slide-item" @click="consumpsub_click" href="#">Range-slider</a></li>
-									<li><a class="slide-item" @click="consumpsub_click" href="#">Calendar</a></li>
-								</ul>
-							</li>
-						</div> -->
+						<li class="slide" :class="fuelExp" @click="fuelClick()">
+							<a class="side-menu__item" :class="fuelAct" href="#">
+								<span class="side-menu__label"><i class="fa fa-tint text-center wd-20"></i><span class="mx-2">Fuels</span></span>
+								<i class="angle fe fe-chevron-down"></i>
+							</a>
+							<ul class="slide-menu">
+								<li><router-link class="slide-item" :class="fuelConsAct" @click="fuelConsClick()" to="/fuelcons">Consumption</router-link></li>
+								<li><router-link class="slide-item" :class="fuelReportAct" @click="fuelReportClick()" to="/fuelreport">Report</router-link></li>
+							</ul>
+						</li>
+
 
 						<!-- SHE -->
 						<div v-if="!!parseInt(loginPermiss.safety)">
 							<!-- <li class="side-item side-item-category mt-4">Safety Dept.</li> -->
-
 							<li class="slide">
 								<a class="side-menu__item" href="#">
 									<span class="side-menu__label"><i class="fa fa-fire-extinguisher text-center wd-20"></i><span class="mx-2">Safety</span></span>
@@ -110,7 +103,7 @@
 
 				<!-- main-header -->
 				<div class="main-header sticky side-header nav nav-item" v-if="isSignin">
-					<div class="container-fluid">
+					<div class="container-fluid ps-0 pe-2">
 						<div class="main-header-left ">
 		
 							<div class="app-sidebar__toggle" data-bs-toggle="sidebar">
@@ -119,7 +112,7 @@
 							</div>
 
 							<div class=" pt-2 mx-3 text-muted text-capitalize">
-								<h5>{{ dept }}</h5>
+								<h5>{{ loginProfile.department }}</h5>
 							</div>
 
 							<!-- <div class="main-header-center ms-3 d-sm-none d-md-none d-lg-block">
@@ -143,7 +136,7 @@
 
 								<li class="dropdown main-profile-menu nav nav-item nav-link p-0">
 									<a class="profile-user d-flex pt-2" href="">
-										<p class="pt-2 me-2 text-muted text-capitalize">{{ loginProfile.name }} {{ loginProfile.surname }}</p>
+										<p class="pt-2 me-2 text-muted text-capitalize">{{ loginProfile.name }}</p>
 										<img alt="" v-if="loginProfile.photo" :src="'assets/img/profile/'+ loginProfile.photo">
 										<img alt="" v-if="!loginProfile.photo && loginProfile.gender == 'Male'" src="assets/img/male.png">
 										<img alt="" v-if="!loginProfile.photo && loginProfile.gender != 'Male'" src="assets/img/female.png">
@@ -177,7 +170,7 @@
 				<!-- /main-header -->
 
 				<!-- container -->
-				<div class="container-fluid">
+				<div class="container-fluid ps-2 pt-2 pe-2">
                     <router-view></router-view>
 				</div>
 				<!-- /Container -->
@@ -207,8 +200,6 @@ export default {
         return {
             isSignin: false
             ,appClass: ''
-			,fuel: true
-			,safety: true
 
 			,homeAct: ''
 			,empAct: ''
@@ -219,13 +210,13 @@ export default {
 			,transAct: ''
 			,lookupAct: ''
 			,permissAct: ''
+			,fuelAct: ''
+			,fuelConsAct: ''
+			,fuelReportAct: ''
 
-			,settExp: ''
+			,fuelExp: ''
 			,infoExp: ''
-
-			,sheShow: ''
-			,miniShow: ''
-			,permissShow: ''
+			,settExp: ''
 
 			,loginProfile: []
 			,loginPermiss: []
@@ -289,11 +280,34 @@ export default {
 			this.permissAct = 'active';
 		},
 
+		fuelConsClick(){
+			this.clearAct();
+			this.fuelAct = 'active';
+			this.fuelConsAct = 'active';
+		},
+
+		fuelReportClick(){
+			this.clearAct();
+			this.fuelAct = 'active';
+			this.fuelReportAct = 'active';
+		},
+
+		fuelClick(){
+			if (this.fuelExp){
+				this.fuelExp = '';
+			} else {
+				this.settExp = '';
+				this.infoExp = '';
+				this.fuelExp = 'is-expanded';
+			}
+		},
+
 		infoClick(){
 			if (this.infoExp){
 				this.infoExp = '';
 			} else {
 				this.settExp = '';
+				this.fuelExp = '';
 				this.infoExp = 'is-expanded';
 			}
 		},
@@ -303,6 +317,7 @@ export default {
 				this.settExp = '';
 			} else {
 				this.infoExp = '';
+				this.fuelExp = '';
 				this.settExp ='is-expanded';
 			}
 		},
@@ -317,7 +332,11 @@ export default {
 			this.permissAct = '';
 			this.infoAct = '';
 			this.settAct = '';
+			this.fuelAct = '';
+			this.fuelConsAct = '';
+			this.fuelReportAct = '';
 
+			this.fuelExp = '';
 			this.infoExp = '';
 			this.settExp = '';
 		},

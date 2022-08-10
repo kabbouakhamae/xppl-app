@@ -12,6 +12,8 @@ use App\Http\Controllers\API\EmpBankController;
 use App\Http\Controllers\API\EmpCardController;
 use App\Http\Controllers\API\EmpAnnualController;
 use App\Http\Controllers\API\EmpFileController;
+use App\Http\Controllers\API\EmpTransController;
+use App\Http\Controllers\API\FuelConsController;
 use App\Http\Controllers\API\TestController;
 
 /*
@@ -52,7 +54,7 @@ Route::group(['prefix' => 'detail', 'middlewar' => 'auth:santum'], function(){
     Route::post('/delete/{id}', [EmpDetailController::class, 'delete']);
 });
 
-Route::group(['prefix' => 'contract', 'middlewar' => 'auth:santum'], function(){
+Route::group(['prefix' => 'contact', 'middlewar' => 'auth:santum'], function(){
     Route::post('/data/{id}', [EmpContController::class, 'data']);
     Route::post('/add', [EmpContController::class, 'add']);
     Route::post('/edit/{id}', [EmpContController::class, 'edit']);
@@ -82,15 +84,27 @@ Route::group(['prefix' => 'annual', 'middlewar' => 'auth:santum'], function(){
     Route::post('/edit/{id}', [EmpAnnualController::class, 'edit']);
     Route::post('/update', [EmpAnnualController::class, 'update']);
     Route::post('/delete/{id}', [EmpAnnualController::class, 'delete']);
+    Route::get('/info', [EmpAnnualController::class, 'info']);
 });
 
 Route::group(['prefix' => 'file', 'middlewar' => 'auth:santum'], function(){
     Route::post('/data/{id}', [EmpFileController::class, 'data']);
     Route::post('/add', [EmpFileController::class, 'add']);
     Route::get('/download/{file}', [EmpFileController::class, 'download']);
-    // Route::post('/edit/{id}', [EmpFileController::class, 'edit']);
-    // Route::post('/update', [EmpFileController::class, 'update']);
     Route::post('/delete/{file}', [EmpFileController::class, 'delete']);
+});
+
+Route::group(['prefix' => 'transport', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/out', [EmpTransController::class, 'out']);
+    Route::post('/in', [EmpTransController::class, 'in']);
+    Route::post('/pickup', [EmpTransController::class, 'pickup']);
+    Route::post('/dropoff', [EmpTransController::class, 'dropoff']);
+});
+
+Route::group(['prefix' => 'fuel', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/date', [FuelConsController::class, 'date']);
+    Route::post('/head', [FuelConsController::class, 'head']);
+
 });
 
 Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
@@ -110,6 +124,7 @@ Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
     Route::get('/bank', [LookupController::class, 'bank']);
     Route::get('/card', [LookupController::class, 'card']);
     Route::get('/year', [LookupController::class, 'year']);
+    Route::get('/month', [LookupController::class, 'month']);
 });
 
 

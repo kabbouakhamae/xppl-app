@@ -22,7 +22,7 @@ table, td,table{
 
 .noto-lao {
   font-family: 'Noto Sans Lao';
-  src: url("fonts/NotoSansLao.ttf");
+  src: url("fonts/NotoSansLao-Regular.ttf");
   font-weight: normal;
   font-style: normal;
 }
