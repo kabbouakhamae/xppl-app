@@ -103,7 +103,17 @@ Route::group(['prefix' => 'transport', 'middlewar' => 'auth:santum'], function()
 
 Route::group(['prefix' => 'fuel', 'middlewar' => 'auth:santum'], function(){
     Route::post('/date', [FuelConsController::class, 'date']);
-    Route::post('/head', [FuelConsController::class, 'head']);
+    Route::post('/header', [FuelConsController::class, 'header']);
+    Route::post('/detail', [FuelConsController::class, 'detail']);
+    Route::post('/headadd', [FuelConsController::class, 'headadd']);
+    Route::post('/headedit/{id}', [FuelConsController::class, 'headedit']);
+    Route::post('/headupd', [FuelConsController::class, 'headupd']);
+    Route::post('/headdel/{id}', [FuelConsController::class, 'headdel']);
+    Route::post('/detailadd', [FuelConsController::class, 'detailadd']);
+    Route::post('/detaildel/{id}', [FuelConsController::class, 'detaildel']);
+    Route::post('/detailedit/{id}', [FuelConsController::class, 'detailedit']);
+    Route::post('/detailupd', [FuelConsController::class, 'detailupd']);
+
 
 });
 
@@ -125,6 +135,15 @@ Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
     Route::get('/card', [LookupController::class, 'card']);
     Route::get('/year', [LookupController::class, 'year']);
     Route::get('/month', [LookupController::class, 'month']);
+    Route::get('/fueldept', [LookupController::class, 'fueldept']);
+    Route::get('/costtype', [LookupController::class, 'costtype']);
+    Route::post('/costno', [LookupController::class, 'costno']);
+    Route::post('/wbs', [LookupController::class, 'wbs']);
+    Route::post('/approve', [LookupController::class, 'approve']);
+    Route::get('/equipno', [LookupController::class, 'equipno']);
+    Route::get('/material', [LookupController::class, 'material']);
+    Route::post('/equipdescr', [LookupController::class, 'equipdescr']);
+    Route::post('/workorder', [LookupController::class, 'workorder']);
 });
 
 
@@ -135,6 +154,7 @@ Route::group(['prefix' => 'test', 'middlewar' => 'auth:santum'], function(){
     Route::get('/download/{file}', [TestController::class, 'download']);
     Route::post('/deleteFile/{file}', [TestController::class, 'deleteFile']);
     Route::get('/getVal', [TestController::class, 'getVal']);
+    Route::get('/tests', [TestController::class, 'tests']);
 
 });
 

@@ -6,11 +6,11 @@
                     <h4 class="card-title text-muted mb-0 my-auto">Transport Manifest</h4>
                 </div>
                 <div class="d-flex my-xl-auto right-content">
-                    <input type="date" class="form-control ms-1" v-model="date" @change="getTransport()">
+                    <input type="date" class="form-control" style="width: 146px" v-model="date" @change="getTransport()">
                 </div>
             </div>
             <div>
-                <h6><span class="noto-lao">ຂາອອກ</span> Outbound: <span class="text-danger fw-bold">{{ dateTime(date) }}</span></h6>
+                <h6><span class="laofont">ຂາອອກ</span> Outbound: <span class="text-danger fw-bold">{{ dateTime(date) }}</span></h6>
             </div>
             <div class="table-responsive">
                 <table class="table main-table-reference text-nowrap mb-0">
@@ -33,20 +33,20 @@
                             <td style="padding: 3px 10px" class="text-center">{{ lst.no }}</td>
                             <td style="padding: 3px 10px">{{ lst.empid }}</td>
                             <td style="padding: 3px 10px">{{ lst.title }} {{ lst.name }} {{ lst.surname }}</td>
-                            <td style="padding: 3px 10px" class="noto-lao"> <span v-if="lst.namelao">{{ lst.titlelao }}</span> {{ lst.namelao }} {{ lst.surnamelao }}</td>
+                            <td style="padding: 3px 10px" class="laofont"> <span v-if="lst.namelao">{{ lst.titlelao }}</span> {{ lst.namelao }} {{ lst.surnamelao }}</td>
                             <td style="padding: 3px 10px">{{ lst.position }}</td>
                             <td style="padding: 3px 10px">{{ lst.dept }}</td>
                             <td style="padding: 3px 10px">{{ lst.phone }}</td>
                             <td style="padding: 3px 10px">{{ dateTime(lst.back) }}</td>
                             <td style="padding: 3px 10px">{{ lst.leaveInfo }}</td>
-                            <td style="padding: 3px 10px" class="cur-pointer noto-lao" title="Click to add drop off point" @click="newDropoff(lst.id)">{{ lst.dropoff }}</td>
+                            <td style="padding: 3px 10px" class="cur-pointer laofont" title="Click to add drop off point" @click="newDropoff(lst.id)">{{ lst.dropoff }}</td>
 
                         </tr> 
                     </tbody>
                 </table>
             </div>
             <div style="margin-top: 35px">
-                <h6><span class="noto-lao">ຂາເຂົ້າ</span> Inbound: <span class="text-danger fw-bold">{{ dateTime(date) }}</span></h6>
+                <h6><span class="laofont">ຂາເຂົ້າ</span> Inbound: <span class="text-danger fw-bold">{{ dateTime(date) }}</span></h6>
             </div>
             <div class="table-responsive">
                 <table class="table main-table-reference text-nowrap mb-0">
@@ -69,13 +69,13 @@
                             <td style="padding: 3px 10px" class="text-center">{{ lst.no }}</td>
                             <td style="padding: 3px 10px">{{ lst.empid }}</td>
                             <td style="padding: 3px 10px">{{ lst.title }} {{ lst.name }} {{ lst.surname }}</td>
-                            <td style="padding: 3px 10px" class="noto-lao"> <span v-if="lst.namelao">{{ lst.titlelao }}</span> {{ lst.namelao }} {{ lst.surnamelao }}</td>
+                            <td style="padding: 3px 10px" class="laofont"> <span v-if="lst.namelao">{{ lst.titlelao }}</span> {{ lst.namelao }} {{ lst.surnamelao }}</td>
                             <td style="padding: 3px 10px">{{ lst.position }}</td>
                             <td style="padding: 3px 10px">{{ lst.dept }}</td>
                             <td style="padding: 3px 10px">{{ lst.phone }}</td>
                             <td style="padding: 3px 10px">{{ dateTime(lst.leave) }}</td>
                             <td style="padding: 3px 10px">{{ lst.leaveInfo }}</td>
-                            <td style="padding: 3px 10px" class="cur-pointer noto-lao" title="Click to add pickup point" @click="newPickup(lst.id)">{{ lst.pickup }}</td>
+                            <td style="padding: 3px 10px" class="cur-pointer laofont" title="Click to add pickup point" @click="newPickup(lst.id)">{{ lst.pickup }}</td>
                         </tr> 
                     </tbody>
                 </table>
@@ -92,7 +92,7 @@
                             <div class="form-group">
                                 <label class="mb-1">Drop off Point</label>                                
                                 <div class="d-flex justify-content-between">
-                                    <input type="text" class="form-control noto-lao" placeholder="ຈຸດສົ່ງພະນັກງານ..." v-model="dropoffForm.dropoff">
+                                    <input type="text" class="form-control laofont" placeholder="ຈຸດສົ່ງພະນັກງານ..." v-model="dropoffForm.dropoff">
                                     <button type="button" class="btn btn-primary ms-2" style="padding: 0px; width: 50px" title="Add new employee" @click="dropoffUpd()"><i class="fa fa-plus"></i></button>  
                                 </div>                           
                             </div>
@@ -112,7 +112,7 @@
                             <div class="form-group">
                                 <label class="mb-1">Pickup Point</label>                                
                                 <div class="d-flex justify-content-between">
-                                    <input type="text" class="form-control noto-lao" placeholder="ຈຸດຮັບພະນັກງານ..." v-model="pickupForm.pickup">
+                                    <input type="text" class="form-control laofont" placeholder="ຈຸດຮັບພະນັກງານ..." v-model="pickupForm.pickup">
                                     <button type="button" class="btn btn-primary ms-2" style="padding: 0px; width: 50px" title="Add new employee" @click="pickupUpd()"><i class="fa fa-plus"></i></button>  
                                 </div>                           
                             </div>

@@ -8,60 +8,61 @@
                             <h4 class="card-title text-muted mb-0 my-auto">Employee List</h4>
                         </div>
                         <div class="d-flex my-xl-auto right-content">
-                            <div class="pos-relative">
+                            <div class="pos-relative me-1" style="width: 100%">
                                 <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
                                     <i class="fe fe-search search-i text-muted"></i>
                                 <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
                             </div>
-                            <button type="button" class="btn ripple btn-primary ms-1" style="padding: 0px; width: 39px; height: 39.5px" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-20"></i></button>
+                            <div style="width: 39px">
+                                <button type="button" class="btn ripple btn-primary" style="padding: 0px; width: 39px; height: 39.5px" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-20"></i></button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Employee table -->
                     <div class="table-responsive userlist-table">
                         <table class="table card-table text-nowrap mb-0">
-                            <thead class="bg-gray-100">
+                            <thead class="bg-gray-100" style="border-bottom: 0.5px solid #ECEFF6">
                                 <tr>
-                                    <th class="wd-80"><span>Image</span></th>
-                                    <th style="width: 50px"><span>Name</span></th>
-                                    <th>
+                                    <th style="letter-spacing: 0px; width: 10px; padding: 6px 4px 6px 6px" class="text-muted"><span>Image</span></th>
+                                    <th style="letter-spacing: 0px; width: 50px; padding: 6px 12px 6px 0px" class="text-muted"><span>Name</span></th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">
                                         <div v-if="!!parseInt(loginPermiss.emp_all)">Position / Dept.</div>
                                         <div v-else>Position</div>
                                     </th>
-                                    <th>Phone Number</th>
-                                    <th>Country</th>
-                                    <th><span>ID</span><span class="text-lowercase">s</span></th>
-                                    <th>Started</th>
-                                    <th>Actions</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted">Phone Number</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted">Country</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted"><span>ID</span><span class="text-lowercase">s</span></th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted">Started</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="tr-hover" v-for="list in empData.data" :key="list.id">
-                                    <td style="padding: 6px 12px">
+                                    <td style="padding: 6px 4px 6px 0px; border: none">
                                         <div class="pos-relative">
                                             <img v-if="list.photo" alt="" class="rounded-circle avatar-md me-2 cur-pointer" :src="'assets/img/profile/'+ list.photo" @click="empPrev(list.id)">                                   
                                             <img v-if="!list.photo && list.gender == 'Male'" alt="" class="rounded-circle avatar-md me-2 cur-pointer" src="assets/img/male.png" @click="empPrev(list.id)">
                                             <img v-if="!list.photo && list.gender != 'Male'" alt="" class="rounded-circle avatar-md me-2 cur-pointer" src="assets/img/female.png" @click="empPrev(list.id)">
                                             <span v-if="list.status == 'Current' || list.status == 'Temporary'" class="rounded-circle bg-success bad"></span>
                                         </div>
-                                        <!-- <span v-if="list.status == 'Current' || list.status == 'Temporary'"><span class="pulse-danger" style="left: 38px; top: 38px"></span></span> -->
                                     </td>
-                                    <td style="padding: 6px 12px">
+                                    <td style="padding: 6px 12px 6px 0px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1">
                                         {{ list.name }} {{ list.surname }} <br>
-                                        <span class="noto-lao">{{ list.namelao }} {{ list.surnamelao }}</span>
+                                        <span class="laofont">{{ list.namelao }} {{ list.surnamelao }}</span>
                                     </td>
-                                    <td style="padding: 6px 12px"> 
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1"> 
                                         {{ list.position }}
                                         <div v-if="!!parseInt(loginPermiss.emp_all)">{{ list.department }}</div>
                                     </td>
-                                    <td style="padding: 6px 12px"> 
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1"> 
                                         <i v-if="list.phone" class="fa fa-tty me-1"></i> {{ list.phone}} 
                                     </td>
-                                    <td style="padding: 6px 12px">
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1">
                                         <img width="20" class="me-1" :src="'assets/img/flags/'+ list.country + '.png'" alt="" >
                                         {{ list.country }} <br>
                                     </td>
-                                    <td style="padding: 6px 12px">
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1">
                                         <div v-if="list.empid">
                                             <!-- <i class="far fa-address-card me-1"></i> -->
                                             {{ list.empid }}
@@ -72,13 +73,13 @@
                                             Scan: {{ list.scanid }}
                                         </div>
                                     </td>
-                                    <td style="padding: 6px 12px"> 
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1"> 
                                         {{ timeago(list.startdate) }} <br>
                                         {{ list.status }}
                                     </td>
-                                    <td style="padding: 6px 12px">        
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1">        
                                         <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
-                                            <i class="mdi mdi-dots-horizontal pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
+                                            <i class="fa fa-ellipsis-h pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%; font-size: 14px; color: #606469"></i>
                                         </button>       
                                         <div class="dropdown-menu tx-13">
                                             <div class="dropdown-item cur-pointer dropdown-hover" @click="empPrev(list.id)">
@@ -95,8 +96,8 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <pagination :pagination="empData" @paginate="getEmpData($event)" :offset="2"></pagination>
                     </div>
+                    <pagination :pagination="empData" @paginate="getEmpData($event)" :offset="2"></pagination>
                 </div> <!-- End employee list -->
 
                 <!-- Add and Edit employee -->
@@ -108,8 +109,8 @@
                                 <!-- <img class="cur-pointer" style="width: 160px; height: 200px; border: solid 1px #cccc;" title="Choose an Image" src="assets/img/no.jpg" @click="chooseImage"> -->
                                 <input class="d-none" ref="fileInput" type="file" accept="image/*"  @change="onSeclected">
                             </div> 
-                            <label class="rdiobox mt-4 ms-2 cur-pointer"><input name="rdio" type="radio" value="Male" checked="" v-model="empForm.gender"><span>Male</span></label>
-                            <label class="rdiobox mb-4 ms-2 cur-pointer"><input name="rdio" type="radio" value="Female" v-model="empForm.gender"><span>Female</span></label>                         
+                            <label class="rdiobox mt-4 cur-pointer"><input name="rdio" type="radio" value="Male" checked="" v-model="empForm.gender"><span>Male</span></label>
+                            <label class="rdiobox mb-4 cur-pointer"><input name="rdio" type="radio" value="Female" v-model="empForm.gender"><span>Female</span></label>                         
                         </div>
 
                         <div class="col-xxl-10">
@@ -140,13 +141,13 @@
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Name Lao  <span class=" text-danger">*</span></label>
-                                        <input type="text" class="form-control noto-lao" placeholder="ຊື່..." v-model="empForm.namelao">
+                                        <input type="text" class="form-control laofont" placeholder="ຊື່..." v-model="empForm.namelao">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Surname Lao</label>
-                                        <input type="text" class="form-control noto-lao" placeholder="ນາມສະກຸນ..." v-model="empForm.surnamelao">
+                                        <input type="text" class="form-control laofont" placeholder="ນາມສະກຸນ..." v-model="empForm.surnamelao">
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4">
@@ -169,25 +170,25 @@
                                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-4">
                                     <div class="form-group">
                                         <label class="mb-0">Country  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.country" placeholder="Select" searchable="true" :options="lkCountry"/>
+                                        <Multiselect class="multi-color" v-model="empForm.country" placeholder="Select" :options="lkCountry"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-8 col-md-6 col-sm-8">
                                     <div class="form-group">
                                         <label class="mb-0">Province</label>
-                                        <input type="text" class="form-control phet-lao" placeholder="Province..." v-model="empForm.province">
+                                        <input type="text" class="form-control laofont" placeholder="Province..." v-model="empForm.province">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">District</label>
-                                        <input type="text" class="form-control phet-lao" placeholder="District..." v-model="empForm.district">
+                                        <input type="text" class="form-control laofont" placeholder="District..." v-model="empForm.district">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Village</label>
-                                        <input type="text" class="form-control phet-lao" placeholder="Village..." v-model="empForm.village">
+                                        <input type="text" class="form-control laofont" placeholder="Village..." v-model="empForm.village">
                                     </div>
                                 </div>
                             </div>
@@ -352,7 +353,7 @@
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-center">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
                                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="detailEdit(lst.id)">
@@ -380,7 +381,7 @@
                                                     <td style="padding: 3px 10px"> {{ lst.working_hrs }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.levels }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.contact }} </td>
-                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                 </tr>                                                  
                                             </tbody>
                                         </table>
@@ -411,7 +412,7 @@
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-center">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
-                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
                                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="contactEdit(lst.id)">
@@ -423,10 +424,10 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.name }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.name }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.relate }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.phone }} </td>
-                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.address }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.address }} </td>
                                                 </tr>                                                
                                             </tbody>
                                         </table>
@@ -458,7 +459,7 @@
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-center">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
-                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
                                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="bankEdit(lst.id)">
@@ -474,7 +475,7 @@
                                                     <td style="padding: 3px 10px"> {{ lst.branch }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.acct_name }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.acct_no }} </td>
-                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                 </tr>                                                
                                             </tbody>
                                         </table>
@@ -505,7 +506,7 @@
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-center">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
-                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
                                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="cardEdit(lst.id)">
@@ -520,7 +521,7 @@
                                                     <td style="padding: 3px 10px"> {{ lst.cardtype }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.cardid }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.expiredate }} </td>
-                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                 </tr>                                                
                                             </tbody>
                                         </table>
@@ -550,7 +551,7 @@
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-center">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
-                                                                <i class="mdi mdi-dots-horizontal"></i>
+                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
                                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="alEdit(lst.id)">
@@ -564,7 +565,7 @@
                                                     </td>
                                                     <td style="padding: 3px 10px"> {{ lst.years }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.remain }} </td>
-                                                    <td style="padding: 3px 10px" class="phet-lao"> {{ lst.remarks }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                 </tr> 
                                             </tbody>
                                         </table>
@@ -653,7 +654,7 @@
 
             <!-- Modal add edit detail -->
             <div class="modal fade effect-scale" id="detailAddEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="detailAddEditLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title text-muted">Employee details</h6>
@@ -761,7 +762,7 @@
                                 <div class="col-xl-10">
                                     <div class="form-group">
                                         <label class="mb-0">Remarks</label>
-                                        <input type="text" class="form-control phet-lao" placeholder="Remarks..." v-model="empForm.remarks">
+                                        <input type="text" class="form-control laofont" placeholder="Remarks..." v-model="empForm.remarks">
                                     </div>
                                 </div>
                             </div>
@@ -784,7 +785,7 @@
 
             <!-- Modal contact -->
             <div class="modal fade effect-scale" id="contact" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="contactLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title text-muted">Contact Person</h6>
@@ -795,7 +796,7 @@
                                 <div class="col-lg-7 col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">Full Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control phet-lao" placeholder="Full name..." v-model="contForm.name">
+                                        <input type="text" class="form-control laofont" placeholder="Full name..." v-model="contForm.name">
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-md-12">
@@ -813,7 +814,7 @@
                                 <div class="col-lg-7 col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">Address</label>
-                                        <input type="text" class="form-control phet-lao" placeholder="Address..." v-model="contForm.address">
+                                        <input type="text" class="form-control laofont" placeholder="Address..." v-model="contForm.address">
                                     </div>
                                 </div>
                             </div>
@@ -835,7 +836,7 @@
 
             <!-- Modal bank info -->
             <div class="modal fade effect-scale" id="bank" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="bankLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title text-muted">Bank Account</h6>
@@ -870,7 +871,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="mb-0">Remarks</label>
-                                        <input type="text" class="form-control phet-lao" placeholder="Remarks..." v-model="bankForm.remarks">
+                                        <input type="text" class="form-control laofont" placeholder="Remarks..." v-model="bankForm.remarks">
                                     </div>
                                 </div>
                             </div>
@@ -891,8 +892,8 @@
             </div> <!-- End of modal contact -->
 
             <!-- Modal Personal Cards -->
-            <div class="modal fade effect-scale" id="cards" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cardLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal fade" id="cards" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cardLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title text-muted">Personal Cards</h6>
@@ -921,7 +922,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="mb-0">Remarks</label>
-                                        <input type="text" class="form-control phet-lao" placeholder="Remarks..." v-model="cardForm.remarks">
+                                        <input type="text" class="form-control laofont" placeholder="Remarks..." v-model="cardForm.remarks">
                                     </div>
                                 </div>
                             </div>
@@ -943,7 +944,7 @@
 
             <!-- Modal Annual Leave -->
             <div class="modal fade effect-scale" id="al" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="alLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title text-muted">Annual Leave</h6>
@@ -966,7 +967,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">Remarks</label>
-                                        <input type="text" class="form-control phet-lao" placeholder="Remarks..." v-model="alForm.remarks">
+                                        <input type="text" class="form-control laofont" placeholder="Remarks..." v-model="alForm.remarks">
                                     </div>
                                 </div>
                             </div>
@@ -995,58 +996,58 @@ export default {
 
     data() {
         return {
-            lkCountry: []
-            ,lkPosition: []
-            ,lkStatus: []
-            ,lkContract: []
-            ,lkLevels: []
-            ,lkRoster: []
-            ,lkScantimes: []
-            ,lkSite: []
-            ,lkDept: []
-            ,lkSection: []
-            ,lkCrew: []
-            ,lkRelate: []
-            ,lkBank: []
-            ,lkCard: []
-            ,lkYear: []
+            lkCountry: [],
+            lkPosition: [],
+            lkStatus: [],
+            lkContract: [],
+            lkLevels: [],
+            lkRoster: [],
+            lkScantimes: [],
+            lkSite: [],
+            lkDept: [],
+            lkSection: [],
+            lkCrew: [],
+            lkRelate: [],
+            lkBank: [],
+            lkCard: [],
+            lkYear: [],
 
-            ,detailData: []
-            ,empData: []
-            ,contData: []
-            ,bankData: []
-            ,cardData: []
-            ,alData: []
-            ,fileData: []
-            ,loginPermiss: []
+            detailData: [],
+            empData: [],
+            contData: [],
+            bankData: [],
+            cardData: [],
+            alData: [],
+            fileData: [],
+            loginPermiss: [],
 
-            ,showList: true
-            ,showAdd: ''
-            ,showDetail: ''
-            ,showTab: ''
-            ,search: ''
-            ,btnClear: false
-            ,btnEmpUpd: ''
-            ,btnEmpAdd: ''
-            ,btnDetailUpd: ''
-            ,btnDetailAdd: ''
-            ,btnContUpd: ''
-            ,btnContAdd: ''
-            ,btnBankUpd: ''
-            ,btnBankAdd: ''
-            ,btnCardUpd: ''
-            ,btnCardAdd: ''
-            ,btnAlUpd: ''
-            ,btnAlAdd: ''
-            ,actTab: ''
+            showList: true,
+            showAdd: '',
+            showDetail: '',
+            showTab: '',
+            search: '',
+            btnClear: false,
+            btnEmpUpd: '',
+            btnEmpAdd: '',
+            btnDetailUpd: '',
+            btnDetailAdd: '',
+            btnContUpd: '',
+            btnContAdd: '',
+            btnBankUpd: '',
+            btnBankAdd: '',
+            btnCardUpd: '',
+            btnCardAdd: '',
+            btnAlUpd: '',
+            btnAlAdd: '',
+            actTab: '',
 
 
-            ,photoPrev: window.location.origin + '/assets/img/no.jpg'
-            ,empForm: { id: '', userid: '', gender: 'Male', name: '', surname: '', namelao: '', surnamelao: '', phone: '', birthday: '', email: '', country: '', province: '', district: '', village: '', startdate: '', enddate: '', position: '', status: 'Current', contract: '', levels: '', empid: '', scanid: '', foodid: '', roster: '', scantimes: '', hours: '9', site: '', dept: '', section: '', crew: '', photo: '', remarks: ''}
-            ,contForm: { id: '', userid: '', name: '', relate: '', phone: '', address: '' }
-            ,bankForm: { id: '', userid: '', bankname: '', branch: '', acctname: '', acctno: '', remarks: '' }
-            ,cardForm: { id: '', userid: '', cardtype: '', cardid: '', expire: '', remarks: '' }
-            ,alForm: { id: '', userid: '', years: '', remain: '', remarks: '' }
+            photoPrev: window.location.origin + '/assets/img/no.jpg',
+            empForm: { id: '', userid: '', gender: 'Male', name: '', surname: '', namelao: '', surnamelao: '', phone: '', birthday: '', email: '', country: '', province: '', district: '', village: '', startdate: '', enddate: '', position: '', status: 'Current', contract: '', levels: '', empid: '', scanid: '', foodid: '', roster: '', scantimes: '', hours: '9', site: '', dept: '', section: '', crew: '', photo: '', remarks: ''},
+            contForm: { id: '', userid: '', name: '', relate: '', phone: '', address: '' },
+            bankForm: { id: '', userid: '', bankname: '', branch: '', acctname: '', acctno: '', remarks: '' },
+            cardForm: { id: '', userid: '', cardtype: '', cardid: '', expire: '', remarks: '' },
+            alForm: { id: '', userid: '', years: '', remain: '', remarks: '' }
             
 
         };
@@ -1791,7 +1792,7 @@ export default {
         alAdd(){
             this.$axios.post('/api/annual/add', this.alForm)
             .then((res) => {
-                 if(res.data.success){
+                if(res.data.success){
 
                     $('#al').modal('hide');
                     this.getAl(this.alForm.userid);
@@ -1953,13 +1954,13 @@ export default {
             }
         },
 
-        searchChange(){
+        async searchChange(){
             if(this.search.length >0){
                 this.btnClear = true;
-                this.getEmpData();
+                const data = await this.getEmpData();
             } else {
                 this.btnClear = false;
-                this.getEmpData();
+                const data = await this.getEmpData();
             }
         },
 
@@ -2135,10 +2136,10 @@ export default {
     },
 
     created(){
-        // this.$store.commit('setUsertype', window.Laravel.user.usertype); // Update store
         this.getPermiss();
         this.getEmpData();
         this.getLookup();
+    
     },
 
     beforeRouteEnter(to, from, next){
@@ -2213,7 +2214,7 @@ export default {
     }
 
     .tr-hover:hover{
-        background: #f9f9ff; 
+        background: #f2f4f8; 
     }
 
 	/* Button icon */
@@ -2233,6 +2234,11 @@ export default {
     .btn-add:hover{
         background: #DDE1E5;
         border-radius: 50px;
+    }
+
+    .ff{
+        border-color: blue;
+
     }
 
 </style>

@@ -1,140 +1,16 @@
 <template>
     <div class="card">
-        <div class="card-body overflow-auto" style="height: 85vh">
+        <div class="card-body overflow-auto" style="height: 85vh;">
             
-
-
-            <!-- Button trigger modal -->
-            <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                Launch static backdrop modal
-            </button> -->
-            <button type="button" class="btn btn-primary" @click="BtPay">
-                Launch static backdrop modal
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <!-- <h5 class="modal-title" id="staticBackdropLabel">Sign In</h5> -->
-                            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                            <h6 class="modal-title">Basic Modal</h6>
-                            <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
-
-                        </div>
-
-                        <div class="modal-body">
-                            
-                            <div class="form-group">
-                                <label class="mb-0">Work Hours</label>
-                                <input type="text" class="form-control" placeholder="name" v-model="insertData.name">
-                            </div>
-                            <div class="form-group">
-                                <label class="mb-0">Work Hours</label>
-                                <input type="text" class="form-control" placeholder="surame" v-model="insertData.surname">
-                            </div>
-                            <div class="form-group">
-                                <label class="mb-0">Work Hours</label>
-                                <input type="text" class="form-control" placeholder="name lao" v-model="insertData.nameLao">
-                            </div>
-                            <div class="form-group">
-                                <label class="mb-0">Work Hours</label>
-                                <input type="text" class="form-control" placeholder="surname lao" v-model="insertData.surnameLao">
-                            </div>
-
-
-
-
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" @click="insertName()">Insert Data</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-            <!-- <div class="col-md-3">
-                <img :src="imagePreview" alt="">
-                <input type="file" @change="onSeclected" class="mt-2" >
-            </div> -->
-
-            <div style="height: 200px; width: 100%;">
-                <img class="cur-pointer" style="width: 160px; height: 200px; border: solid 1px #cccc;" title="Choose an Image" :src="imagePreview" alt="" @click="chooseImage">
-                <!-- <img class="cur-pointer" style="width: 160px; height: 200px; border: solid 1px #cccc;" title="Choose an Image" src="assets/img/no2.jpg" @click="chooseImage"> -->
-                <input class="d-none" ref="fileInput" type="file" @change="onSeclected">
-            </div> 
-
-
-            <button class="mt-5" @click="addFile()">Add File</button>
-
-
-            <div class="ms-1 d-flex justify-content-start align-items-center mt-4">
+            <!-- <div class="ms-1 d-flex justify-content-start align-items-center mt-4">
                 <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" title="Add new bank info" @click="selFiles()">
                     <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
                     <input class="d-none" ref="fileInput" type="file" multiple  @change="fileChange" >
                 </button> 
                 <div class="" style="letter-spacing: 0px; padding: 4px 10px">File Name</div>
-            </div>
-
-
-            <!-- {{ addData }} -->
-            <div class="table-responsive mt-5">
-                <table class="table-hover mb-0 text-md-nowrap bd-gray-100 bd-1">
-                    <thead>
-                        <tr>
-
-                            <th class="w-20 bd-1 bd-gray-100">ID</th>
-                            <th class="bd-1 bd-gray-100">User ID</th>
-                            <th class="bd-1 bd-gray-100">File</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody style="font-size: 13px">
-                        <tr class="bd-1 bd-gray-100" v-for="list in fileData" :key="list.id">
-
-                            <td> {{ list.id }} </td>
-                            <td class="bd-1 bd-gray-100 py-1 px-3"> {{ list.userid}} </td>
-                            <td class="bd-1 bd-gray-100 py-1 px-3"> {{ list.files}} </td>
-
-                            <!-- <td>
-                                <a class="ms-4" href="#" @click="download(list.files)">Download</a>
-                            </td> -->
-
-                            <td>
-                                <a href="#" @click="download(list.files)"> <i class="fe fe-download ms-4"></i></a>
-                                <a href="#" @click="deleteFile(list.files)"> <i class="fe fe-trash-2 ms-4"></i></a>
-                            </td>
-
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-5">
-                <input type="file" @change="imageChange" name="image" ref="files" multiple/>
-            </div>
-
-            <!-- <div class="m-auto">
-                <p v-for="(image,index) in images" :key="index">{{ image.name }}</p>
             </div> -->
 
-            <div>
-                <button @click="uploadImages">Upload</button>
-            </div>
 
-
-<!-- 
-            <div class="mt-4 wd-100 border ht-50 d-flex justify-content-center align-items-center">
-                <button class="btn btn-icon btn-sm btn-primary rounded-circle wd-25 ht-25"  title="Tools">
-                    <i class="mdi mdi-dots-horizontal"></i>
-                </button> 
-            </div> -->
 
  
 
@@ -237,8 +113,7 @@
                 <label class='form-check-label' for='flexSwitchCheckDefault'>Default switch checkbox input</label>
             </div> -->
 
-            {{ test1 }}
-
+   
                 <!-- <div class="card-body">
                     <div class="main-content-label mg-b-5">
                         Toggle Switches
@@ -285,49 +160,7 @@
                 </div>
             </div> -->
 
-            <div class="p-0 border wd-100 ht-100 text-center fw-bold d-flex justify-content-center align-items-center " >File Name</div>
-
-
-
-            <a href="#"><i class="bx bxs-download tx-18" data-bs-toggle="tooltip" title="" data-bs-original-title="Downloads"></i></a>
-
-
-            <div class="main-profile-social-list">
-                <div class="media">
-                    <div class="media-icon bg-primary-transparent text-primary">
-                        <i class="icon ion-logo-github"></i>
-                    </div>
-                    <div class="media-body">
-                        <span>Github</span> <a href="">github.com/spruko</a>
-                    </div>
-                </div>
-                <div class="media">
-                    <div class="media-icon bg-success-transparent text-success">
-                        <i class="icon ion-logo-twitter"></i>
-                    </div>
-                    <div class="media-body">
-                        <span>Twitter</span> <a href="">twitter.com/spruko.me</a>
-                    </div>
-                </div>
-
-                <div class="media">
-                    <div class="media-icon bg-info-transparent text-info">
-                        <i class="icon ion-logo-linkedin"></i>
-                    </div>
-                    <div class="media-body">
-                        <span>Linkedin</span> <a href="">linkedin.com/in/spruko</a>
-                    </div>
-                </div>
-
-                <div class="media">
-                    <div class="media-icon bg-danger-transparent text-danger">
-                        <i class="icon ion-md-link"></i>
-                    </div>
-                    <div class="media-body">
-                        <span>My Portfolio</span> <a href="">spruko.com/</a>
-                    </div>
-                </div>
-            </div>
+            
 
 
             <!-- <div class="main-content-left main-content-left-mail card-body">
@@ -364,183 +197,32 @@
             </button> -->
 
 
-            <div class="card-body">
-                <div class="main-content-left main-content-left-mail">
-                    <a class="btn btn-main-primary btn-compose" href="" id="btnCompose">Compose</a>
-                    <div class="main-mail-menu">
-                        <nav class="nav main-nav-column mg-b-20">
-                            <a class="nav-link active" href=""><i class="bx bxs-inbox"></i> Inbox <span>20</span></a> 
-                            <a class="nav-link" href=""><i class="bx bx-star"></i> Starred <span>3</span></a> 
-                            <a class="nav-link" href=""><i class="bx bx-bookmarks"></i> Important <span>10</span></a> 
-                            <a class="nav-link" href=""><i class="bx bx-send"></i> Sent Mail <span>8</span></a> 
-                            <a class="nav-link" href=""><i class="bx bx-edit"></i> Drafts <span>15</span></a> 
-                            <a class="nav-link" href=""><i class="bx bx-message-error"></i> Spam <span>128</span></a> 
-                            <a class="nav-link" href=""><i class="bx bx-trash"></i> Trash <span>6</span></a>
-                        
-                        </nav><label class="main-content-label main-content-label-sm">Label</label>
-                        <nav class="nav main-nav-column mg-b-20">
-                            <a class="nav-link" href="#"><i class="bx bx-folder-open"></i> Social <span>10</span></a> <a class="nav-link" href="#"><i class="bx bx-folder"></i> Promotions <span>22</span></a> <a class="nav-link" href="#"><i class="bx bx-folder-plus"></i> Updates <span>17</span></a>
-                        </nav><label class="main-content-label main-content-label-sm">Tags</label>
-                        <nav class="nav main-nav-column">
-                            <a class="nav-link" href="#"><i class="bx bxl-twitter"></i> Twitter <span>2</span></a> <a class="nav-link" href="#"><i class="bx bxl-github"></i> Github <span>32</span></a> <a class="nav-link" href="#"><i class="bx bxl-google-plus"></i> Google <span>7</span></a>
-                        </nav>
-                    </div>
+     
+            <div class=" d-flex justify-content-between">
+                <div class="pos-relative" style="width: 90%">
+                    <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
+                        <i class="fe fe-search search-i text-muted"></i>
+                    <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
+                </div>
+                <div>
+                    <button type="button" class="btn ripple btn-primary ms-1" style="padding: 0px; width: 39px; height: 39.5px" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-20"></i></button>
                 </div>
             </div>
 
+            
+            
+     
 
 
 
 
- <div class="d-flex pos-relative" style="width: 50px; margin-left: 150px">
-        <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
-            <i class="mdi mdi-dots-vertical"></i>
-        </button> 
-
-        <!-- <div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow" x-placement="bottom-end" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 55px);" data-popper-placement="bottom-start"> -->
-        <div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow">
-            <div class="dropdown-item cur-pointer dropdown-hover">
-                <i class="fe fe-edit me-2"></i><span>Edit</span>
-            </div>
-            <div class="dropdown-item cur-pointer dropdown-hover">
-                <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="d-flex pos-relative" style="width: 45px; margin-left: 500px">
-
-            <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
-                <i class="mdi mdi-dots-horizontal pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
-            </button>    
-
-            <div  class="dropdown-menu dropdown-menu-left dropdown-menu-arrow tx-13 pos-absolute">
-                <div class="dropdown-item cur-pointer dropdown-hover" @click="empPrev(list.id)">
-                    <i class="fe fe-search me-2"></i><span>Preview</span>
-                </div>
-                <div class="dropdown-item cur-pointer dropdown-hover" @click="empEdit(list.id)">
-                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                </div>
-
-                <div class="dropdown-item cur-pointer dropdown-hover" @click="empDel(list.id)">
-                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                </div>
-            </div>
-
-
-        </div>
-
-
-            <div class="col-xl-12">
-                <div class="card">
-
-                    <div class="card-body">
-                        <div class="table-responsive hoverable-table">
-                            <div id="example-delete_wrapper" class="dataTables_wrapper dt-bootstrap5"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example-delete_length"><label><select name="example-delete_length" aria-controls="example-delete" class="form-select form-select-sm select2"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select></label></div></div><div class="col-sm-12 col-md-6"><div id="example-delete_filter" class="dataTables_filter"><label><input type="search" class="form-control form-control-sm" placeholder="Search..." aria-controls="example-delete"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="example-delete" class="table text-md-nowrap dataTable dtr-inline" role="grid" aria-describedby="example-delete_info" style="width: 1581px;">
-                                <thead>
-                                    <tr role="row">
-                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 268px;" aria-sort="ascending" aria-label="Name: activate to sort column descending">Name</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 397px;" aria-label="Position: activate to sort column ascending">Position</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 201px;" aria-label="Office: activate to sort column ascending">Office</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 104px;" aria-label="Age: activate to sort column ascending">Age</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 214px;" aria-label="Start date: activate to sort column ascending">Start date</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example-delete" rowspan="1" colspan="1" style="width: 157px;" aria-label="Salary: activate to sort column ascending">Salary</th></tr>
-                                </thead>
-                                <tbody>
-                                
-                                    <tr class="odd">
-                                        <td class="dtr-control sorting_1" tabindex="0">Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
-                                    <tr class="odd selected">
-                                        <td class="sorting_1 dtr-control">Angelica Ramos</td>
-                                        <td>Chief Executive Officer (CEO)</td>
-                                        <td>London</td>
-                                        <td>47</td>
-                                        <td>2009/10/09</td>
-                                        <td>$1,200,000</td>
-                                    </tr>
-                                    <tr class="odd">
-                                        <td class="dtr-control sorting_1" tabindex="0">Ashton Cox</td>
-                                        <td>Junior Technical Author</td>
-                                        <td>San Francisco</td>
-                                        <td>66</td>
-                                        <td>2009/01/12</td>
-                                        <td>$86,000</td>
-                                    </tr>
-                                    <tr class="even selected">
-                                        <td class="sorting_1 dtr-control">Bradley Greer</td>
-                                        <td>Software Engineer</td>
-                                        <td>London</td>
-                                        <td>41</td>
-                                        <td>2012/10/13</td>
-                                        <td>$132,000</td>
-                                    </tr>
-                                  
-                                    </tbody>
-                                <tfoot>
-                                    <tr><th rowspan="1" colspan="1">Name</th><th rowspan="1" colspan="1">Position</th><th rowspan="1" colspan="1">Office</th><th rowspan="1" colspan="1">Age</th><th rowspan="1" colspan="1">Start date</th><th rowspan="1" colspan="1">Salary</th></tr>
-                                </tfoot>
-                            </table>
-                            </div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="example-delete_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="example-delete_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="example-delete_previous"><a href="#" aria-controls="example-delete" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="example-delete" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example-delete" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="example-delete_next"><a href="#" aria-controls="example-delete" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    <!-- <div class="col-lg-4">
-        <div aria-label="Basic example" class="btn-group" role="group">
-            <button class="btn btn-secondary pd-x-25" type="button">Left</button> 
-            <button class="btn btn-primary pd-x-25" type="button">Center</button>
-            <button class="btn btn-secondary pd-x-25" type="button">Right</button>
-        </div>
-    </div> -->
-
-    <div class="col-lg-4">
-        <div aria-label="Basic example" class="btn-group" role="group">
-            <button class="btn btn-secondary pd-x-10" type="button">Left</button> 
-            <button class="btn btn-secondary pd-x-10" type="button">Right</button>
-        </div>
-    </div>
-
-
-    <div class="col-lg-4 m-5">
-        <div class="dropdown btn-group" role="group">
-            <button aria-expanded="false" class="btn btn-primary dropdown-toggle-split" style="height: 39.5px" data-bs-toggle="dropdown" id="dropdownMenuButton1" type="button">{{ mon }}<i class="fas fa-caret-down ms-2"></i></button>
-            <div class="dropdown-menu dropdown-menu-right overflow-auto" aria-labelledby="dropdownMenuDate1" x-placement="bottom-end" style="height: 210px">
-                <a class="dropdown-item">January</a>
-                <a class="dropdown-item">February</a>
-                <a class="dropdown-item">March</a>
-                <a class="dropdown-item">April</a>
-                <a class="dropdown-item">June</a>
-                <a class="dropdown-item">July</a>
-                <a class="dropdown-item">August</a>
-                <a class="dropdown-item">September</a>
-                <a class="dropdown-item">October</a>
-                <a class="dropdown-item">November</a>
-                <a class="dropdown-item">December</a>
-            </div>
-
-            <button aria-expanded="false" class="btn btn-primary dropdown-toggle-split rounded-right" style="height: 39.5px" data-bs-toggle="dropdown" id="dropdownMenuButton2" type="button">2022<i class="fas fa-caret-down ms-2"></i></button>
-            <div class="dropdown-menu dropdown-menu-right overflow-auto" aria-labelledby="dropdownMenuDate2" x-placement="bottom-end" style="height: 210px">
-                <a class="dropdown-item">2021</a>
-                <a class="dropdown-item">2022</a>
-                <a class="dropdown-item">2023</a>
-                <a class="dropdown-item">2024</a>
-            </div>
-        </div>
-    </div>
-
-
-    {{ mon }}
-
+ 
 
     
+            <div class="p-0 border wd-100 ht-100 fw-bold d-flex justify-content-end align-items-center " >File Name</div>
+
+            
+        </div>
     </div>
 </template>
 
@@ -582,6 +264,8 @@ export default {
             ,files: []
 
             ,mon: ''
+            ,testData: []
+
         };
     },
 
@@ -590,6 +274,15 @@ export default {
     },
 
     methods: {
+
+        testClick(){
+            this.$axios.get('/api/test/tests')
+            .then((response) => {
+                this.testData = response.data
+                console.log("Data:", response.data);
+            })
+
+        },
 
         getMon(){
             // this.mon = (new Date().getMonth()+1)
@@ -871,6 +564,10 @@ export default {
     /* table.dataTable tbody tr.selected {
 	    background-color: #B0BED9;
     } */
-
+    
+    .tt{
+        border-radius: 0px;
+        border-top: none;
+    }
 
 </style>

@@ -50,20 +50,21 @@
 						</li>
 
 						<!-- Fuel -->
-						<li class="slide" :class="fuelExp" @click="fuelClick()">
-							<a class="side-menu__item" :class="fuelAct" href="#">
-								<span class="side-menu__label"><i class="fa fa-tint text-center wd-20"></i><span class="mx-2">Fuels</span></span>
-								<i class="angle fe fe-chevron-down"></i>
-							</a>
-							<ul class="slide-menu">
-								<li><router-link class="slide-item" :class="fuelConsAct" @click="fuelConsClick()" to="/fuelcons">Consumption</router-link></li>
-								<li><router-link class="slide-item" :class="fuelReportAct" @click="fuelReportClick()" to="/fuelreport">Report</router-link></li>
-							</ul>
-						</li>
+						<div v-if="!!parseInt(permiss.fuel)">
+							<li class="slide" :class="fuelExp" @click="fuelClick()">
+								<a class="side-menu__item" :class="fuelAct" href="#">
+									<span class="side-menu__label"><i class="fa fa-tint text-center wd-20"></i><span class="mx-2">Fuels</span></span>
+									<i class="angle fe fe-chevron-down"></i>
+								</a>
+								<ul class="slide-menu">
+									<li><router-link class="slide-item" :class="fuelConsAct" @click="fuelConsClick()" to="/fuelcons">Consumption</router-link></li>
+									<li><router-link class="slide-item" :class="fuelReportAct" @click="fuelReportClick()" to="/fuelreport">Report</router-link></li>
+								</ul>
+							</li>
+						</div>
 
-
-						<!-- SHE -->
-						<div v-if="!!parseInt(loginPermiss.safety)">
+						<!-- Safety -->
+						<div v-if="!!parseInt(permiss.safety)">
 							<!-- <li class="side-item side-item-category mt-4">Safety Dept.</li> -->
 							<li class="slide">
 								<a class="side-menu__item" href="#">
@@ -87,7 +88,7 @@
 							</a>
 							<ul class="slide-menu">
 								<li><a class="slide-item" :class="lookupAct" @click="lookupClick()" href="#">Lookup</a></li>
-								<li v-if="!!parseInt(loginPermiss.permiss)"><router-link class="slide-item" :class="permissAct" @click="permissClick()" to="/permiss">Permission</router-link></li>
+								<li v-if="!!parseInt(permiss.permiss)"><router-link class="slide-item" :class="permissAct" @click="permissClick()" to="/permiss">Permission</router-link></li>
 							</ul>
 						</li>
 
@@ -103,27 +104,19 @@
 
 				<!-- main-header -->
 				<div class="main-header sticky side-header nav nav-item" v-if="isSignin">
-					<div class="container-fluid ps-0 pe-2">
-						<div class="main-header-left ">
-		
+					<div class="container-fluid ps-sm-0 p-2">
+						<div class="main-header-left ">		
 							<div class="app-sidebar__toggle" data-bs-toggle="sidebar">
 								<a class="open-toggle" href="#"><i class="header-icon fe fe-align-left"></i></a>
 								<a class="close-toggle" href="#"><i class="header-icons fe fe-x"></i></a>
 							</div>
-
-							<div class=" pt-2 mx-3 text-muted text-capitalize">
-								<h5>{{ loginProfile.department }}</h5>
+							<div class="text-muted text-capitalize" style="padding-top: 9px">
+								<h5>{{ profile.department }}</h5>
 							</div>
-
-							<!-- <div class="main-header-center ms-3 d-sm-none d-md-none d-lg-block">
-								<input class="form-control" placeholder="Search for anything..." type="search"> <button
-									class="btn"><i class="fas fa-search d-none d-md-block"></i></button>
-							</div> -->
 						</div>
 						<div class="main-header-right">
 							<ul class="nav nav-item  navbar-nav-right ms-auto">
-							
-								<li class="nav-item full-screen fullscreen-button">
+								<!-- <li class="nav-item full-screen fullscreen-button">
 									<a class="new nav-link full-screen-link" href="#" title="Full screen"><svg
 											xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24"
 											fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -131,49 +124,59 @@
 											<path
 												d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
 											</path>
-										</svg></a>
-								</li>
+										</svg>
+									</a>
+								</li> -->
 
 								<li class="dropdown main-profile-menu nav nav-item nav-link p-0">
-									<a class="profile-user d-flex pt-2" href="">
-										<p class="pt-2 me-2 text-muted text-capitalize">{{ loginProfile.name }}</p>
-										<img alt="" v-if="loginProfile.photo" :src="'assets/img/profile/'+ loginProfile.photo">
-										<img alt="" v-if="!loginProfile.photo && loginProfile.gender == 'Male'" src="assets/img/male.png">
-										<img alt="" v-if="!loginProfile.photo && loginProfile.gender != 'Male'" src="assets/img/female.png">
-									</a>
+									
+										<a class="profile-user d-flex" href="">
+											<div class="d-flex align-items-center">
+												<span class="d-none d-sm-flex text-muted text-capitalize me-2">{{ profile.name }} {{ profile.surname }}</span>
+											</div>
+											<img alt="" v-if="profile.photo" :src="'assets/img/profile/'+ profile.photo">
+											<img alt="" v-if="!profile.photo && profile.gender == 'Male'" src="assets/img/male.png">
+											<img alt="" v-if="!profile.photo && profile.gender != 'Male'" src="assets/img/female.png">
+										</a>
+
+									
 									
 									<div class="dropdown-menu">
 										<div class="main-header-profile bg-primary p-3">
 											<div class="d-flex wd-100p">
-												<div v-if="loginProfile.photo" class="main-img-user"><img alt="" :src="'assets/img/profile/'+ loginProfile.photo"></div>
-												<div v-if="!loginProfile.photo && loginProfile.gender == 'Male'" class="main-img-user"><img alt="" src="assets/img/male.png"></div>
-												<div v-if="!loginProfile.photo && loginProfile.gender != 'Male'" class="main-img-user"><img alt="" src="assets/img/female.png"></div>											
+												<div v-if="profile.photo" class="main-img-user"><img alt="" :src="'assets/img/profile/'+ profile.photo"></div>
+												<div v-if="!profile.photo && profile.gender == 'Male'" class="main-img-user"><img alt="" src="assets/img/male.png"></div>
+												<div v-if="!profile.photo && profile.gender != 'Male'" class="main-img-user"><img alt="" src="assets/img/female.png"></div>											
 												<div class="ms-3 my-auto">
-													<h6 class="text-capitalize text-white">{{ loginProfile.name }}</h6>
-													<span class="text-capitalize"> Username: {{ loginProfile.username }}</span>
+													<div class="d-flex">
+														<h6 class="text-capitalize text-white">{{ profile.name }}</h6>
+														<h6 class="text-capitalize text-white d-sm-none ms-2">{{ profile.surname }}</h6>
+													</div>
+													<span class="text-capitalize"> Username: {{ profile.username }}</span>
 												</div>
 											</div>
 										</div>
-										<a class="dropdown-item disabled" href=""><i class="bx bx-user-circle"></i>Profile</a>
-										<a class="dropdown-item disabled" href=""><i class="bx bx-cog"></i> Edit Profile</a>
-										<a class="dropdown-item disabled" href=""><i class="bx bxs-inbox"></i>Inbox</a>
-										<a class="dropdown-item disabled" href=""><i class="bx bx-envelope"></i>Messages</a>
-										<a class="dropdown-item disabled" href=""><i class="bx bx-slider-alt"></i> Account
+										<a class="dropdown-item disabled" href="#"><i class="bx bx-user-circle"></i>Profile</a>
+										<a class="dropdown-item disabled" href="#"><i class="bx bx-cog"></i> Edit Profile</a>
+										<a class="dropdown-item disabled" href="#"><i class="bx bxs-inbox"></i>Inbox</a>
+										<a class="dropdown-item disabled" href="#"><i class="bx bx-envelope"></i>Messages</a>
+										<a class="dropdown-item disabled" href="#"><i class="bx bx-slider-alt"></i> Account
 											Settings</a>
-										<a class="dropdown-item" href="" @click="signOut()"><i class="bx bx-log-out"></i> Sign out</a>
+										<a class="dropdown-item cur-pointer" @click="signOut()"><i class="bx bx-log-out"></i> Sign out</a>
 									</div>
 								</li>
 							</ul>
 						</div>
 					</div>
 				</div>
-				<!-- /main-header -->
 
-				<!-- container -->
-				<div class="container-fluid ps-2 pt-2 pe-2">
+				<div class="container-fluid" style="margin-top: 20px">
                     <router-view></router-view>
 				</div>
-				<!-- /Container -->
+				<!-- <div class="container-fluid p-sm-2 p-0">
+                    <router-view></router-view>
+				</div> -->
+
 			</div>
 
 
@@ -218,8 +221,8 @@ export default {
 			,infoExp: ''
 			,settExp: ''
 
-			,loginProfile: []
-			,loginPermiss: []
+			,profile: []
+			,permiss: []
         };
     },
 
@@ -343,12 +346,12 @@ export default {
 
 		async getProfile(){
 			const response = await axios.get('api/profile')
-			this.loginProfile = response.data;
+			this.profile = response.data;
 		},
 
 		async getPermiss(){
 			const response = await axios.get('api/permiss')
-			this.loginPermiss = response.data;
+			this.permiss = response.data;
 		},
 
     },

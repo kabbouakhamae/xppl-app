@@ -1,18 +1,16 @@
 <template>
-    <div class="card">
-        <div class="card-body">
-            <div class="breadcrumb-header justify-content-between mb-2 mt-0" >
+<div class="breadcrumb-header justify-content-between mb-2 mt-0" >
                 <div class="d-flex">
                     <h4 class="card-title text-muted mb-0 my-auto">Annual Leave of {{ year }} </h4>
                 </div>
                 <div class="d-flex my-xl-auto right-content">
-                    <div class="pos-relative" >
+                    <div class="pos-relative me-1" style="width: 100%">
                         <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
                         <i class="fe fe-search search-i text-muted"></i>
                         <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
                     </div>
-                    <div class="dropdown ms-1">
-                        <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary dropdown-toggle-split" style="height: 39.5px" data-bs-toggle="dropdown" id="dropdownMenuButton" type="button">{{ year }}<i class="fas fa-caret-down ms-2"></i></button>
+                    <div class="dropdown">
+                        <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary dropdown-toggle-split" style="width: 67px; height: 39.5px" data-bs-toggle="dropdown" id="dropdownMenuButton" type="button">{{ year }}<i class="fas fa-caret-down ms-2"></i></button>
                         <div class="dropdown-menu dropdown-menu-right overflow-auto" aria-labelledby="dropdownMenuDate" x-placement="bottom-end" style="height: 210px">
                             <a class="dropdown-item" v-for="lst in lkYear" :key="lst.value" @click="yearChange(lst.value)">                            
                                 {{ lst.value }}
@@ -21,9 +19,31 @@
                     </div>
                 </div>
             </div>
+    <div class="card">
+        <div class="card-body">
+            <!-- <div class="breadcrumb-header justify-content-between mb-2 mt-0" >
+                <div class="d-flex">
+                    <h4 class="card-title text-muted mb-0 my-auto">Annual Leave of {{ year }} </h4>
+                </div>
+                <div class="d-flex my-xl-auto right-content">
+                    <div class="pos-relative me-1" style="width: 100%">
+                        <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
+                        <i class="fe fe-search search-i text-muted"></i>
+                        <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
+                    </div>
+                    <div class="dropdown">
+                        <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary dropdown-toggle-split" style="width: 67px; height: 39.5px" data-bs-toggle="dropdown" id="dropdownMenuButton" type="button">{{ year }}<i class="fas fa-caret-down ms-2"></i></button>
+                        <div class="dropdown-menu dropdown-menu-right overflow-auto" aria-labelledby="dropdownMenuDate" x-placement="bottom-end" style="height: 210px">
+                            <a class="dropdown-item" v-for="lst in lkYear" :key="lst.value" @click="yearChange(lst.value)">                            
+                                {{ lst.value }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
 
-            <div class="table-responsive " style="heigt: 85vh">
-                <table class="table main-table-reference text-nowrap mb-0">
+            <div class="table-responsive" style="">
+                <table class="table main-table-reference text-nowrap mb-0 table-hover">
                     <thead>
                         <tr>
                             <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold">Name Eng</th>
@@ -38,9 +58,9 @@
                         </tr>
                     </thead>
                     <tbody> 
-                        <tr class="tr-hover" v-for="lst in alInfo.data" :key="lst.id">
+                        <tr v-for="lst in alInfo.data" :key="lst.id">
                             <td style="padding: 3px 10px">{{ lst.title }} {{ lst.name }} {{ lst.surname }}</td>
-                            <td style="padding: 3px 10px" class="noto-lao"> <span v-if="lst.namelao">{{ lst.titlelao }}</span> {{ lst.namelao }} {{ lst.surnamelao }}</td>
+                            <td style="padding: 3px 10px" class="laofont"> <span v-if="lst.namelao">{{ lst.titlelao }}</span> {{ lst.namelao }} {{ lst.surnamelao }}</td>
                             <td style="padding: 3px 10px"> {{ lst.position }} </td>
                             <td v-if="!!parseInt(loginPermiss.al_all)" style="padding: 3px 10px"> {{ lst.department }} </td>
                             <td style="padding: 3px 10px" class="text-end"> {{ formatNumber(lst.remain) }} </td>
@@ -48,12 +68,12 @@
                             <td style="padding: 3px 10px" class="text-end"> {{ formatNumber(lst.use) }} </td>
                             <td v-if="lst.total < 0" style="padding: 3px 10px" class="text-end bg-danger">{{ formatNumber(lst.total) }}</td>
                             <td v-else style="padding: 3px 10px" class="text-end"> {{ formatNumber(lst.total) }} </td>
-                            <td style="padding: 3px 10px" class="noto-lao"> {{ lst.remarks }} </td>
+                            <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                         </tr> 
                     </tbody>
                 </table>
-                <pagination :pagination="alInfo" @paginate="getAlInfo($event)" :offset="2"></pagination>
             </div>
+            <pagination :pagination="alInfo" @paginate="getAlInfo($event)" :offset="2"></pagination>
         </div>
     </div>
 </template>
@@ -64,12 +84,12 @@ export default {
 
     data() {
         return {
-            loginPermiss: []
-            ,lkYear: []
-            ,alInfo: []
-            ,year: new Date().getFullYear()
-            ,search: ''
-            ,btnClear: false
+            loginPermiss: [],
+            lkYear: [],
+            alInfo: [],
+            year: new Date().getFullYear(),
+            search: '',
+            btnClear: false
         };
     },
 

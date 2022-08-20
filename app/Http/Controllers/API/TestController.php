@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 
 class TestController extends Controller
@@ -107,5 +107,11 @@ class TestController extends Controller
         return $value;
     }
 
+    public function tests()
+    {
+        $data = DB::select('select * from emp_names');
+
+        return $data;
+    }
 
 }

@@ -1,42 +1,12 @@
-/* @font-face {
-    font-family: 'Phetsarath OT';
-  src: url("fonts/PHETSARATHOT.eot");
-  src: url("fonts/PHETSARATHOT.woff") format("woff"), url('fonts/PHETSARATHOT.eot') format('embedded-opentype'), url("fonts/PHETSARATHOT.ttf") format("truetype"), url("fonts/PHETSARATHOT.svg") format("svg");
-  font-weight: normal;
-  font-style: normal;
-  } */
 
-  /* html,body,div,p,table,tr,td {
-  font-family: "Phetsarath OT";
-  margin: 0;
-  font-size: 1rem;
-}
 
-h1,h2,h3,h4,h5{
-  font-family: "Phetsarath OT";
-}
-
-table, td,table{
-  white-space: normal;
-} */
-
-.noto-lao {
-  font-family: 'Noto Sans Lao';
-  src: url("fonts/NotoSansLao-Regular.ttf");
+@font-face {
+  font-family: 'Defago Noto Sans';
+  src: url("fonts/DefagoNotoSansLao.ttf");
   font-weight: normal;
   font-style: normal;
 }
 
-.say-lao {
-  font-family: 'Saysettha OT';
-  src: url("fonts/Saysettha OT.ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-.phet-lao {
-  font-family: 'Phetsarath OT';
-  src: url("fonts/PHETSARATHOT.ttf");
-  font-weight: normal;
-  font-style: normal;
+.laofont {
+  font-family: 'Defago Noto Sans';
 }
