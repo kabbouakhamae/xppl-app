@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-body">
-            <div class="breadcrumb-header justify-content-between mb-2 mt-0" >
+            <div class="breadcrumb-header justify-content-between align-items-center mb-3 mt-0" >
                 <div class="d-flex">
                     <h4 class="card-title text-muted mb-0 my-auto">Transport Manifest</h4>
                 </div>
@@ -40,7 +40,6 @@
                             <td style="padding: 3px 10px">{{ dateTime(lst.back) }}</td>
                             <td style="padding: 3px 10px">{{ lst.leaveInfo }}</td>
                             <td style="padding: 3px 10px" class="cur-pointer laofont" title="Click to add drop off point" @click="newDropoff(lst.id)">{{ lst.dropoff }}</td>
-
                         </tr> 
                     </tbody>
                 </table>

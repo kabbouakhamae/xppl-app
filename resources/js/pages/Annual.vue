@@ -1,5 +1,8 @@
 <template>
-<div class="breadcrumb-header justify-content-between mb-2 mt-0" >
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="breadcrumb-header justify-content-between align-items-center mb-3 mt-0" >
                 <div class="d-flex">
                     <h4 class="card-title text-muted mb-0 my-auto">Annual Leave of {{ year }} </h4>
                 </div>
@@ -19,28 +22,6 @@
                     </div>
                 </div>
             </div>
-    <div class="card">
-        <div class="card-body">
-            <!-- <div class="breadcrumb-header justify-content-between mb-2 mt-0" >
-                <div class="d-flex">
-                    <h4 class="card-title text-muted mb-0 my-auto">Annual Leave of {{ year }} </h4>
-                </div>
-                <div class="d-flex my-xl-auto right-content">
-                    <div class="pos-relative me-1" style="width: 100%">
-                        <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
-                        <i class="fe fe-search search-i text-muted"></i>
-                        <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
-                    </div>
-                    <div class="dropdown">
-                        <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary dropdown-toggle-split" style="width: 67px; height: 39.5px" data-bs-toggle="dropdown" id="dropdownMenuButton" type="button">{{ year }}<i class="fas fa-caret-down ms-2"></i></button>
-                        <div class="dropdown-menu dropdown-menu-right overflow-auto" aria-labelledby="dropdownMenuDate" x-placement="bottom-end" style="height: 210px">
-                            <a class="dropdown-item" v-for="lst in lkYear" :key="lst.value" @click="yearChange(lst.value)">                            
-                                {{ lst.value }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
 
             <div class="table-responsive" style="">
                 <table class="table main-table-reference text-nowrap mb-0 table-hover">

@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card-body">
-            <div class="breadcrumb-header justify-content-between mb-2 mt-0" >
+            <div class="breadcrumb-header justify-content-between align-items-center mb-3 mt-0" >
                 <div class="d-flex">
                     <h4 class="card-title text-muted mb-0 my-auto">Fuel consumption of {{ mont }}, {{ year }}</h4>
                 </div>
@@ -44,17 +44,10 @@
                 
                 <!-- Header table -->
                 <div class="col-xl-10 col-lg-9 col-md-8 col-sm-9 ps-sm-0 pt-sm-0 pt-3 ">
-                    <div class="table-responsive border" style="height: 250px">
+                    <div class="table-responsive border ht-sm-250 ht-auto">
                         <table class="table main-table-reference text-nowrap" >
                             <thead class="position-sticky" style="top: -1px">
                                 <tr>
-                                    <!-- <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
-                                        <div class="d-flex justify-content-center">
-                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" :class="btnHeadNew" @click="headerNew()" title="Add new contact">
-                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                            </button> 
-                                        </div>
-                                    </th> -->
                                     <th v-if="!!parseInt(permiss.fuel_all)" style="letter-spacing: 0px; padding: 5px 10px">Department</th>
                                     <th style="letter-spacing: 0px; padding: 5px 10px">
                                         <div v-if="!!parseInt(permiss.fuel_all)">Department Use</div>
@@ -64,32 +57,14 @@
                                     <th style="letter-spacing: 0px; padding: 5px 10px">Cost</th>
                                     <th style="letter-spacing: 0px; padding: 5px 10px">Approve by</th>
                                     <th style="letter-spacing: 0px; padding: 5px 10px">Locations</th>
-                                    <th style="padding: 0px 0px; vertical-align: middle; width: 60%; height: 26px">
-                                        <div class="d-flex justify-content-start">
-                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" :class="btnHeadNew" @click="headerNew()" title="Add new contact">
-                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                            </button> 
-                                        </div>
+                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 80%">
+                                        <span v-if="btnHeadNew == 'disabled'">New Record</span>
+                                        <span v-else class="add-hover cur-pointer" title="Add new record" @click="headerNew()">New Record</span>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody> 
                                 <tr class="tr-hover cur-pointer" v-for="(lst, key) in headData" :key="lst.id" @click="selectedHead(key, lst.id, lst.cost_type)" :style="key === selHeadRow ? 'background-color: #dadee7; border-left: 1.02px solid #0162e8; color: blue' : ''">
-                                    <!-- <td style="padding: 0px 4px; vertical-align: middle">
-                                        <div class="d-flex justify-content-center">
-                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
-                                            </button> 
-                                            <div class="dropdown-menu tx-13">
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="headEdit(lst.id)">
-                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                </div>
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="headDel(lst.id)">
-                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td> -->
                                     <td v-if="!!parseInt(permiss.fuel_all)" style="padding: 3px 10px">{{ lst.dept }}</td>
                                     <td style="padding: 3px 10px">{{ lst.dept_use }}</td>
                                     <td style="padding: 3px 10px">{{ lst.cost_type }}</td>
@@ -97,9 +72,9 @@
                                     <td style="padding: 3px 10px">{{ lst.approve }}</td>
                                     <td style="padding: 3px 10px" class="laofont">{{ lst.location }}</td>
                                     <td style="padding: 0px 4px; vertical-align: middle">
-                                        <div class="d-flex justify-content-center">
+                                        <div class="d-flex justify-content-start">
                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
+                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
                                             </button> 
                                             <div class="dropdown-menu tx-13">
                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="headEdit(lst.id)">
@@ -111,7 +86,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                </tr>                                                                                            
+                                </tr>                                                                                         
                             </tbody>
                         </table>
                     </div>                       
@@ -119,17 +94,10 @@
             </div>
             
             <!-- Detail table -->
-            <div class="table-responsive border mt-3" style="height: 450px">
+            <div class="table-responsive border mt-3 ht-sm-450 ht-auto">
                 <table class="table main-table-reference text-nowrap">
                     <thead class="position-sticky" style="top: -1px">
                         <tr>
-                            <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
-                                <div class="d-flex justify-content-center">
-                                    <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" :class="btnDetailNew" @click="detailNew()" title="Add new contact">
-                                        <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                    </button> 
-                                </div>
-                            </th>
                             <th style="letter-spacing: 0px; padding: 5px 10px">Equip No</th>
                             <th style="letter-spacing: 0px; padding: 5px 10px">Description</th>
                             <th style="letter-spacing: 0px; padding: 5px 10px">Liter</th>
@@ -141,26 +109,15 @@
                             <th style="letter-spacing: 0px; padding: 5px 10px">Work Order</th>
                             <th style="letter-spacing: 0px; padding: 5px 10px">Reserve No</th>
                             <th style="letter-spacing: 0px; padding: 5px 10px">Refuel By</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px; width: 50%">Remarks</th>
+                            <th style="letter-spacing: 0px; padding: 5px 10px">Remarks</th>
+                            <th style="letter-spacing: 0px; padding: 5px 10px; width: 80%">
+                                <span v-if="btnDetailNew == 'disabled'">New Record</span>
+                                <span v-else class="add-hover cur-pointer" title="Add new record" @click="detailNew()">New Record</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody> 
                         <tr class="tr-hover" v-for="lst in detailData" :key="lst.id">
-                            <td style="padding: 0px 4px; vertical-align: middle">
-                                <div class="d-flex justify-content-center">
-                                    <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                        <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
-                                    </button> 
-                                    <div class="dropdown-menu tx-13">
-                                        <div class="dropdown-item cur-pointer dropdown-hover" @click="detailEdit(lst.id)">
-                                            <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                        </div>
-                                        <div class="dropdown-item cur-pointer dropdown-hover" @click="detailDel(lst.id)">
-                                            <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
                             <td style="padding: 3px 10px">{{ lst.equip_no }}</td>
                             <td style="padding: 3px 10px">{{ lst.equip_descr }}</td>
                             <td style="padding: 3px 10px" class="text-end">{{ lst.liter }}</td>
@@ -173,7 +130,21 @@
                             <td style="padding: 3px 10px" class="text-center">{{ lst.reserve_no }}</td>
                             <td style="padding: 3px 10px">{{ lst.refuel_by }}</td>
                             <td style="padding: 3px 10px">{{ lst.remarks }}</td>
-
+                            <td style="padding: 0px 4px; vertical-align: middle">
+                                <div class="d-flex justify-content-start">
+                                    <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
+                                        <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                    </button> 
+                                    <div class="dropdown-menu tx-13">
+                                        <div class="dropdown-item cur-pointer dropdown-hover" @click="detailEdit(lst.id)">
+                                            <i class="fe fe-edit me-2"></i><span>Edit</span>
+                                        </div>
+                                        <div class="dropdown-item cur-pointer dropdown-hover" @click="detailDel(lst.id)">
+                                            <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>                                                                                            
                     </tbody>
                 </table>
@@ -838,5 +809,10 @@ export default {
     .form-control:disabled{
         background-color: white;
         opacity: 1;
+    }
+
+    .add-hover:hover{
+        color: blue;
+        font-weight: bold;
     }
 </style>

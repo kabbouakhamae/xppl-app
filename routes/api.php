@@ -14,6 +14,7 @@ use App\Http\Controllers\API\EmpAnnualController;
 use App\Http\Controllers\API\EmpFileController;
 use App\Http\Controllers\API\EmpTransController;
 use App\Http\Controllers\API\FuelConsController;
+use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\TestController;
 
 /*
@@ -34,7 +35,7 @@ Route::get('profile', [UserController::class, 'profile']);
 Route::get('permiss', [UserController::class, 'permiss']);
 Route::get('username', [UserController::class, 'username']);
 Route::post('permissUpdate', [UserController::class, 'permissUpdate']);
-Route::post('permissEdit/{id}', [UserController::class, 'permissEdit']);
+Route::post('permissEdit', [UserController::class, 'permissEdit']);
 
 
 Route::group(['prefix' => 'employee', 'middlewar' => 'auth:santum'], function(){
@@ -113,8 +114,12 @@ Route::group(['prefix' => 'fuel', 'middlewar' => 'auth:santum'], function(){
     Route::post('/detaildel/{id}', [FuelConsController::class, 'detaildel']);
     Route::post('/detailedit/{id}', [FuelConsController::class, 'detailedit']);
     Route::post('/detailupd', [FuelConsController::class, 'detailupd']);
+});
 
-
+Route::group(['prefix' => 'home', 'middlewar' => 'auth:santum'], function(){
+    Route::get('/countcountry', [HomeController::class, 'countcountry']);
+    Route::get('/countdept', [HomeController::class, 'countdept']);
+    Route::get('/allemp', [HomeController::class, 'allemp']);
 });
 
 Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){

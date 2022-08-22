@@ -100,12 +100,22 @@ class UserController extends Controller
         return $permiss;
     }
     
-    public function username(Request $request){
-        $name = $request->search.'%';
+    // public function username(Request $request){
+    //     $name = $request->search.'%';
+    //     $userList = DB::table('emp_names as a')
+    //                     ->join('permission as b', 'a.id', 'b.userid')
+    //                     ->where('a.name', 'like', $name)
+    //                     ->select('a.id', 'a.name', 'a.surname')
+    //                     ->orderBy('a.name')
+    //                     ->get();
+
+    //     return $userList;
+    // }
+
+    public function username(){
         $userList = DB::table('emp_names as a')
                         ->join('permission as b', 'a.id', 'b.userid')
-                        ->where('a.name', 'like', $name)
-                        ->select('a.id', 'a.name', 'a.surname')
+                        ->select(DB::raw("a.id as value, a.name +' '+ a.surname as label"))
                         ->orderBy('a.name')
                         ->get();
 
@@ -113,8 +123,8 @@ class UserController extends Controller
     }
     
 
-    public function permissEdit($id){
-        $permissData = DB::table('permission')->where('userid', $id)->first();
+    public function permissEdit(Request $request){
+        $permissData = DB::table('permission')->where('userid', $request->id)->first();
 
         return $permissData;
     }
@@ -139,7 +149,11 @@ class UserController extends Controller
                 'bank_del' => $request->bankDel,
                 'card_del' => $request->cardDel,
                 'al_del' => $request->alDel,
-                'file_del' => $request->fileDel
+                'file_del' => $request->fileDel,
+                'al_all' => $request->alAll,
+                'tran_all' => $request->tranAll,
+                'fuel' => $request->fuel,
+                'fuel_all' => $request->fuelAll
             ]);
     }
 

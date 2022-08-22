@@ -3,18 +3,18 @@
         <div class="card">
             <div class="card-body">
                 <div v-if="showList">
-                    <div class="breadcrumb-header justify-content-between mb-2 mt-0" >
+                    <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
                         <div class="d-flex">
                             <h4 class="card-title text-muted mb-0 my-auto">Employee List</h4>
                         </div>
-                        <div class="d-flex my-xl-auto right-content">
+                        <div class="d-flex my-xl-auto right-content align-items-center">
                             <div class="pos-relative me-1" style="width: 100%">
                                 <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
                                     <i class="fe fe-search search-i text-muted"></i>
                                 <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
                             </div>
-                            <div style="width: 39px">
-                                <button type="button" class="btn ripple btn-primary" style="padding: 0px; width: 39px; height: 39.5px" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-20"></i></button>
+                            <div style="width: 40px">
+                                <button type="button" class="btn ripple btn-primary" style="padding: 0px; width: 40px; height: 39.5px" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-20"></i></button>
                             </div>
                         </div>
                     </div>
@@ -24,20 +24,20 @@
                         <table class="table card-table text-nowrap mb-0">
                             <thead class="bg-gray-100" style="border-bottom: 0.5px solid #ECEFF6">
                                 <tr>
-                                    <th style="letter-spacing: 0px; width: 10px; padding: 6px 4px 6px 6px" class="text-muted"><span>Image</span></th>
-                                    <th style="letter-spacing: 0px; width: 50px; padding: 6px 12px 6px 0px" class="text-muted"><span>Name</span></th>
+                                    <th style="letter-spacing: 0px; width: 10px; padding: 6px 4px 6px 4px" class="text-muted fw-bold"><span>Image</span></th>
+                                    <th style="letter-spacing: 0px; width: 50px; padding: 6px 12px 6px 0px" class="text-muted fw-bold"><span>Name</span></th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">
                                         <div v-if="!!parseInt(loginPermiss.emp_all)">Position / Dept.</div>
                                         <div v-else>Position</div>
                                     </th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted">Phone Number</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted">Country</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted"><span>ID</span><span class="text-lowercase">s</span></th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted">Started</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted">Actions</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Phone Number</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Country</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold"><span>ID</span><span class="text-lowercase">s</span></th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Started</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="tx-13">
                                 <tr class="tr-hover" v-for="list in empData.data" :key="list.id">
                                     <td style="padding: 6px 4px 6px 0px; border: none">
                                         <div class="pos-relative">
@@ -47,22 +47,21 @@
                                             <span v-if="list.status == 'Current' || list.status == 'Temporary'" class="rounded-circle bg-success bad"></span>
                                         </div>
                                     </td>
-                                    <td style="padding: 6px 12px 6px 0px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1">
+                                    <td style="padding: 6px 12px 6px 0px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
                                         {{ list.name }} {{ list.surname }} <br>
                                         <span class="laofont">{{ list.namelao }} {{ list.surnamelao }}</span>
                                     </td>
-                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1"> 
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7"> 
                                         {{ list.position }}
                                         <div v-if="!!parseInt(loginPermiss.emp_all)">{{ list.department }}</div>
                                     </td>
-                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1"> 
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7"> 
                                         <i v-if="list.phone" class="fa fa-tty me-1"></i> {{ list.phone}} 
                                     </td>
-                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1">
-                                        <img width="20" class="me-1" :src="'assets/img/flags/'+ list.country + '.png'" alt="" >
-                                        {{ list.country }} <br>
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
+                                        <img width="20" class="me-1" :src="'assets/img/flags/'+ list.country + '.png'" alt="" >{{ list.country }}
                                     </td>
-                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1">
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
                                         <div v-if="list.empid">
                                             <!-- <i class="far fa-address-card me-1"></i> -->
                                             {{ list.empid }}
@@ -73,13 +72,13 @@
                                             Scan: {{ list.scanid }}
                                         </div>
                                     </td>
-                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1"> 
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7"> 
                                         {{ timeago(list.startdate) }} <br>
                                         {{ list.status }}
                                     </td>
-                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #E3E7F1">        
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">        
                                         <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
-                                            <i class="fa fa-ellipsis-h pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%; font-size: 14px; color: #606469"></i>
+                                            <i class="mdi mdi-dots-horizontal text-gray pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
                                         </button>       
                                         <div class="dropdown-menu tx-13">
                                             <div class="dropdown-item cur-pointer dropdown-hover" @click="empPrev(list.id)">

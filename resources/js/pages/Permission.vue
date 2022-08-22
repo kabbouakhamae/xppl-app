@@ -1,103 +1,185 @@
 <template>
-    <div>
-        <div v-if="!!parseInt(loginPermiss.permiss)" class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="wd-250" style="min-width: 250px">
-                        <div class="pos-relative">
-                            <input class="form-control form-control-sm pd-l-30" type="text" placeholder="Search..." v-model="search" @input="searchChange()" >
-                            <i class="fe fe-search search-i text-muted"></i>
-                            <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
-                        </div>
-                        <div class="table-responsive border mt-1" style="max-height: 700px">
-                            <table class="table main-table-reference text-nowrap table-hover cur-pointer" >
-                                <thead class="position-sticky" style="top: -1px">
-                                    <tr>
-                                        <th style="letter-spacing: 0px">Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                    <tr v-for="(lst, key) in userList" :key="lst.id" @click="permissEdit(key, lst.id)" :style="key === selectedRow ? 'background-color: #ecf0fa; border-left: 1px solid #0162e8;' : ''">
-                                        <td style="border: none; padding: 4px 10px" > {{ lst.name }} {{ lst.surname }}  </td>
-                                    </tr>                                                
-                                </tbody>
-                            </table>
+    
+        <div v-if="!!parseInt(loginPermiss.permiss)">
+            <div class="breadcrumb-header justify-content-between align-items-center mb-3 mt-0" >
+                <div class="d-flex">
+                    <h4 class="card-title text-muted mb-0 my-auto">Permission Setting</h4>
+                </div>
+                <div class="d-flex my-xl-auto right-content align-items-center wd-sm-300">         
+                    <Multiselect class="multi-color me-1" placeholder="Select name" searchable="true" v-model="selUser" @select="permissEdit()" :options="userList"/>
+                    <div style="width: 40px">
+                        <button type="button" class="btn ripple btn-primary" :class="btnSave" style="padding: 0px; width: 40px; height: 38px" title="Save" @click="permissUpdate()"><i class="fe fe-save tx-18"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-muted">Permission</h6>
+                            <div class="d-flex justify-content-between">
+                                <span>Access</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="permiss"  v-model="permissData.permiss" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="permiss"></label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="col-xl-2 col-3">
-                        <h6 class="text-muted">Setting</h6>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="permiss"  v-model="permissData.permiss" @change='$emit("input", $event.target.checked)'>
-                            <label class="custom-control-label cur-pointer" for="permiss">Permission</label>
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-muted">Department Tools</h6>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Geology</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="geo"  v-model="permissData.geo" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="geo"></label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Mining</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="mining"  v-model="permissData.mining" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="mining"></label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Safey</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="safety"  v-model="permissData.safety" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="safety"></label>
+                                </div>
+                            </div>
                         </div>
-
-                        <h6 class=" text-muted mt-4">Department Tools</h6>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="geo"  v-model="permissData.geo" @change='$emit("input", $event.target.checked)'>
-                            <label class="custom-control-label cur-pointer" for="geo">Geology</label>
-                        </div>
-                        <div class="custom-control custom-switch mt-2">
-                            <input type="checkbox" class="custom-control-input" id="mining"  v-model="permissData.mining" @change='$emit("input", $event.target.checked)'>
-                            <label class="custom-control-label cur-pointer" for="mining">Mining</label>
-                        </div>
-                        <div class="custom-control custom-switch mt-2">
-                            <input type="checkbox" class="custom-control-input" id="safety"  v-model="permissData.safety" @change='$emit("input", $event.target.checked)'>
-                            <label class="custom-control-label cur-pointer" for="safety">Safety</label>
-                        </div>
-                        <button class="mt-4" @click="permissUpdate()">Update</button>
                     </div>
-
-                    <div class="col-xl-3 col-lg-4">
-                        <h6 class=" text-muted">Employee</h6>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="empAll" v-model="permissData.empAll" @change='$emit("input", $event.target.checked)'>
-                            <label class="custom-control-label cur-pointer" for="empAll">View all</label>
-                        </div>
-                        <div class="custom-control custom-switch mt-2">
-                            <input type="checkbox" class="custom-control-input" id="empAdd" v-model="permissData.empAdd" @change='$emit("input", $event.target.checked)'>
-                            <label class="custom-control-label cur-pointer" for="empAdd">Add</label>
-                        </div>
-                        <div class="custom-control custom-switch mt-2">
-                            <input type="checkbox" class="custom-control-input" id="empDel"  v-model="permissData.empDel" @change='$emit("input", $event.target.checked)'>
-                            <label class="custom-control-label cur-pointer" for="empDel">Delete</label>
-                        </div>
-                        <div class="custom-control custom-switch mt-2">
-                            <input type="checkbox" class="custom-control-input" id="empEdit" v-model="permissData.empEdit" @change='$emit("input", $event.target.checked)'>
-                            <label class="custom-control-label cur-pointer" for="empEdit">Edit</label>
-                        </div>
-                        <div v-if="permissData.empEdit">
-                            <div class="custom-control custom-switch mt-2 ms-4">
-                                <input type="checkbox" class="custom-control-input" id="detailDel" v-model="permissData.detailDel" @change='$emit("input", $event.target.checked)'>
-                                <label class="custom-control-label cur-pointer" for="detailDel">Detail delete</label>
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-muted">Generals</h6>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>View all Annual Leave</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="alall"  v-model="permissData.alAll" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="alall"></label>
+                                </div>
                             </div>
-                            <div class="custom-control custom-switch mt-2 ms-4">
-                                <input type="checkbox" class="custom-control-input" id="contDel" v-model="permissData.contDel" @change='$emit("input", $event.target.checked)'>
-                                <label class="custom-control-label cur-pointer" for="contDel">Contact person delete</label>
-                            </div>
-                            <div class="custom-control custom-switch mt-2 ms-4">
-                                <input type="checkbox" class="custom-control-input" id="bankDel" v-model="permissData.bankDel" @change='$emit("input", $event.target.checked)'>
-                                <label class="custom-control-label cur-pointer" for="bankDel">Bank info delete</label>
-                            </div>
-                            <div class="custom-control custom-switch mt-2 ms-4">
-                                <input type="checkbox" class="custom-control-input" id="cardDel" v-model="permissData.cardDel" @change='$emit("input", $event.target.checked)'>
-                                <label class="custom-control-label cur-pointer" for="cardDel">Personal card delete</label>
-                            </div>
-                            <div class="custom-control custom-switch mt-2 ms-4">
-                                <input type="checkbox" class="custom-control-input" id="alDel" v-model="permissData.alDel" @change='$emit("input", $event.target.checked)'>
-                                <label class="custom-control-label cur-pointer" for="alDel">Annual leave delete</label>
-                            </div>
-                            <div class="custom-control custom-switch mt-2 ms-4">
-                                <input type="checkbox" class="custom-control-input" id="fileDel" v-model="permissData.fileDel" @change='$emit("input", $event.target.checked)'>
-                                <label class="custom-control-label cur-pointer" for="fileDel">Document and File delete</label>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>View all Transport</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="tranall"  v-model="permissData.tranAll" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="tranall"></label>
+                                </div>
                             </div>
                         </div>
-                        
+                    </div>
+                </div>
+                <div class="col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-muted">Employee</h6>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>View All</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="empall"  v-model="permissData.empAll" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="empall"></label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Add</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="empadd"  v-model="permissData.empAdd" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="empadd"></label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Delete</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="empdel"  v-model="permissData.empDel" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="empdel"></label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Edit</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="empedit"  v-model="permissData.empEdit" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="empedit"></label>
+                                </div>
+                            </div>
+                            <div v-if="permissData.empEdit">
+                                <h6 class="text-muted mt-4">Other Delete</h6>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Details</span>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="detaildel" v-model="permissData.detailDel" @change='$emit("input", $event.target.checked)'>
+                                        <label class="custom-control-label cur-pointer" for="detaildel"></label>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Contact Person</span>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="contdel" v-model="permissData.contDel" @change='$emit("input", $event.target.checked)'>
+                                        <label class="custom-control-label cur-pointer" for="contdel"></label>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Bank Account</span>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="bankdel" v-model="permissData.bankDel" @change='$emit("input", $event.target.checked)'>
+                                        <label class="custom-control-label cur-pointer" for="bankdel"></label>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Cards</span>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="carddel" v-model="permissData.cardDel" @change='$emit("input", $event.target.checked)'>
+                                        <label class="custom-control-label cur-pointer" for="carddel"></label>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Annual Leave</span>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="aldel" v-model="permissData.alDel" @change='$emit("input", $event.target.checked)'>
+                                        <label class="custom-control-label cur-pointer" for="aldel"></label>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Document and File</span>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="filedel" v-model="permissData.fileDel" @change='$emit("input", $event.target.checked)'>
+                                        <label class="custom-control-label cur-pointer" for="filedel"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-muted">Fuels</h6>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Access</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="fuel" v-model="permissData.fuel" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="fuel"></label>
+                                </div>
+                            </div>
+                            <div v-if="permissData.fuel">
+                                <div class="d-flex justify-content-between">
+                                    <span>View All</span>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="fuelall" v-model="permissData.fuelAll" @change='$emit("input", $event.target.checked)'>
+                                        <label class="custom-control-label cur-pointer" for="fuelall"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    
 </template>
 
 <script>
@@ -126,15 +208,29 @@ export default {
                 bankDel: '',
                 cardDel: '',
                 alDel: '',
-                fileDel: ''
+                fileDel: '',
+                alAll: '',
+                tranAll: '',
+                fuel: '',
+                fuelAll: ''
             },
             search: '',
             selectedRow: null,
+            selUser: null
         };
     },
 
     mounted() {
         
+    },
+    computed:{
+        btnSave(){
+            if (this.selUser == null){
+                return 'disabled';
+            } else {
+                return '';
+            }
+        }
     },
 
     methods: {
@@ -144,7 +240,7 @@ export default {
         },
 
         getUsername(){
-            this.$axios.get(`/api/username?search=${this.search}`)
+            this.$axios.get('/api/username')
             .then((res) => {
                 this.userList = res.data;
             }).catch ((err) => {
@@ -152,11 +248,11 @@ export default {
             })
         },
 
-        permissEdit(key, id){
-            this.selectedRow = key;
-            this.$axios.post(`/api/permissEdit/${id}`).then((res) => {
-            
-            this.resetForm();
+        permissEdit(){
+            this.resetForm();  
+            this.$axios.post('/api/permissEdit', {
+                id: this.selUser
+            }).then((res) => {
             let dt = this.permissData;
                 dt.id = res.data.id;
                 dt.permiss = !!parseInt(res.data.permiss);
@@ -176,6 +272,10 @@ export default {
                 dt.cardDel = !!parseInt(res.data.card_del);
                 dt.alDel = !!parseInt(res.data.al_del);
                 dt.fileDel = !!parseInt(res.data.file_del);
+                dt.alAll = !!parseInt(res.data.al_all);
+                dt.tranAll = !!parseInt(res.data.tran_all);
+                dt.fuel = !!parseInt(res.data.fuel);
+                dt.fuelAll = !!parseInt(res.data.fuel_all);
 
             }).catch((err) => {
                 console.log(err);
@@ -213,22 +313,10 @@ export default {
                 dt.cardDel = '';
                 dt.alDel = '';
                 dt.fileDel = '';
-        },
-        
-        searchChange(){
-            if(this.search.length >0){
-                this.btnClear = true;
-                this.getUsername();
-            } else {
-                this.btnClear = false;
-                this.getUsername();
-            }
-        },
-
-        searchClear(){
-            this.search = '';
-            this.btnClear = false,
-            this.getUsername();
+                dt.alAll = '';
+                dt.tranAll = '';
+                dt.fuel = '';
+                dt.fuelAll = '';
         },
             
     },
