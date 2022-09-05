@@ -6,7 +6,10 @@
                     <h4 class="card-title text-muted mb-0 my-auto">Transport Manifest</h4>
                 </div>
                 <div class="d-flex my-xl-auto right-content">
-                    <input type="date" class="form-control" style="width: 146px" v-model="date" @change="getTransport()">
+
+                    <Multiselect class="multi-color" style="width: 250px" v-model="depts" mode="multiple" placeholder="Departments..." :close-on-select="false" :searchable="false" :searchStart="true" :options="lkDept" @select="getTransport()"/>
+                    <input type="date" class="form-control ms-1" style="width: 130px" placeholder="Date..." v-model="date" @change="getTransport()">
+                
                 </div>
             </div>
             <div>
@@ -83,35 +86,32 @@
             <div class="modal fade effect-scale" id="dropoff" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dropoffLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm modal-dialog-centered">
                     <div class="modal-content">
-                        <div class="modal-header pb-1">
-                            <h6 class="modal-title text-muted">Add drop off point</h6>
-                            <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
+                        <div class="modal-header pb-1 bd-b-0">
+                            <h6 class="text-muted">Add drop off point</h6>
                         </div>
                         <div class="modal-body">                                
                             <div class="form-group">
-                                <label class="mb-1">Drop off Point</label>                                
                                 <div class="d-flex justify-content-between">
-                                    <input type="text" class="form-control laofont" placeholder="ຈຸດສົ່ງພະນັກງານ..." v-model="dropoffForm.dropoff">
-                                    <button type="button" class="btn btn-primary ms-2" style="padding: 0px; width: 50px" title="Add new employee" @click="dropoffUpd()"><i class="fa fa-plus"></i></button>  
+                                    <input type="text" class="form-control laofont" placeholder="ຈຸດສົ່ງພະນັກງານ..." v-model="dropoffForm.dropoff" @keydown.enter="dropoffUpd()">
+                                    <button type="button" class="btn btn-primary ms-2" style="padding: 0px; width: 50px" title="Add new employee" @click="dropoffUpd()"><i class="fa fa-plus"></i></button> 
                                 </div>                           
                             </div>
                         </div>
                     </div>
                 </div>                                              
             </div>  
+ 
 
             <div class="modal fade effect-scale" id="pickup" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pickupLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm modal-dialog-centered">
                     <div class="modal-content">
-                        <div class="modal-header pb-1">
+                        <div class="modal-header pb-1 bd-b-0">
                             <h6 class="text-muted main-content-label text-capitalize">Add pickup point</h6>
-                            <button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
                         </div>
                         <div class="modal-body">                                
-                            <div class="form-group">
-                                <label class="mb-1">Pickup Point</label>                                
+                            <div class="form-group">                              
                                 <div class="d-flex justify-content-between">
-                                    <input type="text" class="form-control laofont" placeholder="ຈຸດຮັບພະນັກງານ..." v-model="pickupForm.pickup">
+                                    <input type="text" class="form-control laofont" placeholder="ຈຸດຮັບພະນັກງານ..." v-model="pickupForm.pickup" @keydown.enter="pickupUpd()">
                                     <button type="button" class="btn btn-primary ms-2" style="padding: 0px; width: 50px" title="Add new employee" @click="pickupUpd()"><i class="fa fa-plus"></i></button>  
                                 </div>                           
                             </div>
@@ -129,11 +129,13 @@ export default {
 
     data() {
         return {
-            outData: []
-            ,inData: []
-            ,date: ''
-            ,pickupForm: {id: '', pickup: ''}
-            ,dropoffForm: {id: '', dropoff: ''}
+            outData: [],
+            inData: [],
+            lkDept: [],
+            depts: [],
+            date: '',
+            pickupForm: {id: '', pickup: ''},
+            dropoffForm: {id: '', dropoff: ''},
         };
     },
 
@@ -142,31 +144,40 @@ export default {
     },
 
     methods: {
-        async getOutbound(){
+        async getTransport(){
             let fd = new FormData();
+                fd.append('dept', this.depts.toString());
                 fd.append('date', this.date);
 
-            const res = await axios.post('/api/transport/out', fd, {headers:{"Content-Type": "multipart/form-date"}})
-            this.outData = res.data;
+            const outbound = await axios.post('/api/transport/out', fd, {headers:{"Content-Type": "multipart/form-date"}})
+            this.outData = outbound.data;
+
+            const inbound = await axios.post('/api/transport/in', fd, {headers:{"Content-Type": "multipart/form-date"}})
+            this.inData = inbound.data;
         },
+        
+        async getTransport2(){
+            const profile = await axios.get('api/profile')
+			let loginDept = profile.data.department;
 
-        async getInbound(){
             let fd = new FormData();
+                fd.append('dept', loginDept);
                 fd.append('date', this.date);
 
-            const res = await axios.post('/api/transport/in', fd, {headers:{"Content-Type": "multipart/form-date"}})
-            this.inData = res.data;
+            const outbound = await axios.post('/api/transport/out', fd, {headers:{"Content-Type": "multipart/form-date"}})
+            this.outData = outbound.data;
+
+            const inbound = await axios.post('/api/transport/in', fd, {headers:{"Content-Type": "multipart/form-date"}})
+            this.inData = inbound.data;
         },
 
         newDropoff(id){
             $('#dropoff').modal('show');
-            this.dropoffForm.dropoff = '';
             this.dropoffForm.id = id;
         },
 
         newPickup(id){
             $('#pickup').modal('show');
-            this.pickupForm.pickup = '';
             this.pickupForm.id = id;
         },
 
@@ -175,7 +186,7 @@ export default {
             .then((response)=>{
 
                 $('#dropoff').modal('hide');
-                this.getOutbound();
+                this.getTransport();
 
             }).catch((error)=>{
                 console.log(error);
@@ -187,17 +198,11 @@ export default {
             .then((response)=>{
 
                 $('#pickup').modal('hide');
-                this.getInbound();
+                this.getTransport();
 
             }).catch((error)=>{
                 console.log(error);
             })
-        },
-
-        getTransport(){
-            this.getOutbound();
-            this.getInbound();
-
         },
 
         nextDate(){
@@ -210,14 +215,18 @@ export default {
             }
         },
 
+        async getDept(){
+            const depts = await axios.get('/api/lookup/depts')
+            this.lkDept = depts.data;
+        }
 
         
     },
 
     created(){
+        this.getDept();
         this.nextDate();
-        this.getOutbound();
-        this.getInbound();
+        this.getTransport2();
     },
 
     beforeRouteEnter(to, from, next){

@@ -9,18 +9,20 @@ use Illuminate\Support\Facades\DB;
 class EmpTransController extends Controller
 {
     public function out(Request $request){
-        $userid = auth()->user()->userid;
+
+        $dept = $request->dept;
         $date = $request->date;
 
-        $out = DB::select('exec uspEmpTranOutbound ?, ?', [$userid, $date]);
+        $out = DB::select('exec uspEmpTranOutbound ?, ?', [$dept, $date]);
         return $out;
     }
 
+
     public function in(Request $request){
-        $userid = auth()->user()->userid;
+        $dept = $request->dept;
         $date = $request->date;
 
-        $in = DB::select('exec uspEmpTranInbound ?, ?', [$userid, $date]);
+        $in = DB::select('exec uspEmpTranInbound ?, ?', [$dept, $date]);
         return $in;
     }
 

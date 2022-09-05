@@ -31,12 +31,20 @@
 							</router-link>
 						</li>
 
-                        <li class="slide" @click="employee_click">
-							<router-link class="side-menu__item " :class="employee_act"  to="/test">
+						<!-- Roster -->
+                        <li class="slide" :class="rosExp" @click="rosClick()">
+							<a class="side-menu__item" :class="rosAct" href="#">
 								<span class="side-menu__label"><i class="far fa-calendar text-center wd-20"></i><span class="mx-2">Roster</span></span>
-							</router-link>
+								<i class="angle fe fe-chevron-down"></i>
+							</a>
+							<ul class="slide-menu">
+								<li><router-link class="slide-item" :class="rosPreviewAct" @click="rosPreviewClick()" to="/rospreview">Preview</router-link></li>
+								<li><router-link class="slide-item" :class="rosManageAct" @click="rosManageClick()" to="/rosmanage">Manage</router-link></li>
+								<li><router-link class="slide-item" :class="rosCodeAct" @click="rosCodeClick()" to="/roscode">Code</router-link></li>			
+							</ul>
 						</li>
 
+						<!-- Other Info -->
                         <li class="slide" :class="infoExp" @click="infoClick()">
 							<a class="side-menu__item" :class="infoAct" href="#">
 								<span class="side-menu__label"><i class="fa fa-info text-center wd-20"></i><span class="mx-2">Other Info</span></span>
@@ -44,7 +52,7 @@
 							</a>
 							<ul class="slide-menu">
 								<li><router-link class="slide-item" :class="alAct" @click="alClick()" to="/annual">Annual Leave</router-link></li>
-								<li><router-link class="slide-item" :class="leaveAct" @click="leaveClick()" to="/leaveInfo">Leave Info</router-link></li>
+								<li><router-link class="slide-item" :class="leaveAct" @click="leaveClick()" to="/leaveinfo">Leave Info</router-link></li>
 								<li><router-link class="slide-item" :class="transAct" @click="transClick()" to="/transport">Daily Transport</router-link></li>			
 							</ul>
 						</li>
@@ -57,7 +65,7 @@
 									<i class="angle fe fe-chevron-down"></i>
 								</a>
 								<ul class="slide-menu">
-									<li><router-link class="slide-item" :class="fuelConsAct" @click="fuelConsClick()" to="/fuelcons">Consumption</router-link></li>
+									<li><router-link class="slide-item" :class="fuelConsAct" @click="fuelConsClick()" to="/fuelcons">Reservation</router-link></li>
 									<li><router-link class="slide-item" :class="fuelReportAct" @click="fuelReportClick()" to="/fuelreport">Report</router-link></li>
 								</ul>
 							</li>
@@ -87,7 +95,7 @@
 								<i class="angle fe fe-chevron-down"></i>
 							</a>
 							<ul class="slide-menu">
-								<li><a class="slide-item" :class="lookupAct" @click="lookupClick()" href="#">Lookup</a></li>
+								<li v-if="!!parseInt(permiss.lk_add)"><router-link class="slide-item" :class="lookupAct" @click="lookupClick()" to="/lookup">Lookup</router-link></li>
 								<li v-if="!!parseInt(permiss.permiss)"><router-link class="slide-item" :class="permissAct" @click="permissClick()" to="/permiss">Permission</router-link></li>
 							</ul>
 						</li>
@@ -170,7 +178,7 @@
 					</div>
 				</div>
 
-				<div class="container-fluid" style="margin-top: 20px">
+				<div class="container-fluid" style="padding: 10px 10px 0px 10px">
                     <router-view></router-view>
 				</div>
 				<!-- <div class="container-fluid p-sm-2 p-0">
@@ -201,28 +209,33 @@ export default {
 
     data() {
         return {
-            isSignin: false
-            ,appClass: ''
+            isSignin: false,
+            appClass: '',
 
-			,homeAct: ''
-			,empAct: ''
-			,infoAct: ''
-			,settAct: ''
-			,alAct: ''
-			,leaveAct: ''
-			,transAct: ''
-			,lookupAct: ''
-			,permissAct: ''
-			,fuelAct: ''
-			,fuelConsAct: ''
-			,fuelReportAct: ''
+			homeAct: '',
+			empAct: '',
+			infoAct: '',
+			settAct: '',
+			alAct: '',
+			leaveAct: '',
+			transAct: '',
+			lookupAct: '',
+			permissAct: '',
+			fuelAct: '',
+			fuelConsAct: '',
+			fuelReportAct: '',
+			rosAct: '',
+			rosPreviewAct: '',
+			rosManageAct: '',
+			rosCodeAct: '',
 
-			,fuelExp: ''
-			,infoExp: ''
-			,settExp: ''
+			rosExp: '',
+			fuelExp: '',
+			infoExp: '',
+			settExp: '',
 
-			,profile: []
-			,permiss: []
+			profile: [],
+			permiss: []
         };
     },
 
@@ -295,12 +308,42 @@ export default {
 			this.fuelReportAct = 'active';
 		},
 
+		rosPreviewClick(){
+			this.clearAct();
+			this.rosAct = 'active';
+			this.rosPreviewAct = 'active';
+		},
+
+		rosManageClick(){
+			this.clearAct();
+			this.rosAct = 'active';
+			this.rosMangeAct = 'active';
+		},
+
+		rosCodeClick(){
+			this.clearAct();
+			this.rosAct = 'active';
+			this.rosCodeAct = 'active';
+		},
+
+		rosClick(){
+			if (this.rosExp){
+				this.rosExp = '';
+			} else {
+				this.settExp = '';
+				this.infoExp = '';
+				this.fuelExp = '';
+				this.rosExp = 'is-expanded';
+			}
+		},
+
 		fuelClick(){
 			if (this.fuelExp){
 				this.fuelExp = '';
 			} else {
 				this.settExp = '';
 				this.infoExp = '';
+				this.rosExp = '';
 				this.fuelExp = 'is-expanded';
 			}
 		},
@@ -311,6 +354,7 @@ export default {
 			} else {
 				this.settExp = '';
 				this.fuelExp = '';
+				this.rosExp = '';
 				this.infoExp = 'is-expanded';
 			}
 		},
@@ -321,6 +365,7 @@ export default {
 			} else {
 				this.infoExp = '';
 				this.fuelExp = '';
+				this.rosExp = '';
 				this.settExp ='is-expanded';
 			}
 		},
@@ -338,10 +383,15 @@ export default {
 			this.fuelAct = '';
 			this.fuelConsAct = '';
 			this.fuelReportAct = '';
+			this.rosAct = '';
+			this.rosPreviewAct = '';
+			this.rosManageAct = '';
+			this.rosCodeAct = '';
 
 			this.fuelExp = '';
 			this.infoExp = '';
 			this.settExp = '';
+			this.rosExp = '';
 		},
 
 		async getProfile(){

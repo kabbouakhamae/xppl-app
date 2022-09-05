@@ -9,7 +9,7 @@
                             <h5>Sign Up</h5>
                             <div class="form-group multi-color mt-5">
                                 <!-- <label class="mb-0">Name</label>  -->
-                                <Multiselect :options="nameLK" placeholder="Full name" searchable = true v-model="userid" />
+                                <Multiselect :options="nameLK" placeholder="Full name" searchable ="true" searchStart="true" v-model="userid" />
                             </div>
                             
                             <div class="form-group">

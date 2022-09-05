@@ -6,7 +6,7 @@
                     <h4 class="card-title text-muted mb-0 my-auto">Permission Setting</h4>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center wd-sm-300">         
-                    <Multiselect class="multi-color me-1" placeholder="Select name" searchable="true" v-model="selUser" @select="permissEdit()" :options="userList"/>
+                    <Multiselect class="multi-color me-1" placeholder="Select name" searchable="true" searchStart="true" v-model="selUser" @select="permissEdit()" :options="userList"/>
                     <div style="width: 40px">
                         <button type="button" class="btn ripple btn-primary" :class="btnSave" style="padding: 0px; width: 40px; height: 38px" title="Save" @click="permissUpdate()"><i class="fe fe-save tx-18"></i></button>
                     </div>

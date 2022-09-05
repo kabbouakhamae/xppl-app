@@ -114,4 +114,21 @@ class TestController extends Controller
         return $data;
     }
 
+    public function multi(Request $request){
+
+
+        $data = DB::table('emp_names')
+                    ->whereIn('name', $request)
+                    ->get();
+
+        
+        return $data;
+
+        // $parm = ".$request.";
+        // $parm = "'chamlong','Phoukhiaw','Thipphanom'";
+
+        // $object = (object) $request;
+        // $data =DB::select("select * from emp_names where name in($object)");
+        // return $data;
+    }
 }

@@ -32,9 +32,13 @@
                                     </th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Phone Number</th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Country</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold"><span>ID</span><span class="text-lowercase">s</span></th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Employee ID</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Scan ID</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Food ID</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Roster</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Level</th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Started</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Actions</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px; width: 10%" class="text-muted fw-bold">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="tx-13">
@@ -59,23 +63,30 @@
                                         <i v-if="list.phone" class="fa fa-tty me-1"></i> {{ list.phone}} 
                                     </td>
                                     <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
-                                        <img width="20" class="me-1" :src="'assets/img/flags/'+ list.country + '.png'" alt="" >{{ list.country }}
+                                        <img width="20" class="me-2" :src="'assets/img/flags/'+ list.country + '.png'" alt="" >{{ list.country }}
                                     </td>
                                     <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
-                                        <div v-if="list.empid">
-                                            <!-- <i class="far fa-address-card me-1"></i> -->
-                                            {{ list.empid }}
-                                        </div>
-                                        <div v-if="list.scanid">
-                                            <!-- <i class="cf cf-cloak me-1"></i> {{ list.scanid }} -->
-                                            <!-- <img width="15" src="assets/img/scan.jpg">  -->
-                                            Scan: {{ list.scanid }}
-                                        </div>
+                                        <div v-if="list.empid">{{ list.empid }}</div>
+                                    </td>
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">                          
+                                        {{ list.scanid }}
+                                        <span v-if="list.scantimes == 'N/A'">/{{list.scantimes}}</span>
+                                        <span v-else>/ {{list.scantimes}} times</span>
+                                    </td>
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">                          
+                                        {{ list.foodid }}
+                                    </td>
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">                          
+                                        {{ list.roster }}
+                                    </td>
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">                          
+                                        {{ list.levels }}
                                     </td>
                                     <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7"> 
-                                        {{ timeago(list.startdate) }} <br>
+                                        <span v-if="list.status == 'Current' || list.status == 'Temporary'">{{ timeago(list.startdate) }}<br></span>
                                         {{ list.status }}
                                     </td>
+
                                     <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">        
                                         <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
                                             <i class="mdi mdi-dots-horizontal text-gray pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
@@ -140,7 +151,7 @@
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">Name Lao  <span class=" text-danger">*</span></label>
-                                        <input type="text" class="form-control laofont" placeholder="ຊື່..." v-model="empForm.namelao">
+                                        <input type="text" class="form-control laofont" placeholder="ຊື່ ພາສາລາວ..." v-model="empForm.namelao">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
@@ -212,7 +223,7 @@
                                     <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <label class="mb-0">Position  <span class=" text-danger">*</span></label> 
-                                            <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" searchable="true" :options="lkPosition"/>
+                                            <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" searchable="true" searchStart="true" :options="lkPosition"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-6">
@@ -278,13 +289,13 @@
                                     <div class="col-xl-4 col-lg-9 col-md-8 col-sm-8">
                                         <div class="form-group">
                                             <label class="mb-0">Department  <span class=" text-danger">*</span></label> 
-                                            <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" searchable="true" :options="lkDept"/>
+                                            <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" searchable="true" searchStart="true" :options="lkDept"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <label class="mb-0">Section</label> 
-                                            <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" searchable="true" :options="lkSection"/>
+                                            <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" searchable="true" searchStart="true" :options="lkSection"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6">
@@ -317,53 +328,32 @@
                         <div class="panel-body tabs-menu-body main-content-body-right" style="padding: 6px 0px">
                             <div class="tab-content">
                                 <div class="tab-pane overflow-auto active" id="tab1">
-                                    <div class="table-responsive" style="height: 270px">
-                                        <table class="table main-table-reference text-nowrap">
-                                            <thead>
+                                    <div class="table-responsive border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mb-1">
+                                            <thead class="position-sticky" style="top: -1px">
                                                 <tr>
-                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="detailNew()" title="Add new detail">
-                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                                            </button> 
-                                                        </div>
-                                                    </th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Site</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Start Date</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">End Date</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Status</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Position</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Department</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Section</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Crew</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Employee ID</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Scan ID</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Food ID</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Roster</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Scan Times</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Hours</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Levels</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">contact</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Remarks</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Site</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Start Date</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">End Date</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Status</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Position</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Department</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Section</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Crew</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Employee ID</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Scan ID</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Food ID</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Roster</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Scan Times</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Hours</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Levels</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">contact</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Remarks</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 80%">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in detailData" :key="lst.id">
-                                                    <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
-                                                            </button> 
-                                                            <div class="dropdown-menu tx-13">
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="detailEdit(lst.id)">
-                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                                </div>
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="detailDel(lst.id)">
-                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
                                                     <td class="text-center" style="padding: 3px 10px"> {{ lst.site }} </td>
                                                     <td style="padding: 3px 10px"> {{ dateTime(lst.startdate) }} </td>
                                                     <td style="padding: 3px 10px"> {{ dateTime(lst.enddate) }} </td>
@@ -381,7 +371,25 @@
                                                     <td style="padding: 3px 10px"> {{ lst.levels }} </td>
                                                     <td style="padding: 3px 10px"> {{ lst.contact }} </td>
                                                     <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
-                                                </tr>                                                  
+                                                    <td style="padding: 0px 4px; vertical-align: middle">
+                                                        <div class="d-flex justify-content-start">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
+                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                                            </button> 
+                                                            <div class="dropdown-menu tx-13">
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="detailEdit(lst.id)">
+                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
+                                                                </div>
+                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="detailDel(lst.id)">
+                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>   
+                                                <div class="mt-1" style="margin-start: 11px">
+                                                    <a class="add-hover p-0" href="#" @click="detailNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
+                                                </div>                                                                               
                                             </tbody>
                                         </table>
                                     </div>
@@ -389,29 +397,27 @@
 
                                 <!-- contact person -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab2">
-                                    <div class="table-responsive" style="height: 270px">
-                                        <table class="table main-table-reference text-nowrap">
-                                            <thead>
+                                    <div class="table-responsive border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mb-1">
+                                            <thead class="position-sticky" style="top: -1px">
                                                 <tr>
-                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="contactNew()" title="Add new contact">
-                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                                            </button> 
-                                                        </div>
-                                                    </th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">contact Person</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">relate</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Phone</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 60%">Address</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">contact Person</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">relate</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Phone</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Address</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in contData" :key="lst.id">
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.name }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.relate }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.phone }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.address }} </td>
                                                     <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
-                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
+                                                        <div class="d-flex justify-content-start">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
+                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
                                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="contactEdit(lst.id)">
@@ -423,11 +429,10 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.name }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.relate }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.phone }} </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.address }} </td>
-                                                </tr>                                                
+                                                </tr>   
+                                                <div class="mt-1" style="margin-start: 11px">
+                                                    <a class="add-hover p-0" href="#" @click="contactNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
+                                                </div>                                                                               
                                             </tbody>
                                         </table>
                                     </div>
@@ -435,30 +440,29 @@
                                 
                                 <!-- Bank Account -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab3">
-                                    <div class="table-responsive" style="height: 270px">
-                                        <table class="table main-table-reference text-nowrap">
-                                            <thead>
+                                    <div class="table-responsive border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mb-1">
+                                            <thead class="position-sticky" style="top: -1px">
                                                 <tr>
-                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="bankNew()" title="Add new bank info">
-                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                                            </button> 
-                                                        </div>
-                                                    </th>
                                                     <th style="letter-spacing: 0px; padding: 4px 10px">Bank Name</th>
                                                     <th style="letter-spacing: 0px; padding: 4px 10px">Branch</th>
                                                     <th style="letter-spacing: 0px; padding: 4px 10px">Account Name</th>
                                                     <th style="letter-spacing: 0px; padding: 4px 10px">Account No</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 60%">Remarks</th>
+                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Remarks</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in bankData" :key="lst.id">
+                                                    <td style="padding: 3px 10px"> {{ lst.bank_name }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.branch }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.acct_name }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.acct_no }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                     <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
-                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
+                                                        <div class="d-flex justify-content-start">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
+                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
                                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="bankEdit(lst.id)">
@@ -470,12 +474,10 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.bank_name }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.branch }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.acct_name }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.acct_no }} </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
-                                                </tr>                                                
+                                                </tr>   
+                                                <div class="mt-1" style="margin-start: 11px">
+                                                    <a class="add-hover p-0" href="#" @click="bankNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
+                                                </div>                                                                               
                                             </tbody>
                                         </table>
                                     </div>
@@ -483,29 +485,27 @@
 
                                 <!-- Personal cards -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab4">
-                                    <div class="table-responsive" style="height: 270px">
-                                        <table class="table main-table-reference text-nowrap">
-                                            <thead>
+                                    <div class="table-responsive border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mb-1">
+                                            <thead class="position-sticky" style="top: -1px">
                                                 <tr>
-                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="cardNew()" title="Add new bank info">
-                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                                            </button> 
-                                                        </div>
-                                                    </th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Card Type</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Card ID</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Expire Date</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 60%">Remarks</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Card Type</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Card ID</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Expire Date</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Remarks</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in cardData" :key="lst.id">
+                                                    <td style="padding: 3px 10px"> {{ lst.cardtype }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.cardid }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.expiredate }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                     <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
-                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
+                                                        <div class="d-flex justify-content-start">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
+                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
                                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="cardEdit(lst.id)">
@@ -517,11 +517,10 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.cardtype }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.cardid }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.expiredate }} </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
-                                                </tr>                                                
+                                                </tr>   
+                                                <div class="mt-1" style="margin-start: 11px">
+                                                    <a class="add-hover p-0" href="#" @click="cardNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
+                                                </div>                                                                               
                                             </tbody>
                                         </table>
                                     </div>
@@ -529,28 +528,25 @@
 
                                 <!-- Annual Leave -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab5">
-                                    <div class="table-responsive" style="height: 270px">
-                                        <table class="table main-table-reference text-nowrap">
-                                            <thead>
+                                    <div class="table-responsive border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mb-1">
+                                            <thead class="position-sticky" style="top: -1px">
                                                 <tr>
-                                                    <th style="padding: 0px 0px; vertical-align: middle; width: 34px; height: 26px">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="alNew()" title="Add new bank info">
-                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                                            </button> 
-                                                        </div>
-                                                    </th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Year</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Remain</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 80%">Remarks</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Year</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Remain</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Remarks</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in alData" :key="lst.id">
+                                                    <td style="padding: 3px 10px"> {{ lst.years }} </td>
+                                                    <td style="padding: 3px 10px"> {{ lst.remain }} </td>
+                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                     <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25"  data-bs-toggle="dropdown" title="Actions">
-                                                                <i class="fa fa-ellipsis-h" style="font-size: 11px; color: #606469"></i>
+                                                        <div class="d-flex justify-content-start">
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
+                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
                                                             </button> 
                                                             <div class="dropdown-menu tx-13">
                                                                 <div class="dropdown-item cur-pointer dropdown-hover" @click="alEdit(lst.id)">
@@ -562,10 +558,10 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.years }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.remain }} </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
-                                                </tr> 
+                                                </tr>   
+                                                <div class="mt-1" style="margin-start: 11px">
+                                                    <a class="add-hover p-0" href="#" @click="alNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
+                                                </div>                                                                               
                                             </tbody>
                                         </table>
                                     </div>
@@ -573,27 +569,18 @@
 
                                 <!-- Document and Files -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab6">
-                                    <div class="table-responsive" style="height: 270px">
-                                        <table class="table main-table-reference text-nowrap">
-                                            <thead>
+                                    <div class="table-responsive border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mb-1">
+                                            <thead class="position-sticky" style="top: -1px">
                                                 <tr>
-                                                    <th style="padding: 0px 0px; height: 26px">                                                    
-                                                        <div class="ms-1 d-flex justify-content-start align-items-center">
-                                                            <button class="btn btn-icon btn-sm btn-add wd-25 ht-25" @click="fileNew()" title="Add new files">
-                                                                <i class="fa fa-plus-circle text-primary" style="font-size: 15px"></i>
-                                                                <input class="d-none" ref="fileInput2" type="file" multiple  @change="fileAdd()" >
-                                                            </button>                                                        
-                                                            <div class="" style="letter-spacing: 0px; padding: 4px 10px">File Name</div>
-                                                        </div>
-                                                    </th>
-                                                    <!-- <th style="letter-spacing: 0px; padding: 4px 10px">Description</th> -->
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px; width: 80%">Actions</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px">File Name</th>
+                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 80%">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in fileData" :key="lst.id">
                                                     <td style="padding: 3px 10px"> {{ lst.filename }} </td>
-                                                    <td style="padding: 0px 10px; vertical-align: middle;"> 
+                                                    <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-start">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Download file" @click="fileDownload(lst.filename)">
                                                                 <i class="bx bxs-download text-primary" style="font-size: 16px"></i>
@@ -603,7 +590,12 @@
                                                             </button> 
                                                         </div>
                                                     </td>
-                                                </tr>                                                
+                                                </tr>   
+                                                <div class="mt-1" style="margin-start: 11px">
+
+                                                    <a class="add-hover p-0" href="#" @click="fileNew()" title="Add new record"><span class="tx-13">Add...</span></a>    
+                                                    <input class="d-none" ref="fileInput2" type="file" multiple  @change="fileAdd()">
+                                                </div>                                                                               
                                             </tbody>
                                         </table>
                                     </div>
@@ -613,8 +605,8 @@
                     </div> <!-- EndTabs -->
 
                     <div class="d-flex justify-content-end mt-2">
-                        <button v-if="btnEmpUpd" type="button" class="btn btn-info btn-b" :class="btnEmpUpdShow" @click="empUpdate()"><i class="fe fe-check-circle"></i> 
-                            <span class="mx-1">Update</span>
+                        <button v-if="btnEmpUpd" type="button" class="btn btn-primary" :class="btnEmpUpdShow" @click="empUpdate()"><i class="fe fe-save"></i> 
+                            <span class="mx-1">Save</span>
                         </button>
                         <button v-if="btnEmpAdd" type="button" class="btn btn-primary" :class="btnEmpAddShow" @click="empAdd()"><i class="fe fe-plus"></i> 
                             <span class="mx-1">Add</span>
@@ -689,19 +681,19 @@
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">Position  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" searchable="true" :options="lkPosition"/>
+                                        <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" searchable="true" searchStart="true" :options="lkPosition"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">Department  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" searchable="true" :options="lkDept"/>
+                                        <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" searchable="true" searchStart="true" :options="lkDept"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">Section</label> 
-                                        <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" searchable="true" :options="lkSection"/>
+                                        <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" searchable="true" searchStart="true" :options="lkSection"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-6">
@@ -768,8 +760,8 @@
                             
                         </div>
                         <div class="modal-footer">
-                            <button v-if="btnDetailUpd" type="button" class="btn btn-info btn-b" :class="btnDetailShow" @click="detailUpdate()"><i class="fe fe-check-circle"></i> 
-                                <span class="mx-1">Update</span>
+                            <button v-if="btnDetailUpd" type="button" class="btn btn-primary" :class="btnDetailShow" @click="detailUpdate()"><i class="fe fe-save"></i> 
+                                <span class="mx-1">Save</span>
                             </button>
                             <button v-if="btnDetailAdd" type="button" class="btn btn-primary" :class="btnDetailShow" @click="detailAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
@@ -801,7 +793,7 @@
                                 <div class="col-lg-5 col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">relate <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="contForm.relate" placeholder="Select" searchable="true"  :options="lkRelate"/>
+                                        <Multiselect class="multi-color" v-model="contForm.relate" placeholder="Select" searchable="true" searchStart="true" :options="lkRelate"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-md-12">
@@ -819,8 +811,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-if="btnContUpd" type="button" class="btn btn-info btn-b" :class="btnContAddShow" @click="contactUpdate()"><i class="fe fe-check-circle"></i> 
-                                <span class="mx-1">Update</span>
+                            <button v-if="btnContUpd" type="button" class="btn btn-primary" :class="btnContAddShow" @click="contactUpdate()"><i class="fe fe-save"></i> 
+                                <span class="mx-1">Save</span>
                             </button>
                             <button v-if="btnContAdd" type="button" class="btn btn-primary" :class="btnContAddShow" @click="contactAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
@@ -876,8 +868,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-if="btnBankUpd" type="button" class="btn btn-info btn-b" :class="btnBankAddShow" @click="bankUpdate()"><i class="fe fe-check-circle"></i> 
-                                <span class="mx-1">Update</span>
+                            <button v-if="btnBankUpd" type="button" class="btn btn-primary" :class="btnBankAddShow" @click="bankUpdate()"><i class="fe fe-save"></i> 
+                                <span class="mx-1">Save</span>
                             </button>
                             <button v-if="btnBankAdd" type="button" class="btn btn-primary" :class="btnBankAddShow" @click="bankAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
@@ -927,8 +919,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-if="btnCardUpd" type="button" class="btn btn-info btn-b" :class="btnCardAddShow" @click="cardUpdate()"><i class="fe fe-check-circle"></i> 
-                                <span class="mx-1">Update</span>
+                            <button v-if="btnCardUpd" type="button" class="btn btn-primary" :class="btnCardAddShow" @click="cardUpdate()"><i class="fe fe-save"></i> 
+                                <span class="mx-1">Save</span>
                             </button>
                             <button v-if="btnCardAdd" type="button" class="btn btn-primary" :class="btnCardAddShow" @click="cardAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
@@ -972,8 +964,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button v-if="btnAlUpd" type="button" class="btn btn-info btn-b" :class="btnAlAddShow" @click="alUpdate()"><i class="fe fe-check-circle"></i> 
-                                <span class="mx-1">Update</span>
+                            <button v-if="btnAlUpd" type="button" class="btn btn-primary" :class="btnAlAddShow" @click="alUpdate()"><i class="fe fe-save"></i> 
+                                <span class="mx-1">Save</span>
                             </button>
                             <button v-if="btnAlAdd" type="button" class="btn btn-primary" :class="btnAlAddShow" @click="alAdd()"><i class="fe fe-plus"></i> 
                                 <span class="mx-1">Add</span>
@@ -2233,11 +2225,6 @@ export default {
     .btn-add:hover{
         background: #DDE1E5;
         border-radius: 50px;
-    }
-
-    .ff{
-        border-color: blue;
-
     }
 
 </style>

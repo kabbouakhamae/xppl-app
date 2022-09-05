@@ -10,6 +10,12 @@ import Annual from "../pages/Annual.vue";
 import Transport from "../pages/Transport.vue";
 import FuelCons from "../pages/FuelCons.vue";
 import FuelReport from "../pages/FuelReport.vue";
+import Lookup from "../pages/Lookup.vue";
+import RosPreview from "../pages/RosPreview.vue";
+import RosManage from "../pages/RosManage.vue";
+import RosCode from "../pages/RosCode.vue";
+
+
 import test from "../pages/test.vue";
 
 
@@ -60,6 +66,26 @@ const routes =[
         name: "fuelreport",
         path: "/fuelreport",
         component: FuelReport
+    },
+    {
+        name: "lookup",
+        path: "/lookup",
+        component: Lookup
+    },
+    {
+        name: "rospreview",
+        path: "/rospreview",
+        component: RosPreview
+    },
+    {
+        name: "rosmanage",
+        path: "/rosmanage",
+        component: RosManage
+    },
+    {
+        name: "roscode",
+        path: "/roscode",
+        component: RosCode
     },
 
 

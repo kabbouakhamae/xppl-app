@@ -198,28 +198,44 @@
 
 
      
-            <div class=" d-flex justify-content-between">
-                <div class="pos-relative" style="width: 90%">
-                    <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
-                        <i class="fe fe-search search-i text-muted"></i>
-                    <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
-                </div>
-                <div>
-                    <button type="button" class="btn ripple btn-primary ms-1" style="padding: 0px; width: 39px; height: 39.5px" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-20"></i></button>
-                </div>
-            </div>
+    <!-- <Multiselect
+        v-model="values"
+        mode="multiple"
+        :close-on-select="false"
+        :searchable="true"
+        :options="[
+                    { value: 'Chamlong', label: 'Chamlong' },
+                    { value: 'Thipphanom', label: 'Thipphanom' },
+                    { value: 'Dolar', label: 'Dolar' },
+                ]"
+        /> -->
 
             
-            
-     
+    <!-- <div class="wd-500" style="max-width: 500px">
+        <Multiselect
+                v-model="values"
+                mode="tags"
+                :close-on-select="false"
+                :searchable="true"
+                :create-option="true"
+                :options="[
+                    { value: 'Mine Geology-Exploration', label: 'Mine Geology-Exploration' },
+                    { value: 'Mining', label: 'Mining' },
+                    { value: 'Survey', label: 'Survey' },
+                    { value: 'Adminitration', label: 'Adminitration' },
+                ]"
+                />
+        
+    </div>        -->
 
 
 
 
- 
 
+
+
+    <!-- <button @click="testClicks()">test</button> -->
     
-            <div class="p-0 border wd-100 ht-100 fw-bold d-flex justify-content-end align-items-center " >File Name</div>
 
             
         </div>
@@ -248,6 +264,7 @@ export default {
             },
 
             gender: 'Male',
+            values: [],
 
             imagePreview: window.location.origin + '/assets/img/no2.jpg',
             addData: {
@@ -265,7 +282,7 @@ export default {
 
             ,mon: ''
             ,testData: []
-
+            ,data: ''
         };
     },
 
@@ -274,6 +291,15 @@ export default {
     },
 
     methods: {
+        testClicks(){
+            // let names = this.values;
+            // let obj = Object.assign({}, names);
+
+            this.$axios.post('/api/test/multi', this.values)
+            .then(res => {
+                console.log('===>', res.data);
+            })
+        },
 
         testClick(){
             this.$axios.get('/api/test/tests')
@@ -519,10 +545,10 @@ export default {
     },
 
     created(){
-        this.getFile();
-        this.getValue();
-        this.getProfile();
-        this.getMon();
+        // this.getFile();
+        // this.getValue();
+        // this.getProfile();
+        // this.getMon();
         
     
     },

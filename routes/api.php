@@ -15,6 +15,8 @@ use App\Http\Controllers\API\EmpFileController;
 use App\Http\Controllers\API\EmpTransController;
 use App\Http\Controllers\API\FuelConsController;
 use App\Http\Controllers\API\HomeController;
+use App\Http\Controllers\API\LookupSettController;
+use App\Http\Controllers\API\EmpRosterController;
 use App\Http\Controllers\API\TestController;
 
 /*
@@ -85,7 +87,7 @@ Route::group(['prefix' => 'annual', 'middlewar' => 'auth:santum'], function(){
     Route::post('/edit/{id}', [EmpAnnualController::class, 'edit']);
     Route::post('/update', [EmpAnnualController::class, 'update']);
     Route::post('/delete/{id}', [EmpAnnualController::class, 'delete']);
-    Route::get('/info', [EmpAnnualController::class, 'info']);
+    Route::post('/info', [EmpAnnualController::class, 'info']);
 });
 
 Route::group(['prefix' => 'file', 'middlewar' => 'auth:santum'], function(){
@@ -106,20 +108,51 @@ Route::group(['prefix' => 'fuel', 'middlewar' => 'auth:santum'], function(){
     Route::post('/date', [FuelConsController::class, 'date']);
     Route::post('/header', [FuelConsController::class, 'header']);
     Route::post('/detail', [FuelConsController::class, 'detail']);
-    Route::post('/headadd', [FuelConsController::class, 'headadd']);
-    Route::post('/headedit/{id}', [FuelConsController::class, 'headedit']);
-    Route::post('/headupd', [FuelConsController::class, 'headupd']);
-    Route::post('/headdel/{id}', [FuelConsController::class, 'headdel']);
-    Route::post('/detailadd', [FuelConsController::class, 'detailadd']);
-    Route::post('/detaildel/{id}', [FuelConsController::class, 'detaildel']);
-    Route::post('/detailedit/{id}', [FuelConsController::class, 'detailedit']);
-    Route::post('/detailupd', [FuelConsController::class, 'detailupd']);
+    Route::post('/headerAdd', [FuelConsController::class, 'headerAdd']);
+    Route::post('/headerEdit/{id}', [FuelConsController::class, 'headerEdit']);
+    Route::post('/headerUpd', [FuelConsController::class, 'headerUpd']);
+    Route::post('/headerDel/{id}', [FuelConsController::class, 'headerDel']);
+    Route::post('/detailAdd', [FuelConsController::class, 'detailAdd']);
+    Route::post('/detailDel/{id}', [FuelConsController::class, 'detailDel']);
+    Route::post('/detailEdit/{id}', [FuelConsController::class, 'detailEdit']);
+    Route::post('/detailUpd', [FuelConsController::class, 'detailUpd']);
+    Route::post('/addNewReserveNo', [FuelConsController::class, 'addNewReserveNo']);
 });
 
 Route::group(['prefix' => 'home', 'middlewar' => 'auth:santum'], function(){
     Route::get('/countcountry', [HomeController::class, 'countcountry']);
     Route::get('/countdept', [HomeController::class, 'countdept']);
     Route::get('/allemp', [HomeController::class, 'allemp']);
+});
+
+Route::group(['prefix' => 'lookupSett', 'middlewar' => 'auth:santum'], function(){
+    Route::get('/genCategory', [LookupSettController::class, 'genCategory']);
+    Route::post('/genLookup', [LookupSettController::class, 'genLookup']);
+    Route::post('/genCodeAdd', [LookupSettController::class, 'genCodeAdd']);
+    Route::post('/genCodeEdit/{id}', [LookupSettController::class, 'genCodeEdit']);
+    Route::post('/genCodeUpd', [LookupSettController::class, 'genCodeUpd']);
+    Route::post('/genCodeDel/{id}', [LookupSettController::class, 'genCodeDel']);
+    Route::get('/fuelCategory', [LookupSettController::class, 'fuelCategory']);
+    Route::post('/fuelLookup', [LookupSettController::class, 'fuelLookup']);
+    Route::post('/fuelCodeAdd', [LookupSettController::class, 'fuelCodeAdd']);
+    Route::post('/fuelCodeEdit/{id}', [LookupSettController::class, 'fuelCodeEdit']);
+    Route::post('/fuelCodeUpd', [LookupSettController::class, 'fuelCodeUpd']);
+    Route::post('/fuelCodeDel/{id}', [LookupSettController::class, 'fuelCodeDel']);
+    Route::get('/equipment', [LookupSettController::class, 'equipment']);
+    Route::post('/workOrder', [LookupSettController::class, 'workOrder']);
+    Route::post('/equipAdd', [LookupSettController::class, 'equipAdd']);
+    Route::post('/equipEdit/{id}', [LookupSettController::class, 'equipEdit']);
+    Route::post('/equipUpd', [LookupSettController::class, 'equipUpd']);
+    Route::post('/equipDel/{id}', [LookupSettController::class, 'equipDel']);
+    Route::post('/workOrderAdd', [LookupSettController::class, 'workOrderAdd']);
+    Route::post('/workOrderEdit/{id}', [LookupSettController::class, 'workOrderEdit']);
+    Route::post('/workOrderUpd', [LookupSettController::class, 'workOrderUpd']);
+    Route::post('/workOrderDel/{id}', [LookupSettController::class, 'workOrderDel']);
+});
+
+Route::group(['prefix' => 'roster', 'middlewar' => 'auth:santum'], function(){
+    Route::get('/roscode', [EmpRosterController::class, 'rosCode']);
+    Route::post('/rosCodeEdit/{id}', [EmpRosterController::class, 'rosCodeEdit']);
 });
 
 Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
@@ -132,6 +165,7 @@ Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
     Route::get('/scantimes', [LookupController::class, 'scantimes']);
     Route::get('/site', [LookupController::class, 'site']);
     Route::get('/dept', [LookupController::class, 'dept']);
+    Route::get('/depts', [LookupController::class, 'depts']);
     Route::get('/section', [LookupController::class, 'section']);
     Route::get('/crew', [LookupController::class, 'crew']);
     Route::get('/name', [LookupController::class, 'name']);
@@ -149,19 +183,15 @@ Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
     Route::get('/material', [LookupController::class, 'material']);
     Route::post('/equipdescr', [LookupController::class, 'equipdescr']);
     Route::post('/workorder', [LookupController::class, 'workorder']);
+    Route::post('/driver', [LookupController::class, 'driver']);
+    Route::post('/addNewDriver', [LookupController::class, 'addNewDriver']);
 });
 
 
-Route::group(['prefix' => 'test', 'middlewar' => 'auth:santum'], function(){
-    Route::post('/addfile', [TestController::class, 'addfile']);
-    Route::get('/file', [TestController::class, 'file']);
-    Route::post('/images', [TestController::class, 'images']);
-    Route::get('/download/{file}', [TestController::class, 'download']);
-    Route::post('/deleteFile/{file}', [TestController::class, 'deleteFile']);
-    Route::get('/getVal', [TestController::class, 'getVal']);
-    Route::get('/tests', [TestController::class, 'tests']);
+// Route::group(['prefix' => 'test', 'middlewar' => 'auth:santum'], function(){
 
-});
+
+// });
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

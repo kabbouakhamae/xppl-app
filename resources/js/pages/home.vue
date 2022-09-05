@@ -147,7 +147,6 @@
             </div> -->
 
 
-           
                 
         </div>
     </div>
@@ -208,6 +207,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-
+<style>
+    .card{
+        margin-bottom: 10px;
+    }
 </style>

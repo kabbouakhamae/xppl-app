@@ -9,42 +9,42 @@ use Illuminate\Support\Facades\DB;
 class LookupController extends Controller
 {
     public function country(){
-        $country = DB::select("select code as value, code as label from lookup_code where category ='country' and used ='y'");
+        $country = DB::select("select code as value, code as label from lookup_code where category ='country' and used = 1");
         return $country;
     }
 
     public function position(){
-        $position = DB::select("select code as value, code as label from lookup_code where category ='position' and used ='y'");
+        $position = DB::select("select code as value, code as label from lookup_code where category ='position' and used = 1");
         return $position;
     }
 
     public function status(){
-        $status = DB::select("select code as value, code as label from lookup_code where category ='employee status' and used ='y'");
+        $status = DB::select("select code as value, code as label from lookup_code where category ='employee status' and used = 1");
         return $status;
     }
 
     public function contract(){
-        $contract = DB::select("select code as value, code as label from lookup_code where category ='contract' and used ='y'");
+        $contract = DB::select("select code as value, code as label from lookup_code where category ='contract' and used = 1");
         return $contract;
     }
 
     public function levels(){
-        $levels = DB::select("select code as value, code as label from lookup_code where category ='levels' and used ='y'");
+        $levels = DB::select("select code as value, code as label from lookup_code where category ='levels' and used = 1");
         return $levels;
     }
 
     public function roster(){
-        $roster = DB::select("select code as value, code as label from lookup_code where category ='roster' and used ='y'");
+        $roster = DB::select("select code as value, code as label from lookup_code where category ='roster' and used = 1");
         return $roster;
     }
 
     public function scantimes(){
-        $scantimes = DB::select("select code as value, code as label from lookup_code where category ='scan times' and used ='y'");
+        $scantimes = DB::select("select code as value, code as label from lookup_code where category ='scan times' and used = 1");
         return $scantimes;
     }
 
     public function site(){
-        $site = DB::select("select code as value, code as label from lookup_code where category ='site' and used ='y'");
+        $site = DB::select("select code as value, code as label from lookup_code where category ='site' and used = 1");
         return $site;
     }
 
@@ -53,12 +53,17 @@ class LookupController extends Controller
         return $dept;
     }
 
+    public function depts(){
+        $dept = DB::select("select department as value, department as label from department where password is not null");
+        return $dept;
+    }
+
     public function section(){
-        $section = DB::select("select code as value, code as label from lookup_code where category ='section' and used ='y'");
+        $section = DB::select("select code as value, code as label from lookup_code where category ='section' and used = 1");
         return $section;
     }
     public function crew(){
-        $crew = DB::select("select code as value, code as label from lookup_code where category ='crew' and used ='y'");
+        $crew = DB::select("select code as value, code as label from lookup_code where category ='crew' and used = 1");
         return $crew;
     }
 
@@ -68,32 +73,32 @@ class LookupController extends Controller
     }
 
     public function relate(){
-        $relate = DB::select("select code as value, code as label from lookup_code where category = 'Relationship' and used = 'y'");
+        $relate = DB::select("select code as value, code as label from lookup_code where category = 'Relationship' and used = 1");
         return $relate;
     }
 
     public function bank(){
-        $bank = DB::select("select code as value, code as label from lookup_code where category = 'Bank Name' and used = 'y'");
+        $bank = DB::select("select code as value, code as label from lookup_code where category = 'Bank Name' and used = 1");
         return $bank;
     }
 
     public function card(){
-        $card = DB::select("select code as value, code as label from lookup_code where category = 'Card Type' and used = 'y'");
+        $card = DB::select("select code as value, code as label from lookup_code where category = 'Card Type' and used = 1");
         return $card;
     }
 
     public function year(){
-        $year = DB::select("select code as value, code as label from lookup_code where category = 'year' and used = 'y'");
+        $year = DB::select("select code as value, code as label from lookup_code where category = 'year' and used = 1");
         return $year;
     }
 
     public function month(){
-        $month = DB::select("select code as value, code as label from lookup_code where category = 'month' and used = 'y' order by id");
+        $month = DB::select("select code as value, code as label from lookup_code where category = 'month' and used = 1 order by id");
         return $month;
     }
 
     public function fueldept(){
-        $fdept = DB::select("select code as value, code as label from fuel_lookup where category in('cost center', 'io') and used = 1 order by code");
+        $fdept = DB::select("select code as value, code as label from fuel_lookup where category in('cost center', 'io') and used = 1 order by category, code");
         return $fdept;
     }
 
@@ -133,7 +138,7 @@ class LookupController extends Controller
 
     public function equipdescr(Request $request){
         $equip_descr = DB::table("fuel_equipments")
-                    ->where('equip_no', $request->equipno)
+                    ->where('equip_no', $request->equip_no)
                     ->first();
         
         return $equip_descr;
@@ -141,11 +146,28 @@ class LookupController extends Controller
 
     public function workorder(Request $request){
         $workorder = DB::table('fuel_workorders')
-                        ->where('equip_no', $request->equipno)
-                        ->where('year_mont', $request->yearmont)
+                        ->where('equip_no', $request->equip_no)
+                        ->where('year_mont', $request->year_mont)
                         ->first();
 
         return $workorder;
+    }
+
+    public function driver(Request $request){
+        $driver = DB::select("select code as value, code as label from fuel_lookup where category ='driver' and used = 1 and dept = ?", [$request->dept]);
+        return $driver;
+    }
+
+    public function addNewDriver(Request $request){
+        DB::table('fuel_lookup')
+            ->insert([
+                'dept' => $request->dept,
+                'category' => 'Driver',
+                'code' => $request->driver
+            ]);
+        
+        $drivers = DB::select("select code as value, code as label from fuel_lookup where category ='driver' and used = 1 and dept = ?", [$request->dept]);
+        return $drivers;
     }
 
 }

@@ -75,14 +75,23 @@ class EmpAnnualController extends Controller
         ]);
     }
 
-    public function info(Request $request){
-        $userid = auth()->user()->userid;
-        $year = $request->year;
-        $name = $request->search.'%';
+    // public function info(Request $request){
+    //     $userid = auth()->user()->userid;
+    //     $year = $request->year;
+    //     $name = $request->search.'%';
 
-        $info = $this->paginateArray(
-            DB::select('exec uspEmpAnnualLeave ?, ?, ?', [$userid, $year, $name])
-        );
+    //     $info = $this->paginateArray(
+    //         DB::select('exec uspEmpAnnualLeave ?, ?, ?', [$userid, $year, $name])
+    //     );
+
+    //     return $info;
+    // }
+
+    public function info(Request $request){
+
+        $dept = $request->dept;
+        $year = $request->yyyy;
+        $info = DB::select('exec uspEmpAnnualLeave ?, ?', [$dept, $year]);
 
         return $info;
     }
