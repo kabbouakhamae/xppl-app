@@ -16,10 +16,19 @@ class UserController extends Controller
     //
     public function signUp(Request $request){
         try{
-            $userCheck = User::where('userid', $request->userid);
-            if($userCheck->count()){  /// ກວດຊອບອີເມວໃນຖານຂໍ້ມູນ
+            $userCheck1 = User::where('userid', $request->userid);
+            $userCheck2 = User::where('username', $request->username);
+
+            if($userCheck1->count()){  /// ກວດຊອບອີເມວໃນຖານຂໍ້ມູນ
+                
                 $success = false;
                 $message = "This employee already sign up!";
+            
+            } elseif ($userCheck2->count()) {
+                
+                $success = false;
+                $message = "This username is not available!";
+    
             } else {  // ບໍ່ມີອີເມວ
                 $user = new User();
                 $user->userid = $request->userid;

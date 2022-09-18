@@ -1,42 +1,10 @@
 <template>
-    <div class="card card-body">
-        
-        <div class="table-responsive mt-1" style="max-height: 700px">
-            <table class="table main-table-reference text-nowrap table-hover cur-pointer" >
-                <thead>
-                    <tr>
-                        <th style="letter-spacing: 0px; width: 50px">Key</th>
-                        <th style="letter-spacing: 0px">Name</th>
-                    </tr>
-                </thead>
-                <tbody> 
-                    <tr v-for="(lst, key) in names" :key="lst.value" @click="rowSelected(key, lst.value)" :style="key == selectedRow ? 'background-color: #ecf0fa; border-left: 2px solid #0162e8' : ''" title="">
-                        
-                        <td style="padding: 4px 10px">{{ key + 1 }}</td>
-                        <td style="border: none; padding: 4px 10px" :style="lst.value == '2023' ? 'background-color: green' : 
-                                                              lst.value == '2022' || lst.value == '2026' ? 'background-color: red' : 
-                                                              lst.value == '2024' ? 'background-color: pink' : 
-                                                              lst.value == '2025' ||  lst.value == '2027' ? 'background-color: yellow' : 
-                                                              lst.value == '2021' ? 'background-color: gray' : 
-                                                              ''"
-                        >{{ lst.value }}</td>
 
-                    </tr>                                                
-                </tbody>
-            </table>
-        </div>
+        <h1>Fuel Report</h1>
+        <hr>
+        <h1 class="laofont mt-5">ຢູ່ພາຍ​ໃຕ້​ການ​ພັດ​ທະ​ນາ!</h1>
+        <h1>Under Development!</h1>
 
-
-
-        <div v-if="active">
-            <h2>Hello World!</h2>
-        </div>
-
-        <div v-on:mouseover="active = !active">
-            <h1>Hover me!</h1>
-        </div>
-
-    </div>
 </template>
 
 <script>
@@ -92,8 +60,5 @@ export default {
 </script>
 
 <style>
-    .dd{
-        border-left: 2px blue;
-    
-    }
+
 </style>

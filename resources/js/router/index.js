@@ -10,10 +10,15 @@ import Annual from "../pages/Annual.vue";
 import Transport from "../pages/Transport.vue";
 import FuelCons from "../pages/FuelCons.vue";
 import FuelReport from "../pages/FuelReport.vue";
+import FuelLookup from "../pages/FuelLookup.vue";
 import Lookup from "../pages/Lookup.vue";
 import RosPreview from "../pages/RosPreview.vue";
 import RosManage from "../pages/RosManage.vue";
 import RosCode from "../pages/RosCode.vue";
+import CarRentDetail from "../pages/CarRentDetail.vue";
+import CarRentReport from "../pages/CarRentReport.vue";
+import CarRentCode from "../pages/CarRentCode.vue";
+import Macro from "../pages/Macro.vue";
 
 
 import test from "../pages/test.vue";
@@ -68,6 +73,11 @@ const routes =[
         component: FuelReport
     },
     {
+        name: "fuellookup",
+        path: "/fuellookup",
+        component: FuelLookup
+    },
+    {
         name: "lookup",
         path: "/lookup",
         component: Lookup
@@ -86,6 +96,26 @@ const routes =[
         name: "roscode",
         path: "/roscode",
         component: RosCode
+    },
+    {
+        name: "carrentdetail",
+        path: "/carrentdetail",
+        component: CarRentDetail
+    },
+    {
+        name: "carrentreport",
+        path: "/carrentreport",
+        component: CarRentReport
+    },
+    {
+        name: "carrentcode",
+        path: "/carrentcode",
+        component: CarRentCode
+    },
+    {
+        name: "macro",
+        path: "/macro",
+        component: Macro
     },
 
 

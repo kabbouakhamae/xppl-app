@@ -1,17 +1,19 @@
 <template>
     <div class="card">
         <div class="card-body">
-            <div class="breadcrumb-header justify-content-between align-items-center mb-3 mt-0" >
+            <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
                 <div class="d-flex">
                     <h4 class="card-title text-muted mb-0 my-auto">Transport Manifest</h4>
                 </div>
-                <div class="d-flex my-xl-auto right-content">
-
-                    <Multiselect class="multi-color" style="width: 250px" v-model="depts" mode="multiple" placeholder="Departments..." :close-on-select="false" :searchable="false" :searchStart="true" :options="lkDept" @select="getTransport()"/>
-                    <input type="date" class="form-control ms-1" style="width: 130px" placeholder="Date..." v-model="date" @change="getTransport()">
-                
+                <div class="d-flex my-xl-auto right-content align-items-center">
+                    <div class="wd-xl-200 wd-lg-200 wd-md-200 wd-70p">
+                        <Multiselect class="multi-color" v-model="depts" mode="multiple" placeholder="Departments..." :close-on-select="false" :searchable="false" :searchStart="true" :options="lkDept" @select="getTransport()"/>
+                    </div>
+                    <div class="ms-1" style="width: 130px">
+                        <input type="date" class="form-control" placeholder="Date..." v-model="date" @change="getTransport()">
+                    </div>
                 </div>
-            </div>
+            </div> 
             <div>
                 <h6><span class="laofont">ຂາອອກ</span> Outbound: <span class="text-danger fw-bold">{{ dateTime(date) }}</span></h6>
             </div>
@@ -100,7 +102,6 @@
                     </div>
                 </div>                                              
             </div>  
- 
 
             <div class="modal fade effect-scale" id="pickup" data-bs-keyboard="false" tabindex="-1" aria-labelledby="pickupLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm modal-dialog-centered">

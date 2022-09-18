@@ -2,21 +2,16 @@
     
     <div class="card">
         <div class="card-body">
-            <div class="breadcrumb-header justify-content-between align-items-center mb-3 mt-0" >
+            <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
                 <div class="d-flex">
                     <h4 class="card-title text-muted mb-0 my-auto">Annual Leave of {{ year }} </h4>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center">
-                    <div class="wd-xl-200 wd-lg-200 wd-md-200 wd-100p me-1">
+                    <div class="wd-xl-200 wd-lg-200 wd-md-200 wd-70p me-1">
                         <Multiselect class="multi-color" v-model="depts" mode="multiple" placeholder="Departments..." :close-on-select="false" :searchable="false" :searchStart="true" :options="lkDept" @select="getAlInfo()"/>
                     </div>
-                    <div class="dropdown">
-                        <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary dropdown-toggle-split" style="width: 75px; height: 39.5px" data-bs-toggle="dropdown" id="dropdownMenuButton" type="button">{{ year }}<i class="fas fa-caret-down ms-2"></i></button>
-                        <div class="dropdown-menu dropdown-menu-right overflow-auto" aria-labelledby="dropdownMenuDate" x-placement="bottom-end" style="height: 210px">
-                            <a class="dropdown-item" v-for="lst in lkYear" :key="lst.value" @click="yearChange(lst.value)">                            
-                                {{ lst.value }}
-                            </a>
-                        </div>
+                    <div class="ms-1" style="width: 120px">
+                        <Multiselect class="multi-color" placeholder="Year" :options="lkYear" v-model="year" @select="yearChange()"/>
                     </div>
                 </div>
             </div>  
@@ -68,8 +63,6 @@ export default {
             alInfo: [],
             depts: [],
             year: new Date().getFullYear(),
-            search: '',
-            btnClear: false
         };
     },
 
@@ -78,14 +71,25 @@ export default {
     },
 
     methods: {
-        yearChange(value){
-            this.year = value;
+        yearChange(){
             this.getAlInfo();
         },
 
         async getAlInfo(){
             let fd = new FormData();
                 fd.append('dept', this.depts.toString());
+                fd.append('yyyy', this.year);
+
+            const res = await axios.post('/api/annual/info', fd, {headers:{"Content-Type": "multipart/form-date"}})
+            this.alInfo = res.data;
+        },
+
+        async getAlInfo2(){
+            const profile = await axios.get('api/profile')
+			let loginDept = profile.data.department;
+
+            let fd = new FormData();
+                fd.append('dept', loginDept);
                 fd.append('yyyy', this.year);
 
             const res = await axios.post('/api/annual/info', fd, {headers:{"Content-Type": "multipart/form-date"}})
@@ -108,6 +112,7 @@ export default {
     },
 
     created(){
+        this.getAlInfo2();
         this.lookup();
     },
 

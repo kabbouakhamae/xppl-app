@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Roster Preview</h1>
+        <h1>Car Rental Code</h1>
         <hr>
         <h1 class="laofont mt-5">ຢູ່ພາຍ​ໃຕ້​ການ​ພັດ​ທະ​ນາ!</h1>
         <h1>Under Development!</h1>
@@ -9,7 +9,7 @@
 
 <script>
 export default {
-    name: 'XpplAppRosPreview',
+    name: 'XpplAppCarRentCode',
 
     data() {
         return {

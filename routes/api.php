@@ -17,6 +17,7 @@ use App\Http\Controllers\API\FuelConsController;
 use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\LookupSettController;
 use App\Http\Controllers\API\EmpRosterController;
+use App\Http\Controllers\API\CarRentController;
 use App\Http\Controllers\API\TestController;
 
 /*
@@ -106,17 +107,19 @@ Route::group(['prefix' => 'transport', 'middlewar' => 'auth:santum'], function()
 
 Route::group(['prefix' => 'fuel', 'middlewar' => 'auth:santum'], function(){
     Route::post('/date', [FuelConsController::class, 'date']);
-    Route::post('/header', [FuelConsController::class, 'header']);
+    Route::post('/dateadd', [FuelConsController::class, 'dateAdd']);
+    Route::post('/head', [FuelConsController::class, 'head']);
     Route::post('/detail', [FuelConsController::class, 'detail']);
-    Route::post('/headerAdd', [FuelConsController::class, 'headerAdd']);
-    Route::post('/headerEdit/{id}', [FuelConsController::class, 'headerEdit']);
-    Route::post('/headerUpd', [FuelConsController::class, 'headerUpd']);
-    Route::post('/headerDel/{id}', [FuelConsController::class, 'headerDel']);
-    Route::post('/detailAdd', [FuelConsController::class, 'detailAdd']);
-    Route::post('/detailDel/{id}', [FuelConsController::class, 'detailDel']);
-    Route::post('/detailEdit/{id}', [FuelConsController::class, 'detailEdit']);
-    Route::post('/detailUpd', [FuelConsController::class, 'detailUpd']);
-    Route::post('/addNewReserveNo', [FuelConsController::class, 'addNewReserveNo']);
+    Route::post('/headadd', [FuelConsController::class, 'headAdd']);
+    Route::post('/headedit/{id}', [FuelConsController::class, 'headEdit']);
+    Route::post('/headupd', [FuelConsController::class, 'headUpd']);
+    Route::post('/headdel/{id}', [FuelConsController::class, 'headDel']);
+    Route::post('/detailadd', [FuelConsController::class, 'detailAdd']);
+    Route::post('/detaildel/{id}', [FuelConsController::class, 'detailDel']);
+    Route::post('/detailedit/{id}', [FuelConsController::class, 'detailEdit']);
+    Route::post('/detailupd', [FuelConsController::class, 'detailUpd']);
+    Route::post('/reserveadd', [FuelConsController::class, 'reserveAdd']);
+    Route::get('/category', [FuelConsController::class, 'Category']);
 });
 
 Route::group(['prefix' => 'home', 'middlewar' => 'auth:santum'], function(){
@@ -151,8 +154,42 @@ Route::group(['prefix' => 'lookupSett', 'middlewar' => 'auth:santum'], function(
 });
 
 Route::group(['prefix' => 'roster', 'middlewar' => 'auth:santum'], function(){
-    Route::get('/roscode', [EmpRosterController::class, 'rosCode']);
+    Route::get('/rosCode', [EmpRosterController::class, 'rosCode']);
+    Route::post('/rosCodeAdd', [EmpRosterController::class, 'rosCodeAdd']);
     Route::post('/rosCodeEdit/{id}', [EmpRosterController::class, 'rosCodeEdit']);
+    Route::post('/rosCodeUpd', [EmpRosterController::class, 'rosCodeUpd']);
+    Route::post('/rosCodeDel/{id}', [EmpRosterController::class, 'rosCodeDel']);
+});
+
+Route::group(['prefix' => 'carRent', 'middlewar' => 'auth:santum'], function(){
+    Route::post('/date', [CarRentController::class, 'date']);
+    Route::post('/addDate', [CarRentController::class, 'addDate']);
+    Route::get('/carComp', [CarRentController::class, 'carComp']);
+    Route::get('/carType', [CarRentController::class, 'carType']);
+    Route::get('/departPoint', [CarRentController::class, 'departPoint']);
+    Route::get('/destination', [CarRentController::class, 'destination']);
+    Route::get('/route', [CarRentController::class, 'route']);
+    Route::post('/fuelKm', [CarRentController::class, 'fuelKm']);
+    Route::get('/equipNo', [CarRentController::class, 'equipNo']);
+    Route::get('/departPoint', [CarRentController::class, 'departPoint']);
+    Route::get('/destination', [CarRentController::class, 'destination']);
+    Route::get('/paidType', [CarRentController::class, 'paidType']);
+    Route::get('/route', [CarRentController::class, 'route']);
+    Route::post('/routeKm', [CarRentController::class, 'routeKm']);
+    Route::post('/head', [CarRentController::class, 'head']);
+    Route::post('/addHead', [CarRentController::class, 'addHead']);
+    Route::post('/editHead/{id}', [CarRentController::class, 'editHead']);
+    Route::post('/updHead', [CarRentController::class, 'updHead']);
+    Route::post('/delHead/{id}', [CarRentController::class, 'delHead']);
+    Route::post('/detail', [CarRentController::class, 'detail']);
+    Route::post('/addDetail', [CarRentController::class, 'addDetail']);
+    Route::post('/editDetail/{id}', [CarRentController::class, 'editDetail']);
+    Route::post('/updDetail', [CarRentController::class, 'updDetail']);
+    Route::post('/delDetail/{id}', [CarRentController::class, 'delDetail']);
+    Route::post('/addFile', [CarRentController::class, 'addFile']);
+    Route::get('/files', [CarRentController::class, 'files']);
+    Route::get('/download/{file}', [CarRentController::class, 'download']);
+
 });
 
 Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
@@ -184,7 +221,7 @@ Route::group(['prefix' => 'lookup', 'middlewar' => 'auth:santum'], function(){
     Route::post('/equipdescr', [LookupController::class, 'equipdescr']);
     Route::post('/workorder', [LookupController::class, 'workorder']);
     Route::post('/driver', [LookupController::class, 'driver']);
-    Route::post('/addNewDriver', [LookupController::class, 'addNewDriver']);
+    Route::post('/driveradd', [LookupController::class, 'driverAdd']);
 });
 
 

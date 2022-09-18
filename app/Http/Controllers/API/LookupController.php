@@ -158,7 +158,7 @@ class LookupController extends Controller
         return $driver;
     }
 
-    public function addNewDriver(Request $request){
+    public function driverAdd(Request $request){
         DB::table('fuel_lookup')
             ->insert([
                 'dept' => $request->dept,

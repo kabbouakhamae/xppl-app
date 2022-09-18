@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
                         <div class="d-flex">
-                            <h4 class="card-title text-muted mb-0 my-auto">General Lookup</h4>
+                            <h4 class="card-title text-muted mb-0 my-auto text-capitalize">General Lookup</h4>
                         </div>
                         <div class="d-flex my-xl-auto right-content align-items-center">
                             <div class="wd-xl-200 wd-lg-200 wd-md-200 wd-100p">
@@ -29,17 +29,12 @@
                                     <td style="padding: 3px 10px"> {{ lst.descr }} </td>
                                     <td style="padding: 0px 4px; vertical-align: middle">
                                         <div class="d-flex justify-content-start">
-                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="genCodeEdit(lst.id)">
+                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                             </button> 
-                                            <div class="dropdown-menu tx-13">
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="genCodeEdit(lst.id)">
-                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                </div>
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="genCodeDel(lst.id)">
-                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                </div>
-                                            </div>
+                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete this record" @click="genCodeDel(lst.id)">
+                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                            </button> 
                                         </div>
                                     </td>
                                 </tr>   
@@ -56,7 +51,7 @@
                 <div class="card-body">
                     <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
                         <div class="d-flex">
-                            <h4 class="card-title text-muted mb-0 my-auto">Fuel Lookup</h4>
+                            <h4 class="card-title text-muted mb-0 my-auto text-capitalize">Fuel Lookup</h4>
                         </div>
                         <div class="d-flex my-xl-auto right-content align-items-center">
                             <div class="wd-xl-200 wd-lg-200 wd-md-200 wd-100p">
@@ -82,17 +77,12 @@
                                     <td style="padding: 3px 10px"> {{ lst.descr }} </td>
                                     <td style="padding: 0px 4px; vertical-align: middle">
                                         <div class="d-flex justify-content-start">
-                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="fuelCodeEdit(lst.id)">
+                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                             </button> 
-                                            <div class="dropdown-menu tx-13">
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="fuelCodeEdit(lst.id)">
-                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                </div>
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="fuelCodeDel(lst.id)">
-                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                </div>
-                                            </div>
+                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete this record" @click="fuelCodeDel(lst.id)">
+                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                            </button> 
                                         </div>
                                     </td>
                                 </tr>   
@@ -106,13 +96,13 @@
             </div>
         </div>
 
-        <!-- Equipment nad Work Order -->
+        <!-- Equipment and Work Order -->
         <div class="col-xl-6">
             <div class="card">
                 <div class="card-body">
                     <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
                         <div class="d-flex">
-                            <h6 class="card-title text-muted mb-0 my-auto">Equipmemt and Work Order</h6>
+                            <h6 class="card-title text-muted mb-0 my-auto text-capitalize">Equipmemt and Work Order</h6>
                         </div>
                         <div class="d-flex my-xl-auto right-content align-items-center">
                             <div class="pos-relative wd-xl-200 wd-lg-200 wd-md-200 wd-100p">
@@ -140,17 +130,12 @@
                                     <td style="padding: 3px 10px"> {{ lst.equip_descr }} </td>
                                     <td style="padding: 0px 4px; vertical-align: middle">
                                         <div class="d-flex justify-content-start">
-                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="equipEdit(lst.id)">
+                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                             </button> 
-                                            <div class="dropdown-menu tx-13">
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="equipEdit(lst.id)">
-                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                </div>
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="equipDel(lst.id)">
-                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                </div>
-                                            </div>
+                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete this record" @click="equipDel(lst.id)">
+                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                            </button> 
                                         </div>
                                     </td>
                                 </tr>   
@@ -180,17 +165,12 @@
                                     <td style="padding: 3px 10px"> {{ lst.basic_date }} </td>
                                     <td style="padding: 0px 4px; vertical-align: middle">
                                         <div class="d-flex justify-content-start">
-                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="workOrderEdit(lst.id)">
+                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                             </button> 
-                                            <div class="dropdown-menu tx-13">
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="workOrderEdit(lst.id)">
-                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                </div>
-                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="workOrderDel(lst.id)">
-                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                </div>
-                                            </div>
+                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete this record" @click="workOrderDel(lst.id)">
+                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                            </button> 
                                         </div>
                                     </td>
                                 </tr>   
@@ -866,6 +846,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style>
 
 </style>

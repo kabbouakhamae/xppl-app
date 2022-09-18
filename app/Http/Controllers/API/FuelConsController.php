@@ -9,7 +9,44 @@ use Illuminate\Support\Str;
 
 class FuelConsController extends Controller
 {
-    public function header(Request $request){
+    public function date(Request $request){
+        $mont = $request->mont;
+        $year = $request->year;
+
+        $date = DB::select("select * from fuel_date where format(refuel_date,'MMMM') = ? and year(refuel_date) = ? order by refuel_date", [$mont, $year]);
+        return $date;
+    }
+
+    public function dateAdd(Request $request){
+        $check = DB::table('fuel_date')
+                    ->where('refuel_date', $request->date);
+
+        $cdate = date('Y-m-d');
+
+        if ($check->count()){
+            $success = false;
+            $message = 'Duplicate record!';
+        } elseif ($request->date > $cdate){
+            $success = false;
+            $message = 'The date is early than today!';
+        } else {
+            DB::table('fuel_date')
+                ->insert([
+                    'refuel_date' => $request->date
+                ]);
+
+            $success = true;
+            $message = "Insert completed!";
+        }
+
+        $response = [
+            'success' => $success,
+            'message' => $message
+        ];
+        return response()->json($response);
+    }
+
+    public function head(Request $request){
         $userid = auth()->user()->userid;
 
         if ($request->permiss == 1){
@@ -41,7 +78,7 @@ class FuelConsController extends Controller
         return $det;
     }
 
-    public function headerAdd(Request $request){
+    public function headAdd(Request $request){
         $check = DB::table('fuel_headers')
                     ->where('refuel_date', $request->refuel_date)
                     ->where('created_dept', $request->created_dept)
@@ -53,6 +90,8 @@ class FuelConsController extends Controller
             $success = false;
             $message = 'Duplicate record!';
         } else {
+
+            $datetime = now("Asia/Bangkok")->toDateTimeString();
             $createdBy = Str::lower(auth()->user()->username);
             DB::table('fuel_headers')
                 ->insert([
@@ -64,6 +103,7 @@ class FuelConsController extends Controller
                     'cost_no' => $request->cost_no,
                     'location' => $request->location,
                     'approved_by' => $request->approved_by,
+                    'created_at' => $datetime,
                     'created_by' => $createdBy
             ]);
 
@@ -78,12 +118,13 @@ class FuelConsController extends Controller
         return response()->json($response);
     }
 
-    public function headerEdit($id){
+    public function headEdit($id){
         $fheader = DB::table('fuel_headers')->find($id);
         return $fheader;
     }
 
-    public function headerUpd(Request $request){
+    public function headUpd(Request $request){
+        $datetime = now("Asia/Bangkok")->toDateTimeString();
         $updatedBy = Str::lower(auth()->user()->username);
         DB::table('fuel_headers')
             ->where('id', $request->id)
@@ -94,11 +135,12 @@ class FuelConsController extends Controller
                 'cost_no' => $request->cost_no,
                 'location' => $request->location,
                 'approved_by' => $request->approved_by,
+                'updated_at' => $datetime,
                 'updated_by' => $updatedBy
             ]);
     }
 
-    public function headerDel($id){
+    public function headDel($id){
         DB::delete('delete from fuel_headers where id = ?', [$id]);
     }
 
@@ -112,6 +154,7 @@ class FuelConsController extends Controller
             $success = false;
             $message = 'Duplicate record!';
         } else {
+            $datetime = now("Asia/Bangkok")->toDateTimeString();
             $createdBy = Str::lower(auth()->user()->username);
             DB::table('fuel_details')->insert([
                 'head_id' => $request->head_id,
@@ -125,6 +168,7 @@ class FuelConsController extends Controller
                 'driver' => $request->driver,
                 'liter' => $request->liter,
                 'refuel_by' => $request->refuel_by,
+                'created_at' => $datetime,
                 'created_by' => $createdBy
             ]);
 
@@ -145,7 +189,9 @@ class FuelConsController extends Controller
     }
 
     public function detailUpd(Request $request){
+        $datetime = now("Asia/Bangkok")->toDateTimeString();
         $updatedBy = Str::lower(auth()->user()->username);
+        
         DB::table('fuel_details')
             ->where('id', $request->id)
             ->update([
@@ -159,6 +205,7 @@ class FuelConsController extends Controller
                 'driver' => $request->driver,
                 'liter' => $request->liter,
                 'refuel_by' => $request->refuel_by,
+                'updated_at' => $datetime,
                 'updated_by' => $updatedBy
             ]);
     }
@@ -167,12 +214,17 @@ class FuelConsController extends Controller
         DB::delete('delete from fuel_details where id = ?', [$id]);
     }
 
-    public function addNewReserveNo(Request $request){
+    public function reserveAdd(Request $request){
         DB::table('fuel_workorders')
             ->where('work_order', $request->workOrder)
             ->update([
                 'reserve_no' => $request->reserveNo
             ]);
+    }
+
+    public function Category(){
+        $cate = DB::select('select distinct category from fuel_lookup order by 1');
+        return $cate;
     }
 
 }

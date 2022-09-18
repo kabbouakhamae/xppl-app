@@ -2,121 +2,102 @@
     <div>
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title text-muted mb-0 my-auto">XPPL Roster Code</h4>
+                <div class="d-flex justify-content-between mb-1">
+                    <h4 class="card-title text-muted mb-0 my-auto text-capitalize">XPPL Roster Code</h4>
+                    <button v-if="!!parseInt(loginPermiss.lk_ros)" type="button" class="btn btn-sm btn-rounded btn-primary" style="padding: 3.2px 11.2px" title="Add new record" @click="newCode()"><i class="fe fe-plus"></i> 
+                        <span class="mx-1">New</span>
+                    </button>
+                </div>
 
-                <a class="add-hover p-0 mt-5" href="#" @click="newCode()" title="Add new record"><span class="tx-13 text-primary">Add...</span></a>  
-
-                <div class="table-responsive mt-1 border mh-">
+                <div class="table-responsive ht-md-700">
                     <table class="table main-table-reference text-nowrap mb-0">
                         <thead class="position-sticky" style="top: -1px">
                             <tr>
                                 <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold">Roster Code</th>
                                 <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold">Timesheet Code</th>
                                 <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold">Description Lao</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold" v-if="!!parseInt(loginPermiss.lk_ros)">Description Eng</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px; width: 70%" class="fw-bold" v-else>Description Eng</th>      
+                                <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold">Description Eng</th>    
+                                <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold" v-if="!!parseInt(loginPermiss.lk_ros)">Working Time</th>      
+                                <th style="letter-spacing: 0px; padding: 5px 10px; width: 70%" class="fw-bold" v-else>Working Time</th>      
                                 <th style="letter-spacing: 0px; padding: 5px 10px; width: 70%" class="fw-bold" v-if="!!parseInt(loginPermiss.lk_ros)">Actions</th>
                             </tr>
                         </thead>
                         <tbody> 
-                            <!-- <tr class="position-sticky" style="top: 30px"> -->
-                            <tr v-if="formShow">
-                                <td class="p-0">
-                                    <input type="text" class="form-control form-control-sm border-0" style="padding: 0px 0px 0px 10px" placeholder="Roster code..." v-model="rosCodeForm.rcode">
-                                </td>
-                                <td class="p-0">
-                                    <input type="text" class="form-control form-control-sm border-0" style="padding: 0px 0px 0px 10px" placeholder="Ref code..." v-model="rosCodeForm.ref_code">
-                                </td>
-                                <td class="p-0">
-                                    <input type="text" class="form-control form-control-sm border-0 wd-250 laofont" style="padding: 0px 0px 0px 10px" placeholder="Description in Lao..." v-model="rosCodeForm.descr_lao">
-                                </td>
-                                <td class="p-0">
-                                    <input type="text" class="form-control form-control-sm border-0 wd-250" style="padding: 0px 0px 0px 10px" placeholder="Description in Eng..." v-model="rosCodeForm.descr_eng">
-                                </td>
-
-                                <td style="padding: 0px 4px; vertical-align: middle">
-                                    <div class="d-flex justify-content-start">
-                                        <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                            <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
-                                        </button> 
-                                        <div class="dropdown-menu tx-13">
-                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="rodCodeEdit(lst.id)">
-                                                <i class="fe fe-save me-2"></i><span>Edit</span>
-                                            </div>
-                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="fuelCodeDel(lst.id)">
-                                                <i class="fe fe-x me-2"></i><span>Cancel</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-
-
-                            </tr>
-                            <tr v-else v-for="lst in rosCodeData" :key="lst.id">
-                            <!-- <tr class="tr-hover" v-for="lst in rosCodeData" :key="lst.id" 
-                                                            :style="lst.ref_code == 'A' || lst.ref_code == 'A/2' || lst.ref_code == 'H' || lst.ref_code == 'M' || lst.ref_code == 'P' ? 'background-color: #FFFF99' 
-                                                            : lst.ref_code == 'B' ? 'background-color: #C4D79B' 
-                                                            : lst.ref_code == 'EM' ? 'background-color: #D8E4BC' 
-                                                            : ''"> -->
-                                
+                            <tr v-for="lst in rosCodeData" :key="lst.id">
                                 <td style="padding: 3px 10px">{{ lst.rcode }}</td>
                                 <td style="padding: 3px 10px">{{ lst.ref_code }}</td>
                                 <td style="padding: 3px 10px" class="laofont">{{ lst.descr_lao }}</td>
                                 <td style="padding: 3px 10px"> {{ lst.descr_eng }} </td>
-
+                                <td style="padding: 3px 10px"> {{ lst.working_time }} </td>
                                 <td style="padding: 0px 4px; vertical-align: middle" v-if="!!parseInt(loginPermiss.lk_ros)">
                                     <div class="d-flex justify-content-start">
-                                        <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                            <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                        <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="rosCodeEdit(lst.id)">
+                                            <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                         </button> 
-                                        <div class="dropdown-menu tx-13">
-                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="rodCodeEdit(lst.id)">
-                                                <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                            </div>
-                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="rosCodeDel(lst.id)">
-                                                <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                            </div>
-                                        </div>
+                                        <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete this record" @click="rosCodeDel(lst.id)">
+                                            <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                        </button> 
                                     </div>
                                 </td>
                             </tr> 
-                            
-                            <!-- <div class="mt-1" style="margin-start: 11px" v-if="!!parseInt(loginPermiss.lk_ros)">
-                                    <a class="add-hover p-0" href="#" @click="newFuelLookup()" title="Add new record"><span class="tx-13 text-primary">Add...</span></a>                                                                                           
-                                </div>   -->
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Equip Modal -->
-                <!-- <div class="modal fade effect-scale" id="equip" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="equipLabel" aria-hidden="true">
+                <div class="modal fade effect-scale" id="rosCode" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="rosCodeLabel" aria-hidden="true">
                     <div class="modal-dialog modal-md">
                         <div class="modal-content">
                             <div class="modal-header pb-1">
-                                <h6 class="text-muted main-content-label text-capitalize">Equipment Number</h6>
+                                <h6 class="text-muted main-content-label text-capitalize">Roster Code</h6>
                             </div>
                             <div class="modal-body">  
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="mb-0">Roster Code  <span class=" text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Roster code..." v-model="rosCodeForm.rcode">
+                                        </div>   
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="mb-0">Timesheet Code  <span class=" text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Timesheet code..." v-model="rosCodeForm.ref_code">
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="form-group">
-                                    <label class="mb-0">Equipment No  <span class=" text-danger">*</span></label>
-                                    <input type="text" class="form-control" placeholder="Short name..." v-model="equipForm.equip_no">
-                                </div>   
-                                <div class="form-group">
-                                    <label class="mb-0">Equipment Name  <span class=" text-danger">*</span></label>
-                                    <input type="text" class="form-control" placeholder="Long name..." v-model="equipForm.equip_name">
-                                </div>   
-                                <div class="form-group">
-                                    <label class="mb-0">Equipment Description  <span class=" text-danger">*</span></label>
-                                    <input type="text" class="form-control" placeholder="Description..." v-model="equipForm.equip_descr">
+                                    <label class="mb-0">Description Lao <span class=" text-danger">*</span></label>
+                                    <input type="text" class="form-control laofont" placeholder="Description..." v-model="rosCodeForm.descr_lao">
                                 </div>    
+                                <div class="form-group">
+                                    <label class="mb-0">Description Eng  <span class=" text-danger">*</span></label>
+                                    <input type="text" class="form-control" placeholder="Description..." v-model="rosCodeForm.descr_eng">
+                                </div>  
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="mb-0">Working Time</label>
+                                            <input type="text" class="form-control" placeholder="Working time..." v-model="rosCodeForm.working_time">
+                                        </div>   
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="mb-0">Used  <span class=" text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Used..." v-model="rosCodeForm.used">
+                                        </div>
+                                    </div>
+                                </div>  
                                 <div class="d-flex justify-content-end">
-                                    <button v-if="bntAddShow" type="button" class="btn btn-primary" :class="btnEquipAddDis" @click="equipAdd()"><i class="fe fe-plus"></i><span class="mx-1">Add</span></button> 
-                                    <button v-else type="button" class="btn btn-primary" @click="equipUpd()"><i class="fe fe-save"></i><span class="mx-1">Save</span></button> 
+                                    <button v-if="bntAddShow" type="button" class="btn btn-primary" :class="btnRosAddDis" @click="rosCodeAdd()"><i class="fe fe-plus"></i><span class="mx-1">Add</span></button> 
+                                    <button v-else type="button" class="btn btn-primary" @click="rosCodeUpd()"><i class="fe fe-save"></i><span class="mx-1">Save</span></button> 
                                     <button type="button" class="btn btn-secondary ms-1" data-bs-dismiss="modal"><i class="fe fe-x"></i><span class="mx-1">Close</span></button>
                                 </div>
                             </div>
                         </div>
                     </div>                                              
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
@@ -130,9 +111,8 @@ export default {
         return {
             rosCodeData: [],
             loginPermiss: [],
-            rosCodeForm: {id: '', rcode: '', ref_code: '', descr_lao: '', descr_eng: ''},
-            formShow: false,
-            formDataShow: ''
+            rosCodeForm: {id: '', rcode: '', ref_code: '', descr_lao: '', descr_eng: '', working_time: '', used: '1'},
+            bntAddShow: ''
         };
     },
 
@@ -140,33 +120,38 @@ export default {
         
     },
 
+    computed: {
+        btnRosAddDis(){
+            let f = this.rosCodeForm;
+            if (f.rcode == '' || f.ref_code == '' || f.descr_lao == '' || f.descr_eng == '' || f.used == ''){
+                return 'disabled';
+            } else {
+                return '';
+            }
+        }
+    },
+
     methods: {
         async getRosCode(){
             const response = await axios.get('/api/permiss')
             this.loginPermiss = response.data;
 
-            const code = await axios.get('/api/roster/roscode')
+            const code = await axios.get('/api/roster/rosCode')
             this.rosCodeData = code.data;
         },
 
         newCode(){
-            this.formShow = true;
-        },
-
-        newFuelLookup(){
-            this.fuelCodeFormClear();
+            this.rosCodeFormClear();
             this.bntAddShow = true;
-            $('#fuelLookup').modal('show');
+            $('#rosCode').modal('show');
         },
 
-        fuelCodeAdd(){
-            this.$axios.post('/api/lookupSett/fuelCodeAdd', this.fuelCodeForm)
+        rosCodeAdd(){
+            this.$axios.post('/api/roster/rosCodeAdd', this.rosCodeForm)
             .then((res) => {
-                    if(res.data.success){
-
-                    $('#fuelLookup').modal('hide');
-                    this.fuelCateSelected();
-
+                if(res.data.success){
+                    $('#rosCode').modal('hide');
+                    this.getRosCode();
                 } else {
                     alert(res.data.message)
                 }
@@ -175,11 +160,10 @@ export default {
             })
         },
 
-        rodCodeEdit(id){
-            this.formShow = true;
-            this.formDataShow = false;
-            // this.fuelCodeFormClear();
-            // $('#fuelLookup').modal('show');
+        rosCodeEdit(id){
+            this.rosCodeFormClear();
+            this.bntAddShow = false;
+            $('#rosCode').modal('show');
 
             this.$axios.post(`/api/roster/rosCodeEdit/${id}`)
             .then((res)=>{
@@ -189,25 +173,27 @@ export default {
                 this.rosCodeForm.ref_code = res.data.ref_code;
                 this.rosCodeForm.descr_lao = res.data.descr_lao;
                 this.rosCodeForm.descr_eng = res.data.descr_eng;
+                this.rosCodeForm.working_time = res.data.working_time;
+                this.rosCodeForm.used = res.data.used;
 
             }).catch((error)=>{
                 console.log(error);
             })
         },
 
-        fuelCodeUpd(){
-            this.$axios.post('/api/lookupSett/fuelCodeUpd', this.fuelCodeForm)
+        rosCodeUpd(){
+            this.$axios.post('/api/roster/rosCodeUpd', this.rosCodeForm)
             .then((res)=>{
 
-                $('#fuelLookup').modal('hide');
-                this.fuelCateSelected();
+                $('#rosCode').modal('hide');
+                this.getRosCode();
 
             }).catch((error)=>{
                 console.log(error);
             })
         },
 
-        fuelCodeDel(id){
+        rosCodeDel(id){
             this.$swal.fire({
                 text: "Do you want to delete this record?",
                 icon: 'question',
@@ -219,10 +205,10 @@ export default {
                 allowOutsideClick: false,
             }).then((result)=>{
                 if(result.isConfirmed){
-                    this.$axios.post(`/api/lookupSett/fuelCodeDel/${id}`)
+                    this.$axios.post(`/api/roster/rosCodeDel/${id}`)
                     .then((response)=>{
 
-                        this.fuelCateSelected();
+                        this.getRosCode();
 
                     }).catch((error)=>{
                         console.log(error);
@@ -230,10 +216,19 @@ export default {
                 }
             });
         },
+
+        rosCodeFormClear(){
+            let f = this.rosCodeForm;
+                f.rcode = '';
+                f.ref_code = '';
+                f.descr_lao = '';
+                f.descr_eng = '';
+                f.working_time = '';
+                f.used = '1';
+        }
     },
 
     
-
     created(){
         this.getRosCode();
     },
@@ -243,7 +238,7 @@ export default {
             window.location.href = "/signin";
         }
         next();
-	},
+	}
 };
 </script>
 

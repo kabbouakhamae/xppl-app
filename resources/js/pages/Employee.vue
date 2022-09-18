@@ -86,21 +86,14 @@
                                         <span v-if="list.status == 'Current' || list.status == 'Temporary'">{{ timeago(list.startdate) }}<br></span>
                                         {{ list.status }}
                                     </td>
-
-                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">        
-                                        <button class="btn btn-icon btn-sm btn-i wd-38 ht-38 pos-relative" data-bs-toggle="dropdown" title="Actions">
-                                            <i class="mdi mdi-dots-horizontal text-gray pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
-                                        </button>       
-                                        <div class="dropdown-menu tx-13">
-                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="empPrev(list.id)">
-                                                <i class="fe fe-search me-2"></i><span>Preview</span>
-                                            </div>
-                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="empEdit(list.id)">
-                                                <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                            </div>
-                                            <div class="dropdown-item cur-pointer dropdown-hover" @click="empDel(list.id)">
-                                                <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                            </div>
+                                    <td style="padding: 0px 4px; vertical-align: middle; border-bottom: 0.5px solid #e3e8f7">
+                                        <div class="d-flex justify-content-start">
+                                            <button class="btn btn-icon btn-sm btn-i wd-30 ht-30 pos-relative p-0 m-0" title="Edit" @click="empEdit(list.id)">
+                                                <i class="bx bx-edit text-info pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
+                                            </button> 
+                                            <button class="btn btn-icon btn-sm btn-i wd-30 ht-30 pos-relative p-0 m-0" title="Delete" @click="empDel(list.id)">
+                                                <i class="bx bx-trash text-danger pos-absolute" style="left: 50%; transform: translateX(-50%); top: 50%"></i>
+                                            </button> 
                                         </div>
                                     </td>
                                 </tr>
@@ -328,6 +321,13 @@
                         <div class="panel-body tabs-menu-body main-content-body-right" style="padding: 6px 0px">
                             <div class="tab-content">
                                 <div class="tab-pane overflow-auto active" id="tab1">
+
+                                    <!-- <div class=" d-flex justify-content-end my-1">
+                                        <button type="button" class="btn btn-sm btn-rounded btn-secondary my-1" style="padding: 3.2px 11.2px" title="Add new record" @click="detailNew()"><i class="fe fe-plus"></i> 
+                                            <span class="mx-1">New</span>
+                                        </button>
+                                    </div> -->
+
                                     <div class="table-responsive border" style="max-height: 270px">
                                         <table class="table main-table-reference text-nowrap mb-1">
                                             <thead class="position-sticky" style="top: -1px">
@@ -373,17 +373,12 @@
                                                     <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-start">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="detailEdit(lst.id)">
+                                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
-                                                            <div class="dropdown-menu tx-13">
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="detailEdit(lst.id)">
-                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                                </div>
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="detailDel(lst.id)">
-                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                                </div>
-                                                            </div>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete" @click="detailDel(lst.id)">
+                                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                                            </button> 
                                                         </div>
                                                     </td>
                                                 </tr>   
@@ -416,17 +411,12 @@
                                                     <td style="padding: 3px 10px" class="laofont"> {{ lst.address }} </td>
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-start">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="contactEdit(lst.id)">
+                                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
-                                                            <div class="dropdown-menu tx-13">
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="contactEdit(lst.id)">
-                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                                </div>
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="contactDel(lst.id)">
-                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                                </div>
-                                                            </div>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete" @click="contactDel(lst.id)">
+                                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                                            </button> 
                                                         </div>
                                                     </td>
                                                 </tr>   
@@ -461,17 +451,12 @@
                                                     <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-start">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="bankEdit(lst.id)">
+                                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
-                                                            <div class="dropdown-menu tx-13">
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="bankEdit(lst.id)">
-                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                                </div>
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="bankDel(lst.id)">
-                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                                </div>
-                                                            </div>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete" @click="bankDel(lst.id)">
+                                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                                            </button> 
                                                         </div>
                                                     </td>
                                                 </tr>   
@@ -504,17 +489,12 @@
                                                     <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-start">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="cardEdit(lst.id)">
+                                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
-                                                            <div class="dropdown-menu tx-13">
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="cardEdit(lst.id)">
-                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                                </div>
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="cardDel(lst.id)">
-                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                                </div>
-                                                            </div>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete" @click="cardDel(lst.id)">
+                                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                                            </button> 
                                                         </div>
                                                     </td>
                                                 </tr>   
@@ -545,17 +525,12 @@
                                                     <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
                                                     <td style="padding: 0px 4px; vertical-align: middle">
                                                         <div class="d-flex justify-content-start">
-                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                                                                <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 13px"></i>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="alEdit(lst.id)">
+                                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
-                                                            <div class="dropdown-menu tx-13">
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="alEdit(lst.id)">
-                                                                    <i class="fe fe-edit me-2"></i><span>Edit</span>
-                                                                </div>
-                                                                <div class="dropdown-item cur-pointer dropdown-hover" @click="alDel(lst.id)">
-                                                                    <i class="fe fe-trash-2 me-2"></i><span>Delete</span>
-                                                                </div>
-                                                            </div>
+                                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete" @click="alDel(lst.id)">
+                                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
+                                                            </button> 
                                                         </div>
                                                     </td>
                                                 </tr>   
@@ -592,7 +567,6 @@
                                                     </td>
                                                 </tr>   
                                                 <div class="mt-1" style="margin-start: 11px">
-
                                                     <a class="add-hover p-0" href="#" @click="fileNew()" title="Add new record"><span class="tx-13">Add...</span></a>    
                                                     <input class="d-none" ref="fileInput2" type="file" multiple  @change="fileAdd()">
                                                 </div>                                                                               
