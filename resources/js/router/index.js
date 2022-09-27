@@ -18,6 +18,7 @@ import RosCode from "../pages/RosCode.vue";
 import CarRentDetail from "../pages/CarRentDetail.vue";
 import CarRentReport from "../pages/CarRentReport.vue";
 import CarRentCode from "../pages/CarRentCode.vue";
+import Fingerscan from "../pages/Fingerscan.vue";
 import Macro from "../pages/Macro.vue";
 
 
@@ -116,6 +117,11 @@ const routes =[
         name: "macro",
         path: "/macro",
         component: Macro
+    },
+    {
+        name: "fingerscan",
+        path: "/fingerscan",
+        component: Fingerscan
     },
 
 

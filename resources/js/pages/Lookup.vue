@@ -18,15 +18,15 @@
                         <table class="table main-table-reference text-nowrap mb-1">
                             <thead>
                                 <tr>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Code</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Description</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th class="wd-60p">Actions</th>
                                 </tr>
                             </thead>
                             <tbody> 
                                 <tr class="tr-hover" v-for="lst in genCodeData" :key="lst.id">
-                                    <td style="padding: 3px 10px"> {{ lst.code }} </td>
-                                    <td style="padding: 3px 10px"> {{ lst.descr }} </td>
+                                    <td> {{ lst.code }} </td>
+                                    <td> {{ lst.descr }} </td>
                                     <td style="padding: 0px 4px; vertical-align: middle">
                                         <div class="d-flex justify-content-start">
                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="genCodeEdit(lst.id)">
@@ -64,17 +64,17 @@
                         <table class="table main-table-reference text-nowrap mb-1">
                             <thead>
                                 <tr>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Department</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Code</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Description</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
+                                    <th>Department</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th class="wd-60p">Actions</th>
                                 </tr>
                             </thead>
                             <tbody> 
                                 <tr class="tr-hover" v-for="lst in fuelCodeData" :key="lst.id">
-                                    <td style="padding: 3px 10px"> {{ lst.dept }} </td>
-                                    <td style="padding: 3px 10px"> {{ lst.code }} </td>
-                                    <td style="padding: 3px 10px"> {{ lst.descr }} </td>
+                                    <td> {{ lst.dept }} </td>
+                                    <td> {{ lst.code }} </td>
+                                    <td> {{ lst.descr }} </td>
                                     <td style="padding: 0px 4px; vertical-align: middle">
                                         <div class="d-flex justify-content-start">
                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="fuelCodeEdit(lst.id)">
@@ -117,17 +117,17 @@
                         <table class="table main-table-reference text-nowrap mb-1">
                             <thead class="position-sticky" style="top: -1px">
                                 <tr>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Equip No</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Equip Name</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Equip Descr</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
+                                    <th>Equip No</th>
+                                    <th>Equip Name</th>
+                                    <th>Equip Descr</th>
+                                    <th class="wd-60p">Actions</th>
                                 </tr>
                             </thead>
                             <tbody> 
                                 <tr class="tr-hover cur-pointer" v-for="(lst, key) in equipData" :key="lst.id" @click="equipSelected(key, lst.equip_no)" :style="key === equipSelectedRow ? 'background-color: #dadee7; border-left: 1.02px solid #0162e8; color: blue' : ''">
-                                    <td style="padding: 3px 10px"> {{ lst.equip_no }} </td>
-                                    <td style="padding: 3px 10px"> {{ lst.equip_name }} </td>
-                                    <td style="padding: 3px 10px"> {{ lst.equip_descr }} </td>
+                                    <td> {{ lst.equip_no }} </td>
+                                    <td> {{ lst.equip_name }} </td>
+                                    <td> {{ lst.equip_descr }} </td>
                                     <td style="padding: 0px 4px; vertical-align: middle">
                                         <div class="d-flex justify-content-start">
                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="equipEdit(lst.id)">
@@ -146,23 +146,23 @@
                         </table>
                     </div>
 
-                    <div class="table-responsive border mt-3">
+                    <div class="table-responsive element border mt-3">
                         <table class="table main-table-reference text-nowrap mb-1">
                             <thead>
                                 <tr>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Equip No</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Work Order</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Reserve No</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Date</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
+                                    <th>Equip No</th>
+                                    <th>Work Order</th>
+                                    <th>Reserve No</th>
+                                    <th>Date</th>
+                                    <th class="wd-60p">Actions</th>
                                 </tr>
                             </thead>
                             <tbody> 
                                 <tr class="tr-hover" v-for="lst in workOrderData" :key="lst.id">
-                                    <td style="padding: 3px 10px"> {{ lst.equip_no }} </td>
-                                    <td style="padding: 3px 10px"> {{ lst.work_order }} </td>
-                                    <td style="padding: 3px 10px"> {{ lst.reserve_no }} </td>
-                                    <td style="padding: 3px 10px"> {{ lst.basic_date }} </td>
+                                    <td> {{ lst.equip_no }} </td>
+                                    <td> {{ lst.work_order }} </td>
+                                    <td> {{ lst.reserve_no }} </td>
+                                    <td> {{ lst.basic_date }} </td>
                                     <td style="padding: 0px 4px; vertical-align: middle">
                                         <div class="d-flex justify-content-start">
                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="workOrderEdit(lst.id)">
@@ -287,10 +287,6 @@
                     <h6 class="text-muted main-content-label text-capitalize">Work Order Number</h6>
                 </div>
                 <div class="modal-body">    
-                    <!-- <div class="form-group">
-                        <label class="mb-0">Equip No  <span class=" text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Equip no..." v-model="workOrderForm.equip_no">
-                    </div>    -->
                     <div class="form-group">
                         <label class="mb-0">Work Order  <span class=" text-danger">*</span></label>
                         <input type="text" class="form-control" placeholder="Work order..." v-model="workOrderForm.work_order">

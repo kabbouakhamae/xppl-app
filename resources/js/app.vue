@@ -31,6 +31,12 @@
 							</router-link>
 						</li>
 
+                        <li class="slide " @click="fingerscan()">
+							<router-link class="side-menu__item" :class="fingerscan_act" to="/fingerscan">
+								<span class="side-menu__label"><i class="far fa-hand-pointer text-center wd-20"></i><span class="mx-2">Finger Scan</span></span>
+							</router-link>
+						</li>
+
 						<!-- Roster -->
                         <li class="slide" :class="rosExp" @click="rosClick()">
 							<a class="side-menu__item" :class="rosAct" href="#">
@@ -43,6 +49,7 @@
 								<li><router-link class="slide-item" :class="rosCodeAct" @click="rosCodeClick()" to="/roscode">Code</router-link></li>			
 							</ul>
 						</li>
+
 
 						<!-- Other Info -->
                         <li class="slide" :class="infoExp" @click="infoClick()">
@@ -299,6 +306,11 @@ export default {
 			this.empAct = 'active';
 		},
 		
+		fingerscan(){
+			this.clearAct();
+			this.fingerscan_act = 'active';
+		},
+		
 		alClick(){
 			this.clearAct();
 			this.infoAct = 'active';
@@ -471,6 +483,7 @@ export default {
 			this.carRentReport_act = '';
 			this.carRentCode_act = '';
 			this.macro_act = '';
+			this.fingerscan_act = '';
 
 			this.fuelExp = '';
 			this.infoExp = '';

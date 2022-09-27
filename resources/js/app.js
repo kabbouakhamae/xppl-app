@@ -12,7 +12,7 @@ import store from "./store/store";
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import Cleave from 'vue-cleave-component';
-// import dashcard from "./Components/Dash_card.vue";
+import loading from "./components/loading.vue";
 
 import pagination from "./components/pagination.vue";
 import Multiselect from '@vueform/multiselect';
@@ -27,8 +27,7 @@ app.use(router);
 app.use(store);
 app.use(VueSweetalert2);
 app.use(Cleave);
-// app.component('dashcard',dashcard);
-
+app.component('loading', loading);
 app.component('pagination',pagination);
 app.component('Multiselect', Multiselect);
 app.mount("#app");

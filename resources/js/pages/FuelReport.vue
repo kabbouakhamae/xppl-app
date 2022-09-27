@@ -1,14 +1,23 @@
 <template>
+    <div>
 
-        <h1>Fuel Report</h1>
+        <!-- <loading/> -->
+        
+    </div>
+
+        <!-- <h1>Fuel Report</h1>
         <hr>
         <h1 class="laofont mt-5">ຢູ່ພາຍ​ໃຕ້​ການ​ພັດ​ທະ​ນາ!</h1>
-        <h1>Under Development!</h1>
+        <h1>Under Development!</h1> -->
+
+        
 
 </template>
 
 <script>
+import loading from '../components/loading.vue';
 export default {
+
     name: 'XpplAppFuelReport',
 
     data() {
@@ -61,4 +70,5 @@ export default {
 
 <style>
 
+    
 </style>

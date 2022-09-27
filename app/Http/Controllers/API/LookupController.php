@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class LookupController extends Controller
 {
@@ -159,11 +160,16 @@ class LookupController extends Controller
     }
 
     public function driverAdd(Request $request){
+        $now = now("Asia/Bangkok")->toDateTimeString();
+        $user = Str::lower(auth()->user()->username);
+
         DB::table('fuel_lookup')
             ->insert([
                 'dept' => $request->dept,
                 'category' => 'Driver',
-                'code' => $request->driver
+                'code' => $request->driver,
+                'created_at' => $now,
+                'created_by' => $user
             ]);
         
         $drivers = DB::select("select code as value, code as label from fuel_lookup where category ='driver' and used = 1 and dept = ?", [$request->dept]);

@@ -18,6 +18,7 @@ use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\LookupSettController;
 use App\Http\Controllers\API\EmpRosterController;
 use App\Http\Controllers\API\CarRentController;
+use App\Http\Controllers\API\FingerscanController;
 use App\Http\Controllers\API\TestController;
 
 /*
@@ -119,13 +120,18 @@ Route::group(['prefix' => 'fuel', 'middlewar' => 'auth:santum'], function(){
     Route::post('/detailedit/{id}', [FuelConsController::class, 'detailEdit']);
     Route::post('/detailupd', [FuelConsController::class, 'detailUpd']);
     Route::post('/reserveadd', [FuelConsController::class, 'reserveAdd']);
-    Route::get('/category', [FuelConsController::class, 'Category']);
+    Route::get('/category', [FuelConsController::class, 'category']);
+    Route::post('/code', [FuelConsController::class, 'code']);
 });
 
 Route::group(['prefix' => 'home', 'middlewar' => 'auth:santum'], function(){
     Route::get('/countcountry', [HomeController::class, 'countcountry']);
     Route::get('/countdept', [HomeController::class, 'countdept']);
     Route::get('/allemp', [HomeController::class, 'allemp']);
+    Route::get('/onsite', [HomeController::class, 'onsite']);
+    Route::get('/offsite', [HomeController::class, 'offsite']);
+    Route::get('/users', [HomeController::class, 'users']);
+    Route::post('/manpower', [HomeController::class, 'manpower']);
 });
 
 Route::group(['prefix' => 'lookupSett', 'middlewar' => 'auth:santum'], function(){
@@ -189,6 +195,15 @@ Route::group(['prefix' => 'carRent', 'middlewar' => 'auth:santum'], function(){
     Route::post('/addFile', [CarRentController::class, 'addFile']);
     Route::get('/files', [CarRentController::class, 'files']);
     Route::get('/download/{file}', [CarRentController::class, 'download']);
+
+});
+
+Route::group(['prefix' => 'fingerscan', 'middlewar' => 'auth:santum'], function(){
+    Route::get('/summary', [FingerscanController::class, 'summary']);
+    Route::post('/detail', [FingerscanController::class, 'detail']);
+    Route::post('/aclog', [FingerscanController::class, 'acLog']);
+    Route::get('/summary2', [FingerscanController::class, 'summary2']);
+    Route::get('/header', [FingerscanController::class, 'header']);
 
 });
 

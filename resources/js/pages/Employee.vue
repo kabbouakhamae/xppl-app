@@ -1,7 +1,10 @@
 <template>
-    <div>
+    <div v-if="loading">
+        <loading/>
+    </div> 
+    <div v-else>
         <div class="card">
-            <div class="card-body">
+            <div class="card-body pd-t-10">
                 <div v-if="showList">
                     <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
                         <div class="d-flex">
@@ -9,49 +12,48 @@
                         </div>
                         <div class="d-flex my-xl-auto right-content align-items-center">
                             <div class="pos-relative me-1" style="width: 100%">
-                                <input class="form-control pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
-                                    <i class="fe fe-search search-i text-muted"></i>
-                                <button class="btn btn-icon btn-sm search-c text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x"></i></button>
+                                <input class="form-control form-control-sm ht-30 pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
+                                    <i class="fe fe-search search-ism text-muted"></i>
+                                <button class="btn btn-icon btn-sm search-csm text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x" style="font-size: 14px"></i></button>
                             </div>
-                            <div style="width: 40px">
-                                <button type="button" class="btn ripple btn-primary" style="padding: 0px; width: 40px; height: 39.5px" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-20"></i></button>
+                            <div class="wd-30">
+                                <button type="button" class="btn btn-sm ripple btn-primary ht-30 wd-30 p-0" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-16"></i></button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Employee table -->
-                    <div class="table-responsive userlist-table">
+                    <div class="table-responsive element userlist-table">
                         <table class="table card-table text-nowrap mb-0">
-                            <thead class="bg-gray-100" style="border-bottom: 0.5px solid #ECEFF6">
+                            <thead style="top: 0px; height: 35px; background-color: #5195D3">
                                 <tr>
-                                    <th style="letter-spacing: 0px; width: 10px; padding: 6px 4px 6px 4px" class="text-muted fw-bold"><span>Image</span></th>
-                                    <th style="letter-spacing: 0px; width: 50px; padding: 6px 12px 6px 0px" class="text-muted fw-bold"><span>Name</span></th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">
+                                    <th style="letter-spacing: 0px; width: 10px; padding: 6px 4px 6px 4px" class="fw-bold text-white"><span>Image</span></th>
+                                    <th style="letter-spacing: 0px; width: 50px; padding: 6px 12px 6px 0px" class="fw-bold text-white"><span>Name</span></th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">
                                         <div v-if="!!parseInt(loginPermiss.emp_all)">Position / Dept.</div>
                                         <div v-else>Position</div>
                                     </th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Phone Number</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Country</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Employee ID</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Scan ID</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Food ID</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Roster</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Level</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="text-muted fw-bold">Started</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px; width: 10%" class="text-muted fw-bold">Actions</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Phone Number</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Country</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Employee ID</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Scan ID</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Food ID</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Roster</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Level</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Started</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px; width: 10%" class="fw-bold text-white">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="tx-13">
                                 <tr class="tr-hover" v-for="list in empData.data" :key="list.id">
                                     <td style="padding: 6px 4px 6px 0px; border: none">
-                                        <div class="pos-relative">
-                                            <img v-if="list.photo" alt="" class="rounded-circle avatar-md me-2 cur-pointer" :src="'assets/img/profile/'+ list.photo" @click="empPrev(list.id)">                                   
-                                            <img v-if="!list.photo && list.gender == 'Male'" alt="" class="rounded-circle avatar-md me-2 cur-pointer" src="assets/img/male.png" @click="empPrev(list.id)">
-                                            <img v-if="!list.photo && list.gender != 'Male'" alt="" class="rounded-circle avatar-md me-2 cur-pointer" src="assets/img/female.png" @click="empPrev(list.id)">
+                                        <div class="pos-relative" @click="empPrev(list.id)">
+                                            <img v-if="list.photo" alt="" class="rounded-circle avatar-md me-2 cur-pointer" :src="'assets/img/profile/'+ list.photo">                                   
+                                            <img v-if="!list.photo && list.gender == 'Male'" alt="" class="rounded-circle avatar-md me-2 cur-pointer" src="assets/img/male.png">
+                                            <img v-if="!list.photo && list.gender != 'Male'" alt="" class="rounded-circle avatar-md me-2 cur-pointer" src="assets/img/female.png">
                                             <span v-if="list.status == 'Current' || list.status == 'Temporary'" class="rounded-circle bg-success bad"></span>
                                         </div>
                                     </td>
-                                    <td style="padding: 6px 12px 6px 0px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
+                                    <td style="padding: 6px 12px 6px 0px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7" @click="empEdit(list.id)" class="cur-pointer" title="Edit">
                                         {{ list.name }} {{ list.surname }} <br>
                                         <span class="laofont">{{ list.namelao }} {{ list.surnamelao }}</span>
                                     </td>
@@ -304,7 +306,7 @@
                     
                     <!-- Tabs -->
                     <div class="panel panel-primary tabs-style-2 mt-4" v-if="showTab">
-                        <div class=" tab-menu-heading">
+                        <div class="tab-menu-heading">
                             <div class="tabs-menu1">
                                 <ul class="nav panel-tabs main-nav-line">
                                     <li><a href="#tab1" class="nav-link active" style="padding: 4px 18px" data-bs-toggle="tab">Employee Detail</a></li>
@@ -323,56 +325,56 @@
                                 <div class="tab-pane overflow-auto active" id="tab1">
 
                                     <!-- <div class=" d-flex justify-content-end my-1">
-                                        <button type="button" class="btn btn-sm btn-rounded btn-secondary my-1" style="padding: 3.2px 11.2px" title="Add new record" @click="detailNew()"><i class="fe fe-plus"></i> 
+                                        <button type="button" class="btn btn-sm btn-rounded btn-secondary my-1" style="padding: 3.2px 11.2px" title="Create a new item" @click="detailNew()"><i class="fe fe-plus"></i> 
                                             <span class="mx-1">New</span>
                                         </button>
                                     </div> -->
 
-                                    <div class="table-responsive border" style="max-height: 270px">
-                                        <table class="table main-table-reference text-nowrap mb-1">
-                                            <thead class="position-sticky" style="top: -1px">
+                                    <div class="table-responsive element border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mg-b-0">
+                                            <thead class="position-sticky" style="top: 0px">
                                                 <tr>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Site</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Start Date</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">End Date</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Status</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Position</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Department</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Section</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Crew</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Employee ID</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Scan ID</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Food ID</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Roster</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Scan Times</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Hours</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Levels</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">contact</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Remarks</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 80%">Actions</th>
+                                                    <th class="border-start-0">Site</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Status</th>
+                                                    <th>Position</th>
+                                                    <th>Department</th>
+                                                    <th>Section</th>
+                                                    <th>Crew</th>
+                                                    <th>Employee ID</th>
+                                                    <th>Scan ID</th>
+                                                    <th>Food ID</th>
+                                                    <th>Roster</th>
+                                                    <th>Scan Times</th>
+                                                    <th>Hours</th>
+                                                    <th>Levels</th>
+                                                    <th>contact</th>
+                                                    <th>Remarks</th>
+                                                    <th class=" border-end-0 wd-80p">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in detailData" :key="lst.id">
-                                                    <td class="text-center" style="padding: 3px 10px"> {{ lst.site }} </td>
-                                                    <td style="padding: 3px 10px"> {{ dateTime(lst.startdate) }} </td>
-                                                    <td style="padding: 3px 10px"> {{ dateTime(lst.enddate) }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.status }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.position }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.department }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.section }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.crew }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.empid }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.scanid }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.foodid }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.roster }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.scantimes }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.working_hrs }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.levels }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.contact }} </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
-                                                    <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-start">
+                                                    <td class="border-start-0"> {{ lst.site }} </td>
+                                                    <td> {{ dateTime(lst.startdate) }} </td>
+                                                    <td> {{ dateTime(lst.enddate) }} </td>
+                                                    <td> {{ lst.status }} </td>
+                                                    <td> {{ lst.position }} </td>
+                                                    <td> {{ lst.department }} </td>
+                                                    <td> {{ lst.section }} </td>
+                                                    <td> {{ lst.crew }} </td>
+                                                    <td> {{ lst.empid }} </td>
+                                                    <td> {{ lst.scanid }} </td>
+                                                    <td> {{ lst.foodid }} </td>
+                                                    <td> {{ lst.roster }} </td>
+                                                    <td> {{ lst.scantimes }} </td>
+                                                    <td> {{ lst.working_hrs }} </td>
+                                                    <td> {{ lst.levels }} </td>
+                                                    <td> {{ lst.contact }} </td>
+                                                    <td class="laofont"> {{ lst.remarks }} </td>
+                                                    <td class="p-0 align-middle border-end-0">
+                                                        <div class="d-flex justify-content-start ms-1">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="detailEdit(lst.id)">
                                                                 <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
@@ -381,36 +383,37 @@
                                                             </button> 
                                                         </div>
                                                     </td>
-                                                </tr>   
-                                                <div class="mt-1" style="margin-start: 11px">
-                                                    <a class="add-hover p-0" href="#" @click="detailNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
-                                                </div>                                                                               
+                                                </tr>
                                             </tbody>
                                         </table>
+                                        <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="detailNew()" title="Create a new item">
+                                            <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                                            <span class="text-primary tx-13">New</span>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <!-- contact person -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab2">
-                                    <div class="table-responsive border" style="max-height: 270px">
-                                        <table class="table main-table-reference text-nowrap mb-1">
-                                            <thead class="position-sticky" style="top: -1px">
+                                    <div class="table-responsive element border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mg-b-0">
+                                            <thead class="position-sticky" style="top: 0px">
                                                 <tr>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">contact Person</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">relate</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Phone</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Address</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
+                                                    <th class="border-start-0">contact Person</th>
+                                                    <th>relate</th>
+                                                    <th>Phone</th>
+                                                    <th>Address</th>
+                                                    <th class="border-end-0 wd-60p">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in contData" :key="lst.id">
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.name }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.relate }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.phone }} </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.address }} </td>
-                                                    <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-start">
+                                                    <td class="border-start-0 laofont"> {{ lst.name }} </td>
+                                                    <td> {{ lst.relate }} </td>
+                                                    <td> {{ lst.phone }} </td>
+                                                    <td class="laofont"> {{ lst.address }} </td>
+                                                    <td class="p-0 align-middle border-end-0">
+                                                        <div class="d-flex justify-content-start ms-1">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="contactEdit(lst.id)">
                                                                 <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
@@ -420,37 +423,38 @@
                                                         </div>
                                                     </td>
                                                 </tr>   
-                                                <div class="mt-1" style="margin-start: 11px">
-                                                    <a class="add-hover p-0" href="#" @click="contactNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
-                                                </div>                                                                               
                                             </tbody>
                                         </table>
+                                        <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="contactNew()" title="Create a new item">
+                                            <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                                            <span class="text-primary tx-13">New</span>
+                                        </div>                                                                               
                                     </div>
                                 </div>
                                 
                                 <!-- Bank Account -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab3">
-                                    <div class="table-responsive border" style="max-height: 270px">
-                                        <table class="table main-table-reference text-nowrap mb-1">
-                                            <thead class="position-sticky" style="top: -1px">
+                                    <div class="table-responsive element border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mg-b-0">
+                                            <thead class="position-sticky" style="top: 0px">
                                                 <tr>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Bank Name</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Branch</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Account Name</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Account No</th>
-                                                    <th style="letter-spacing: 0px; padding: 4px 10px">Remarks</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
+                                                    <th class="border-start-0">Bank Name</th>
+                                                    <th>Branch</th>
+                                                    <th>Account Name</th>
+                                                    <th>Account No</th>
+                                                    <th>Remarks</th>
+                                                    <th class="border-end-0 wd-60p">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in bankData" :key="lst.id">
-                                                    <td style="padding: 3px 10px"> {{ lst.bank_name }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.branch }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.acct_name }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.acct_no }} </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
-                                                    <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-start">
+                                                    <td class="border-start-0"> {{ lst.bank_name }} </td>
+                                                    <td> {{ lst.branch }} </td>
+                                                    <td> {{ lst.acct_name }} </td>
+                                                    <td> {{ lst.acct_no }} </td>
+                                                    <td class="laofont"> {{ lst.remarks }} </td>
+                                                    <td class="p-0 align-middle border-end-0">
+                                                        <div class="d-flex justify-content-start ms-1">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="bankEdit(lst.id)">
                                                                 <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
@@ -459,36 +463,37 @@
                                                             </button> 
                                                         </div>
                                                     </td>
-                                                </tr>   
-                                                <div class="mt-1" style="margin-start: 11px">
-                                                    <a class="add-hover p-0" href="#" @click="bankNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
-                                                </div>                                                                               
+                                                </tr>                                                                                 
                                             </tbody>
                                         </table>
+                                        <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="bankNew()" title="Create a new item">
+                                            <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                                            <span class="text-primary tx-13">New</span>
+                                        </div> 
                                     </div>
                                 </div>
 
                                 <!-- Personal cards -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab4">
-                                    <div class="table-responsive border" style="max-height: 270px">
-                                        <table class="table main-table-reference text-nowrap mb-1">
-                                            <thead class="position-sticky" style="top: -1px">
+                                    <div class="table-responsive element border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mg-b-0">
+                                            <thead class="position-sticky" style="top: 0px">
                                                 <tr>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Card Type</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Card ID</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Expire Date</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Remarks</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
+                                                    <th class="border-start-0">Card Type</th>
+                                                    <th>Card ID</th>
+                                                    <th>Expire Date</th>
+                                                    <th>Remarks</th>
+                                                    <th class="border-end-0 wd-60p">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in cardData" :key="lst.id">
-                                                    <td style="padding: 3px 10px"> {{ lst.cardtype }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.cardid }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.expiredate }} </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
-                                                    <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-start">
+                                                    <td class="border-start-0"> {{ lst.cardtype }} </td>
+                                                    <td> {{ lst.cardid }} </td>
+                                                    <td> {{ lst.expiredate }} </td>
+                                                    <td class="laofont"> {{ lst.remarks }} </td>
+                                                    <td class="p-0 align-middle border-end-0">
+                                                        <div class="d-flex justify-content-start ms-1">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="cardEdit(lst.id)">
                                                                 <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
@@ -497,34 +502,35 @@
                                                             </button> 
                                                         </div>
                                                     </td>
-                                                </tr>   
-                                                <div class="mt-1" style="margin-start: 11px">
-                                                    <a class="add-hover p-0" href="#" @click="cardNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
-                                                </div>                                                                               
+                                                </tr>                                                                                 
                                             </tbody>
                                         </table>
+                                        <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="cardNew()" title="Create a new item">
+                                            <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                                            <span class="text-primary tx-13">New</span>
+                                        </div> 
                                     </div>
                                 </div>
 
                                 <!-- Annual Leave -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab5">
-                                    <div class="table-responsive border" style="max-height: 270px">
-                                        <table class="table main-table-reference text-nowrap mb-1">
-                                            <thead class="position-sticky" style="top: -1px">
+                                    <div class="table-responsive element border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mg-b-0">
+                                            <thead class="position-sticky" style="top: 0px">
                                                 <tr>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Year</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Remain</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">Remarks</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
+                                                    <th class="border-start-0">Year</th>
+                                                    <th>Remain</th>
+                                                    <th>Remarks</th>
+                                                    <th class="border-end-0 wd-60p">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in alData" :key="lst.id">
-                                                    <td style="padding: 3px 10px"> {{ lst.years }} </td>
-                                                    <td style="padding: 3px 10px"> {{ lst.remain }} </td>
-                                                    <td style="padding: 3px 10px" class="laofont"> {{ lst.remarks }} </td>
-                                                    <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-start">
+                                                    <td class="border-start-0"> {{ lst.years }} </td>
+                                                    <td> {{ lst.remain }} </td>
+                                                    <td class="laofont"> {{ lst.remarks }} </td>
+                                                    <td class="p-0 align-middle border-end-0">
+                                                        <div class="d-flex justify-content-start ms-1">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="alEdit(lst.id)">
                                                                 <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                                             </button> 
@@ -533,30 +539,31 @@
                                                             </button> 
                                                         </div>
                                                     </td>
-                                                </tr>   
-                                                <div class="mt-1" style="margin-start: 11px">
-                                                    <a class="add-hover p-0" href="#" @click="alNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
-                                                </div>                                                                               
+                                                </tr>                                                                                  
                                             </tbody>
                                         </table>
+                                        <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="alNew()" title="Create a new item">
+                                            <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                                            <span class="text-primary tx-13">New</span>
+                                        </div> 
                                     </div>
                                 </div>
 
                                 <!-- Document and Files -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab6">
-                                    <div class="table-responsive border" style="max-height: 270px">
-                                        <table class="table main-table-reference text-nowrap mb-1">
-                                            <thead class="position-sticky" style="top: -1px">
+                                    <div class="table-responsive element border" style="max-height: 270px">
+                                        <table class="table main-table-reference text-nowrap mg-b-0">
+                                            <thead class="position-sticky" style="top: 0px">
                                                 <tr>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px">File Name</th>
-                                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 80%">Actions</th>
+                                                    <th class="border-start-0">File Name</th>
+                                                    <th class="border-end-0 wd-80p">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in fileData" :key="lst.id">
-                                                    <td style="padding: 3px 10px"> {{ lst.filename }} </td>
-                                                    <td style="padding: 0px 4px; vertical-align: middle">
-                                                        <div class="d-flex justify-content-start">
+                                                    <td class="border-start-0"> {{ lst.filename }} </td>
+                                                    <td class="p-0 align-middle border-end-0">
+                                                        <div class="d-flex justify-content-start ms-1">
                                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Download file" @click="fileDownload(lst.filename)">
                                                                 <i class="bx bxs-download text-primary" style="font-size: 16px"></i>
                                                             </button> 
@@ -565,13 +572,14 @@
                                                             </button> 
                                                         </div>
                                                     </td>
-                                                </tr>   
-                                                <div class="mt-1" style="margin-start: 11px">
-                                                    <a class="add-hover p-0" href="#" @click="fileNew()" title="Add new record"><span class="tx-13">Add...</span></a>    
-                                                    <input class="d-none" ref="fileInput2" type="file" multiple  @change="fileAdd()">
-                                                </div>                                                                               
+                                                </tr>
                                             </tbody>
                                         </table>
+                                        <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="fileNew()" title="Create a new item">
+                                            <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                                            <span class="text-primary tx-13">New</span>
+                                            <input class="d-none" ref="fileInput2" type="file" multiple  @change="fileAdd()">
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -1012,9 +1020,9 @@ export default {
             contForm: { id: '', userid: '', name: '', relate: '', phone: '', address: '' },
             bankForm: { id: '', userid: '', bankname: '', branch: '', acctname: '', acctno: '', remarks: '' },
             cardForm: { id: '', userid: '', cardtype: '', cardid: '', expire: '', remarks: '' },
-            alForm: { id: '', userid: '', years: '', remain: '', remarks: '' }
+            alForm: { id: '', userid: '', years: '', remain: '', remarks: '' },
             
-
+            loading: false,
         };
     },
 
@@ -1084,7 +1092,7 @@ export default {
         async getEmpData(page){
 			const response = await axios.get(`/api/employee?page=${page}&search=${this.search}`)
             this.empData = response.data;
-
+            
             if (response.data[0].photo){
                 this.photoPrev = window.location.origin + '/assets/img/profile/' + response.data[0].photo
             } else {
@@ -2018,7 +2026,23 @@ export default {
                 f.remarks = '';
         },
 
-        async getLookup(){
+        async onLoad(){
+            this.loading = true;
+
+            const permiss = await axios.get('/api/permiss')
+            this.loginPermiss = permiss.data;
+
+            const emp = await axios.get(`/api/employee?page=${1}&search=${this.search}`)
+            this.empData = emp.data;
+            
+            this.loading = false;
+
+            if (response.data[0].photo){
+                this.photoPrev = window.location.origin + '/assets/img/profile/' + response.data[0].photo
+            } else {
+                this.photoPrev = window.location.origin + '/assets/img/no.jpg'
+            }
+
             const country = await axios.get('/api/lookup/country')
             this.lkCountry = country.data;
 
@@ -2077,11 +2101,6 @@ export default {
             })
         },
 
-        async getPermiss(){
-            const response = await axios.get('/api/permiss')
-            this.loginPermiss = response.data;
-        },
-
         formatNumber(value) {
 			let val = (value / 1).toFixed(0).replace(",", ".");
 			return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -2101,10 +2120,7 @@ export default {
     },
 
     created(){
-        this.getPermiss();
-        this.getEmpData();
-        this.getLookup();
-    
+        this.onLoad();
     },
 
     beforeRouteEnter(to, from, next){
@@ -2163,6 +2179,12 @@ export default {
         top: 50%;
         transform: translateY(-50%);
     }
+    .search-ism{
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
     .search-c:hover{
         background: #E9EBEC;
     }
@@ -2174,6 +2196,18 @@ export default {
         right: 5px;
         width: 30px;
         height: 30px;
+        color: gray;
+        border-radius: 50px;
+    }
+
+    .search-csm{ 
+        position: absolute;
+        z-index: 999;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 2px;
+        width: 25px;
+        height: 25px;
         color: gray;
         border-radius: 50px;
     }
@@ -2199,6 +2233,26 @@ export default {
     .btn-add:hover{
         background: #DDE1E5;
         border-radius: 50px;
+    }
+
+    .main-table-reference>thead>tr>th, .main-table-reference>thead>tr>td{
+        letter-spacing: 0.5px;
+        padding: 7px 10px;
+        border-right: 1px solid #e3e8f7;
+        border-left: 1px solid #e3e8f7;
+        border-top: none;
+        border-bottom: none;
+        background-color: #5195D3; /* #80B1F4 #5195D3*/
+        color: white;
+        /* color: #22252f; */
+    }
+    
+    .main-table-reference>tbody>tr>th, .main-table-reference>tbody>tr>td{
+        padding: 4px 10px;
+    }
+
+    .element::-webkit-scrollbar {
+        display: none;
     }
 
 </style>

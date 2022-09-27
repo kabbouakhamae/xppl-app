@@ -222,9 +222,23 @@ class FuelConsController extends Controller
             ]);
     }
 
-    public function Category(){
+    public function category(){
         $cate = DB::select('select distinct category from fuel_lookup order by 1');
         return $cate;
+    }
+
+    public function code(Request $request){
+        if ($request->cate == 'Approve By' || $request->cate == 'Driver' || $request->cate == 'WBS'){
+            $code = DB::table('fuel_lookup')
+                        ->where('dept', $request->dept)
+                        ->where('category', $request->cate)
+                        ->get();    
+        } else {
+            $code = DB::table('fuel_lookup')
+                        ->where('category', $request->cate)
+                        ->get();  
+        }
+        return $code;
     }
 
 }

@@ -1,9 +1,11 @@
 <template>
     <div class="card card-body">
-         <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
-            <div class="d-flex">
-                <h4 class="card-title text-muted mb-0 my-auto">Car Rental Record</h4>
+        <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
+            <div>
+                <h4 class="card-title mg-b-0">Car Rental</h4>
+                <p class="tx-12 tx-gray-500 mb-2">Contractor car rental records...</p>
             </div>
+
             <div class="d-flex my-xl-auto right-content align-items-center">
                 <div class="wd-xl-150 wd-lg-150 wd-md-150 wd-70p">
                     <Multiselect class="multi-color" placeholder="Month" :options="lkMonth" v-model="mont" @select="montSelected()"/>
@@ -12,74 +14,76 @@
                     <Multiselect class="multi-color" placeholder="Year" :options="lkYear" v-model="year" @select="yearSelected()"/>
                 </div>
             </div>
-        </div>  
+        </div> 
+
         <div class="row">
             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-3">
-                <div class="table-responsive border" style="height: 250px">
-                    <table class="table main-table-reference text-nowrap cur-pointer">
-                        <thead class="position-sticky" style="top: -1px">
+                <div class="table-responsive element border ht-250">
+                    <table class="table main-table-reference text-nowrap mg-b-0">
+                        <thead class="position-sticky" style="top: 0px">
                             <tr>
-                                <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold pd-y-5">Departed Date</th>
+                                <th class="border-0">Departed Date</th>
                             </tr>
                         </thead>
                         <tbody> 
-                            <tr class="tr-hover" v-for="(lst, key) in dateList" :key="lst.id" @click="dateSelected(key, dateTime1(lst.rent_date))" :style="key === selDateRow ? 'background-color: #dadee7; border-left: 1px solid #0162e8; color: blue' : ''">
-                                <td style="border: none; padding: 4px 10px">{{dateTime(lst.rent_date)}}</td>
-                            </tr>  
-                            <div class="mt-1" style="margin-start: 11px">
-                                <a class="add-hover p-0" href="#" @click="newDate()" title="Add new record"><span class="tx-13 text-primary">Add...</span></a>                                                                                           
-                            </div>                                                                                            
+                            <tr class="tr-hover cur-pointer" v-for="(lst, key) in dateList" :key="lst.id" @click="dateSelected(key, dateTime1(lst.refuel_date))" :style="key === dateRowSel ? 'background-color: #dadee7; color: blue' : ''">
+                                <td class="border-0">{{dateTime(lst.rent_date)}}</td>
+                            </tr>                                                                                          
                         </tbody>
                     </table>
+                    <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 pt-1 pb-2 wd-100" @click="newDate()" title="Create a new date">
+                        <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                        <span class="text-primary tx-13">New</span>
+                    </div>
                 </div>            
             </div>
 
             <div class="col-xl-10 col-lg-9 col-md-8 col-sm-9 ps-sm-0 pt-sm-0 pt-3 ">
-                <div class="table-responsive border" style="height: 250px">
-                    <table class="table main-table-reference text-nowrap" >
-                        <thead class="position-sticky" style="top: -1px">
+                <div class="table-responsive element border ht-250">
+                    <table class="table main-table-reference text-nowrap mg-b-0" >
+                        <thead class="position-sticky" style="top: 0px">
                             <tr>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Return Date</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Driver</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Company</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">LV No</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">LV Name</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Type of Car</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Fuel <span class="text-capitalize">(Km/L)</span></th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">From</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Destination</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Route</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Route <span class="text-capitalize">(Km)</span></th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Trip</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Total <span class="text-capitalize">(Km)</span></th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Total <span class="text-capitalize">(L)</span></th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Refuel <span class="text-capitalize">(L)</span></th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Price <span class="text-capitalize">(Kip/L)</span></th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px">Remarks</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px; width: 60%">Actions</th>
+                                <th class="border-start-0">Return Date</th>
+                                <th>Driver</th>
+                                <th>Company</th>
+                                <th>LV No</th>
+                                <th>LV Name</th>
+                                <th>Type of Car</th>
+                                <th>Fuel <span class="text-capitalize">(Km/L)</span></th>
+                                <th>From</th>
+                                <th>Destination</th>
+                                <th>Route</th>
+                                <th>Route <span class="text-capitalize">(Km)</span></th>
+                                <th>Trip</th>
+                                <th>Total <span class="text-capitalize">(Km)</span></th>
+                                <th>Total <span class="text-capitalize">(L)</span></th>
+                                <th>Refuel <span class="text-capitalize">(L)</span></th>
+                                <th>Price <span class="text-capitalize">(Kip/L)</span></th>
+                                <th>Remarks</th>
+                                <th class="border-end-0 wd-60p">Actions</th>
                             </tr>
                         </thead>
                         <tbody> 
-                            <tr class="tr-hover cur-pointer" v-for="(lst, key) in headList" :key="lst.id" @click="headSelected(key, lst.id)" :style="key === selHeadRow ? 'background-color: #dadee7; border-left: 1.02px solid #0162e8; color: blue' : ''">
-                                <td style="padding: 3px 10px">{{dateTime(lst.return_date)}}</td>
-                                <td style="padding: 3px 10px">{{lst.driver}}</td>
-                                <td style="padding: 3px 10px">{{lst.company}}</td>
-                                <td style="padding: 3px 10px">{{lst.equip_no}}</td>
-                                <td style="padding: 3px 10px">{{lst.equip_descr}}</td>
-                                <td style="padding: 3px 10px">{{lst.car_type}}</td>
-                                <td style="padding: 3px 10px" class="text-end">{{formatNumber(lst.fuel_per_km)}}</td>
-                                <td style="padding: 3px 10px">{{lst.depart_point}}</td>
-                                <td style="padding: 3px 10px">{{lst.destination}}</td>
-                                <td style="padding: 3px 10px">{{lst.route}}</td>
-                                <td style="padding: 3px 10px" class="text-end">{{formatNumber(lst.route_km)}}</td>
-                                <td style="padding: 3px 10px" class="text-center">{{lst.trip}}</td>
-                                <td style="padding: 3px 10px" class="text-end">{{formatNumber(lst.total_km)}}</td>
-                                <td style="padding: 3px 10px" class="text-end">{{formatNumber(lst.total_l)}}</td>
-                                <td style="padding: 3px 10px" class="text-end">{{formatNumber(lst.refuel)}}</td>
-                                <td style="padding: 3px 10px" class="text-end">{{formatNumber(lst.fuel_price)}}</td>
-                                <td style="padding: 3px 10px" class="laofont">{{lst.remarks}}</td>
-                                <td style="padding: 0px 4px; vertical-align: middle">
-                                    <div class="d-flex justify-content-start">
+                            <tr class="tr-hover cur-pointer" v-for="(lst, key) in headList" :key="lst.id" @click="headSelected(key, lst.id)" :style="key === selHeadRow ? 'background-color: #dadee7; color: blue' : ''">
+                                <td class="border-start-0">{{dateTime(lst.return_date)}}</td>
+                                <td>{{lst.driver}}</td>
+                                <td>{{lst.company}}</td>
+                                <td>{{lst.equip_no}}</td>
+                                <td>{{lst.equip_descr}}</td>
+                                <td>{{lst.car_type}}</td>
+                                <td class="text-end">{{formatNumber(lst.fuel_per_km)}}</td>
+                                <td>{{lst.depart_point}}</td>
+                                <td>{{lst.destination}}</td>
+                                <td>{{lst.route}}</td>
+                                <td class="text-end">{{formatNumber(lst.route_km)}}</td>
+                                <td class="text-center">{{lst.trip}}</td>
+                                <td class="text-end">{{formatNumber(lst.total_km)}}</td>
+                                <td class="text-end">{{formatNumber(lst.total_l)}}</td>
+                                <td class="text-end">{{formatNumber(lst.refuel)}}</td>
+                                <td class="text-end">{{formatNumber(lst.fuel_price)}}</td>
+                                <td class="laofont">{{lst.remarks}}</td>
+                                <td class="p-0 align-middle border-end-0">
+                                    <div class="d-flex justify-content-start ms-1">
                                         <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="editHead(lst.id)">
                                             <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                         </button> 
@@ -89,36 +93,37 @@
                                     </div>
                                 </td>
                             </tr>     
-                            <div class="mt-1" style="margin-start: 11px" v-if="btnHeadNew">
-                                <a class="add-hover p-0" href="#" @click="newHead()" title="Add new record"><span class="tx-13 text-primary">Add...</span></a>                                                                                           
-                            </div> 
                         </tbody>
                     </table>
+                    <div v-if="btnHeadNew" class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="newHead()" title="Create a new item">
+                        <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                        <span class="text-primary tx-13">New</span>
+                    </div>
                 </div>                       
             </div>
         </div>
 
-        <div class="table-responsive border mt-4">
-            <table class="table main-table-reference text-nowrap mb-1">
+        <div v-if="btnDetailNew" class="table-responsive element border mt-4">
+            <table class="table main-table-reference text-nowrap mg-b-0">
                 <thead>
                     <tr>
-                        <th style="letter-spacing: 0px; padding: 5px 10px">Other Paid</th>
-                        <th style="letter-spacing: 0px; padding: 5px 10px">Amount <span class="text-capitalize">(Kip)</span></th>
-                        <th style="letter-spacing: 0px; padding: 5px 10px">Qty</th>
-                        <th style="letter-spacing: 0px; padding: 5px 10px">Total <span class="text-capitalize">(Kip)</span></th>
-                        <th style="letter-spacing: 0px; padding: 5px 10px">Remarks</th>
-                        <th style="letter-spacing: 0px; padding: 5px 10px; width: 65%">Actions</th>
+                        <th class="border-start-0">Other Paid</th>
+                        <th>Amount <span class="text-capitalize">(Kip)</span></th>
+                        <th>Qty</th>
+                        <th>Total <span class="text-capitalize">(Kip)</span></th>
+                        <th>Remarks</th>
+                        <th class="border-end-0 wd-65p">Actions</th>
                     </tr>
                 </thead>
                 <tbody> 
                     <tr class="tr-hover" v-for="lst in detailList" :key="lst.id">
-                        <td style="padding: 3px 10px">{{lst.paid_type}}</td>
-                        <td style="padding: 3px 10px" class="text-end">{{formatNumber(lst.amount)}}</td>
-                        <td style="padding: 3px 10px" class="text-end">{{ lst.qty }}</td>
-                        <td style="padding: 3px 10px" class="text-end">{{ formatNumber(lst.total_amount) }}</td>
-                        <td style="padding: 3px 10px" class="laofont">{{ lst.remarks }}</td>
-                        <td style="padding: 0px 4px; vertical-align: middle">
-                            <div class="d-flex justify-content-start">
+                        <td class="border-start-0">{{lst.paid_type}}</td>
+                        <td class="text-end">{{formatNumber(lst.amount)}}</td>
+                        <td class="text-end">{{ lst.qty }}</td>
+                        <td class="text-end">{{ formatNumber(lst.total_amount) }}</td>
+                        <td class="laofont">{{ lst.remarks }}</td>
+                        <td class="p-0 align-middle border-end-0">
+                            <div class="d-flex justify-content-start ms-1">
                                 <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="editDetail(lst.id)">
                                     <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                 </button> 
@@ -128,11 +133,12 @@
                             </div>
                         </td>
                     </tr>                                                                                            
-                    <div class="mt-1" style="margin-start: 11px" v-if="btnDetailNew">
-                        <a class="add-hover p-0" href="#" @click="newDetail()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
-                    </div>  
                 </tbody>
             </table>
+            <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="newDetail()" title="Create a new item">
+                <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                <span class="text-primary tx-13">New</span>
+            </div>
         </div>
     </div>
 

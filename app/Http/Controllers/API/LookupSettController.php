@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class LookupSettController extends Controller
 {
@@ -91,13 +92,18 @@ class LookupSettController extends Controller
             $success = false;
             $message = 'Duplicate record!';
         } else {
+            $now = now("Asia/Bangkok")->toDateTimeString();
+            $user = Str::lower(auth()->user()->username);
+
             DB::table('fuel_lookup')
                 ->insert([
                     'dept' => $request->dept,
                     'category' => $request->category,
                     'code' => $request->code,
                     'descr' => $request->descr,
-                    'used' => $request->used
+                    'used' => $request->used,
+                    'created_at' => $now,
+                    'created_by' => $user
                 ]);
 
             $success = true;
@@ -117,13 +123,18 @@ class LookupSettController extends Controller
     }
 
     public function fuelCodeUpd(Request $request){
+        $now = now("Asia/Bangkok")->toDateTimeString();
+        $user = Str::lower(auth()->user()->username);
+
         DB::table('fuel_lookup')
             ->where('id', $request->id)
             ->update([
                 'dept' => $request->dept,
                 'code' => $request->code,
                 'descr' => $request->descr,
-                'used' => $request->used
+                'used' => $request->used,
+                'updated_at' => $now,
+                'updated_by' => $user
             ]);
     }
 

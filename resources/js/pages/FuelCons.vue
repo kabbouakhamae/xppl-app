@@ -2,8 +2,9 @@
     <div class="card">
         <div class="card-body">
             <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
-                <div class="d-flex">
-                    <h4 class="card-title text-muted mb-0 my-auto">Fuel Reservation</h4>
+                <div>
+                    <h4 class="card-title mg-b-0">Fuel Reservation</h4>
+                    <p class="tx-12 tx-gray-500 mb-2">Daily fuel reservation records...</p>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center">
                     <div class="wd-xl-150 wd-lg-150 wd-md-150 wd-70p">
@@ -17,82 +18,61 @@
 
             <div class="row">
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-3">
-                    <!-- <div class="table-responsive border" style="height: 250px">
-                        <table class="table main-table-reference text-nowrap cur-pointer">
-                            <thead class="position-sticky" style="top: -1px">
+                    <div class="table-responsive element border ht-250">
+                        <table class="table main-table-reference text-nowrap mg-b-0">
+                            <thead class="position-sticky" style="top: 0px">
                                 <tr>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold pd-y-5">Refuel Date</th>
+                                    <th class="border-0">Refuel Date</th>
                                 </tr>
                             </thead>
-                            <tbody> 
-                                <tr class="tr-hover" v-for="(lst, key) in dateList" :key="lst.id" @click="dateSelected(key, dateTime1(lst.refuel_date))" :style="key === dateRowSel ? 'background-color: #dadee7; border-left: 1px solid #0162e8; color: blue' : ''">
-                                    <td style="border: none; padding: 4px 10px">{{dateTime(lst.refuel_date)}}</td>
-                                </tr>  
-                                <div class="mt-1" style="margin-start: 11px">
-                                    <a class="add-hover p-0" href="#" @click="dateNew()" title="Add new date"><span class="tx-13 text-primary">Add...</span></a>                                                                                           
-                                </div>                                                                                            
-                            </tbody>
-                        </table>
-                    </div> -->
-
-                    <table class="table table-bordered border-bottom mg-b-0 text-nowrap">
-                        <thead>
-                            <tr class=" bg-primary">
-                                <th class="px-2 text-white">Refuel Date</th>
-                            </tr>
-                        </thead>
-                    </table>
-                    
-                    <div class="table-responsive ht-200 element border-end border-bottom border-start">
-                        <table class="table mg-b-0 text-nowrap">
-                            <tbody class="tx-13">
-                                <tr class="tr-hover cur-pointer" v-for="(lst, key) in dateList" :key="lst.id" @click="dateSelected(key, dateTime1(lst.refuel_date))" :style="key === dateRowSel ? 'background-color: #dadee7; border-left: 1px solid #0162e8; color: blue' : ''">
-                                    <td style="border: none; padding: 4px 10px">{{dateTime(lst.refuel_date)}}</td>
+                            <tbody>
+                                <tr class="tr-hover cur-pointer" v-for="(lst, key) in dateList" :key="lst.id" @click="dateSelected(key, dateTime1(lst.refuel_date))" :style="key === dateRowSel ? 'background-color: #dadee7; color: blue' : ''">
+                                    <td class="border-0">{{dateTime(lst.refuel_date)}}</td>
                                 </tr>
-                                <div class="mt-1" style="margin-start: 11px">
-                                    <a class="add-hover p-0" href="#" @click="dateNew()" title="Add new date"><span class="tx-13 text-primary">Add...</span></a>                                                                                           
-                                </div> 
                             </tbody>
                         </table>
-                    </div>            
+                        <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 pt-1 pb-2 wd-100" @click="dateNew()" title="Create a new date">
+                            <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                            <span class="text-primary tx-13">New</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Header table -->
-                <div class="col-xl-10 col-lg-9 col-md-8 col-sm-9 ps-sm-0 pt-sm-0 pt-3 ">
-                    <div class="table-responsive element" style="max-height: 231.08px">
-                        <table class="table table-bordered border-bottom mg-b-0 text-nowrap">
-                            <thead class="position-sticky" style="top: -0.1px">
-                                <tr class=" bg-primary">
-                                    <th class="px-2 text-white" v-if="!!parseInt(permiss.fuel_all)" >Department</th>
-                                    <th class="px-2 text-white">
-                                        <div v-if="!!parseInt(permiss.fuel_all)">Department Cost</div>
-                                        <div v-else>Department</div>
-                                    </th>
-                                    <th class="px-2 text-white">Cost Type</th>
-                                    <th class="px-2 text-white">Cost Code</th>
-                                    <th class="px-2 text-white">Locations</th>
-                                    <th class="px-2 text-white">Approve by</th>
-                                    <th class="px-2 text-white">created at</th>
-                                    <th class="px-2 text-white">created by</th>
-                                    <th class="px-2 text-white">Updated at</th>
-                                    <th class="px-2 text-white">Updated by</th>
-                                    <th class="px-2 text-white wd-80p">Actions</th>
+                <div class="col-xl-10 col-lg-9 col-md-8 col-sm-9 ps-sm-0 pt-sm-0 pt-3">
+                    <div class="table-responsive element border ht-250">
+                        <table class="table main-table-reference text-nowrap mg-b-0">
+                            <thead class="position-sticky" style="top: 0px">
+                                <tr>        
+                                    <th v-if="permiss.fuel_all == 1" class="border-start-0">Department</th>
+                                    <th v-if="permiss.fuel_all == 1">Department Cost</th>
+                                    <th v-else class="border-start-0">Department</th>
+                                    <th>Cost Type</th>
+                                    <th>Cost Code</th>
+                                    <th>Locations</th>
+                                    <th>Approved By</th>
+                                    <th>Created At</th>
+                                    <th>Created By</th>
+                                    <th>Updated At</th>
+                                    <th>Updated By</th>
+                                    <th class="border-end-0 wd-80p">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="tx-13">
-                                <tr class="tr-hover cur-pointer" v-for="(lst, key) in headList" :key="lst.id" @click="headSelected(key, lst.id, lst.cost_type)" :style="key === headRowSel ? 'background-color: #dadee7; border-left: 1.02px solid #0162e8; color: blue' : ''">
-                                    <td class="px-2 py-1" v-if="!!parseInt(permiss.fuel_all)">{{lst.created_dept}}</td>
-                                    <td class="px-2 py-1">{{lst.cost_dept}}</td>
-                                    <td class="px-2 py-1">{{lst.cost_type}}</td>
-                                    <td class="px-2 py-1">{{lst.cost_no}}</td>
-                                    <td class="px-2 py-1 laofont">{{lst.location}}</td>
-                                    <td class="px-2 py-1">{{lst.approved_by}}</td>
-                                    <td class="px-2 py-1 text-muted">{{dateTime2(lst.created_at)}}</td>
-                                    <td class="px-2 py-1 text-muted text-capitalize">{{lst.created_by}}</td>
-                                    <td class="px-2 py-1 text-muted">{{dateTime2(lst.updated_at)}}</td>
-                                    <td class="px-2 py-1 text-muted text-capitalize">{{lst.updated_by}}</td>
-                                    <td class="p-0 align-middle">
-                                        <div class="d-flex justify-content-start">
+                            <tbody>
+                                <tr class="tr-hover cur-pointer" v-for="(lst, key) in headList" :key="lst.id" @click="headSelected(key, lst.id, lst.cost_type)" :style="key === headRowSel ? 'background-color: #dadee7; color: blue' : ''">
+                                    <td v-if="permiss.fuel_all == 1" class="border-start-0">{{lst.created_dept}}</td>
+                                    <td v-if="permiss.fuel_all == 1">{{lst.cost_dept}}</td>
+                                    <td v-else class="border-start-0">{{lst.cost_dept}}</td>
+                                    <td>{{lst.cost_type}}</td>
+                                    <td>{{lst.cost_no}}</td>
+                                    <td class="laofont">{{lst.location}}</td>
+                                    <td>{{lst.approved_by}}</td>
+                                    <td class="text-muted">{{dateTime2(lst.created_at)}}</td>
+                                    <td class="text-muted text-capitalize">{{lst.created_by}}</td>
+                                    <td class="text-muted">{{dateTime2(lst.updated_at)}}</td>
+                                    <td class="text-muted text-capitalize">{{lst.updated_by}}</td>
+                                    <td class="p-0 align-middle border-end-0">
+                                        <div class="d-flex justify-content-start ms-1">
                                             <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="headEdit(lst.id)">
                                                 <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                             </button> 
@@ -101,106 +81,57 @@
                                             </button> 
                                         </div>
                                     </td>
-                                </tr>      
+                                </tr>
                             </tbody>
                         </table>
-                                <div class="mt-1" style="margin-start: 11px" v-if="headNewShow">
-                                    <a class="add-hover p-0" href="#" @click="headNew()" title="Add new record"><span class="tx-13 text-primary">Add...</span></a>                                                                                           
-                                </div> 
+                        <div v-if="headNewShow" class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="headNew()" title="Create a new item">
+                            <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                            <span class="text-primary tx-13">New</span>
+                        </div>
                     </div>
-                    
-                    <!-- <div class="table-responsive border" style="height: 250px">
-                        <table class="table main-table-reference text-nowrap" >
-                            <thead class="position-sticky" style="top: -1px">
-                                <tr>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px" v-if="!!parseInt(permiss.fuel_all)" >Department</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">
-                                        <div v-if="!!parseInt(permiss.fuel_all)">Department Cost</div>
-                                        <div v-else>Department</div>
-                                    </th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Cost Type</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Cost Code</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Locations</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Approve by</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">created at</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">created by</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Updated at</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px">Updated by</th>
-                                    <th style="letter-spacing: 0px; padding: 5px 10px; width: 80%">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody> 
-                                <tr class="tr-hover cur-pointer" v-for="(lst, key) in headList" :key="lst.id" @click="headSelected(key, lst.id, lst.cost_type)" :style="key === headRowSel ? 'background-color: #dadee7; border-left: 1.02px solid #0162e8; color: blue' : ''">
-                                    <td style="padding: 3px 10px" v-if="!!parseInt(permiss.fuel_all)">{{lst.created_dept}}</td>
-                                    <td style="padding: 3px 10px">{{lst.cost_dept}}</td>
-                                    <td style="padding: 3px 10px">{{lst.cost_type}}</td>
-                                    <td style="padding: 3px 10px">{{lst.cost_no}}</td>
-                                    <td style="padding: 3px 10px" class="laofont">{{lst.location}}</td>
-                                    <td style="padding: 3px 10px">{{lst.approved_by}}</td>
-                                    <td style="padding: 3px 10px" class="text-muted">{{dateTime2(lst.created_at)}}</td>
-                                    <td style="padding: 3px 10px" class="text-muted text-capitalize">{{lst.created_by}}</td>
-                                    <td style="padding: 3px 10px" class="text-muted">{{dateTime2(lst.updated_at)}}</td>
-                                    <td style="padding: 3px 10px" class="text-muted text-capitalize">{{lst.updated_by}}</td>
-                                    <td style="padding: 0px 4px; vertical-align: middle">
-                                        <div class="d-flex justify-content-start">
-                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="headEdit(lst.id)">
-                                                <i class="bx bx-edit text-info" style="font-size: 16px"></i>
-                                            </button> 
-                                            <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Delete" @click="headDel(lst.id)">
-                                                <i class="bx bx-trash text-danger" style="font-size: 16px"></i>
-                                            </button> 
-                                        </div>
-                                    </td>
-                                </tr>      
-                                <div class="mt-1" style="margin-start: 11px" v-if="headNewShow">
-                                    <a class="add-hover p-0" href="#" @click="headNew()" title="Add new record"><span class="tx-13 text-primary">Add...</span></a>                                                                                           
-                                </div> 
-                            </tbody>
-                        </table>
-                    </div>                        -->
                 </div>
             </div>
             
             <!-- Detail table -->
-            <div class="table-responsive border mt-4" style="max-height: 450px">
-                <table class="table main-table-reference text-nowrap mb-1">
-                    <thead class="position-sticky" style="top: -1px">
+            <div v-if="detailNewShow" class="table-responsive element border mt-4" style="max-height: 450px">
+                <table class="table main-table-reference text-nowrap mg-b-0">
+                    <thead class="position-sticky" style="top: 0px">
                         <tr>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">No</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Equip No</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Description</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Liter</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">smu</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Driver</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Shift</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Material</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Work Order</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Reserve No</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">created at</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">created by</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Updated at</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px">Updated by</th>
-                            <th style="letter-spacing: 0px; padding: 5px 10px; width: 80%">Actions</th>
+                            <th class="border-start-0">No</th>
+                            <th>Equip No</th>
+                            <th>Equip Description</th>
+                            <th>Liter</th>
+                            <th>SMU</th>
+                            <th>Driver</th>
+                            <th>Shift</th>
+                            <th>Material</th>
+                            <th>Work Order</th>
+                            <th>Reserve No</th>
+                            <th>Created At</th>
+                            <th>Created By</th>
+                            <th>Updated At</th>
+                            <th>Updated By</th>
+                            <th class="border-end-0 wd-80p">Actions</th>
                         </tr>
                     </thead>
-                    <tbody> 
+                    <tbody>
                         <tr class="tr-hover" v-for="(lst, key) in detailList" :key="lst.id">
-                            <td style="padding: 3px 10px">{{ key + 1 }}</td>
-                            <td style="padding: 3px 10px">{{ lst.equip_no }}</td>
-                            <td style="padding: 3px 10px" class=" laofont">{{ lst.equip_descr }}</td>
-                            <td style="padding: 3px 10px" class="text-end">{{ lst.liter }}</td>
-                            <td style="padding: 3px 10px" class="text-end">{{ lst.smu }}</td>
-                            <td style="padding: 3px 10px" class="text-capitalize">{{ lst.driver }}</td>
-                            <td style="padding: 3px 10px">{{ lst.work_shift }}</td>
-                            <td style="padding: 3px 10px">{{ lst.material_descr }}</td>
-                            <td style="padding: 3px 10px">{{ lst.work_order }}</td>
-                            <td style="padding: 3px 10px" class="text-center">{{ lst.reserve_no }}</td>
-                            <td style="padding: 3px 10px" class="text-muted">{{dateTime2(lst.created_at)}}</td>
-                            <td style="padding: 3px 10px" class="text-muted text-capitalize">{{lst.created_by}}</td>
-                            <td style="padding: 3px 10px" class="text-muted">{{dateTime2(lst.updated_at)}}</td>
-                            <td style="padding: 3px 10px" class="text-muted text-capitalize">{{lst.updated_by}}</td>
-                            <td style="padding: 0px 4px; vertical-align: middle">
-                                <div class="d-flex justify-content-start">
+                            <td class="border-start-0">{{ key + 1 }}</td>
+                            <td>{{ lst.equip_no }}</td>
+                            <td class="laofont">{{ lst.equip_descr }}</td>
+                            <td class="text-end">{{ lst.liter }}</td>
+                            <td class="text-end">{{ lst.smu }}</td>
+                            <td class="text-capitalize">{{ lst.driver }}</td>
+                            <td>{{ lst.work_shift }}</td>
+                            <td>{{ lst.material_descr }}</td>
+                            <td>{{ lst.work_order }}</td>
+                            <td class="text-center">{{ lst.reserve_no }}</td> 
+                            <td class="text-muted">{{dateTime2(lst.created_at)}}</td>
+                            <td class="text-muted text-capitalize">{{lst.created_by}}</td>
+                            <td class="text-muted">{{dateTime2(lst.updated_at)}}</td>
+                            <td class="text-muted text-capitalize">{{lst.updated_by}}</td>
+                            <td class="p-0 align-middle border-end-0">
+                                <div class="d-flex justify-content-start ms-1">
                                     <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit" @click="detailEdit(lst.id)">
                                         <i class="bx bx-edit text-info" style="font-size: 16px"></i>
                                     </button> 
@@ -210,14 +141,15 @@
                                 </div>
                             </td>
                         </tr>
-                        <div class="mt-1" style="margin-start: 11px" v-if="detailNewShow">
-                            <a class="add-hover p-0" href="#" @click="detailNew()" title="Add new record"><span class="tx-13">Add...</span></a>                                                                                        
-                        </div> 
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-start align-items-center cur-pointer add-hover ms-2 ht-30 wd-100" @click="detailNew()" title="Create a new item">
+                    <div><i class="fa fa-plus me-1 text-primary tx-10 mb-2"></i></div>
+                    <span class="text-primary tx-13">New</span>
+                </div>
             </div>
 
-             <!-- Add Date Modal -->
+            <!-- Add Date Modal -->
             <div class="modal fade" id="date" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dateLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
@@ -400,7 +332,7 @@
                 </div>                                              
             </div>
 
-            <div class="modal fade effect-scale mt-3 bd-0 bg-black-1" id="driver" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dropoffLabel" aria-hidden="true">
+            <div class="modal fade effect-scale pd-t-100 bd-0 bg-black-7" id="driver" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dropoffLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header pb-1 bd-b-0">

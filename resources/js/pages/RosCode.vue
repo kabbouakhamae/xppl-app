@@ -9,27 +9,28 @@
                     </button>
                 </div>
 
-                <div class="table-responsive ht-md-700">
-                    <table class="table main-table-reference text-nowrap mb-0">
-                        <thead class="position-sticky" style="top: -1px">
+                <div class="table-responsive element ht-md-700">
+                    <table class="table main-table-reference text-nowrap mg-b-0">
+                        <thead class="position-sticky" style="top: 0px">
                             <tr>
-                                <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold">Roster Code</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold">Timesheet Code</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold">Description Lao</th>
-                                <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold">Description Eng</th>    
-                                <th style="letter-spacing: 0px; padding: 5px 10px" class="fw-bold" v-if="!!parseInt(loginPermiss.lk_ros)">Working Time</th>      
-                                <th style="letter-spacing: 0px; padding: 5px 10px; width: 70%" class="fw-bold" v-else>Working Time</th>      
-                                <th style="letter-spacing: 0px; padding: 5px 10px; width: 70%" class="fw-bold" v-if="!!parseInt(loginPermiss.lk_ros)">Actions</th>
+                                <th>Roster Code</th>
+                                <th>Timesheet Code</th>
+                                <th>Description Lao</th>
+                                <th>Description Eng</th>  
+
+                                <th v-if="loginPermiss.lk_ros == 1">Working Time</th>      
+                                <th class="wd-70p" v-else>Working Time</th>      
+                                <th class="wd-70p" v-if="loginPermiss.lk_ros == 1">Actions</th>
                             </tr>
                         </thead>
                         <tbody> 
                             <tr v-for="lst in rosCodeData" :key="lst.id">
-                                <td style="padding: 3px 10px">{{ lst.rcode }}</td>
-                                <td style="padding: 3px 10px">{{ lst.ref_code }}</td>
-                                <td style="padding: 3px 10px" class="laofont">{{ lst.descr_lao }}</td>
-                                <td style="padding: 3px 10px"> {{ lst.descr_eng }} </td>
-                                <td style="padding: 3px 10px"> {{ lst.working_time }} </td>
-                                <td style="padding: 0px 4px; vertical-align: middle" v-if="!!parseInt(loginPermiss.lk_ros)">
+                                <td>{{ lst.rcode }}</td>
+                                <td>{{ lst.ref_code }}</td>
+                                <td class="laofont">{{ lst.descr_lao }}</td>
+                                <td> {{ lst.descr_eng }} </td>
+                                <td> {{ lst.working_time }} </td>
+                                <td v-if="loginPermiss.lk_ros == 1" class="p-0 align-middle">
                                     <div class="d-flex justify-content-start">
                                         <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" title="Edit this record" @click="rosCodeEdit(lst.id)">
                                             <i class="bx bx-edit text-info" style="font-size: 16px"></i>

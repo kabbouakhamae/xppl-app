@@ -68,9 +68,10 @@
 		</script>
 
         <div id="app"></div> <!-- ດຶງຂໍ້ມູນທັງໝົດຈາກ #app ຈາກ app.js ມາສະແດງຜົນ -->
-            
+    
+        <script src="//unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>   
+        <script src="assets/plugins/jquery/table2excel.js"></script>
 
-        
 
     <!-- Back-to-top -->
     <!-- <a href="#top" id="back-to-top"><i class="las la-angle-double-up"></i></a> -->
