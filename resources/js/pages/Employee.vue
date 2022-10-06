@@ -6,46 +6,47 @@
         <div class="card">
             <div class="card-body pd-t-10">
                 <div v-if="showList">
+
                     <div class="breadcrumb-header justify-content-between align-items-center mb-2 mt-0" >
-                        <div class="d-flex">
+                        <div>
                             <h4 class="card-title text-muted mb-0 my-auto">Employee List</h4>
                         </div>
                         <div class="d-flex my-xl-auto right-content align-items-center">
-                            <div class="pos-relative me-1" style="width: 100%">
-                                <input class="form-control form-control-sm ht-30 pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
+                            <div class="pos-relative me-1 wd-md-200 wd-100p">
+                                <input class="form-control form-control-sm box-height pd-l-30" type="text" placeholder="Search by name..." v-model="search" @input="searchChange()" >
                                     <i class="fe fe-search search-ism text-muted"></i>
                                 <button class="btn btn-icon btn-sm search-csm text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x" style="font-size: 14px"></i></button>
                             </div>
                             <div class="wd-30">
-                                <button type="button" class="btn btn-sm ripple btn-primary ht-30 wd-30 p-0" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-16"></i></button>
+                                <button type="button" class="btn btn-sm ripple btn-primary btn-tools p-0" title="Add new employee" @click="empNew()"><i class="mdi mdi-account-plus tx-16"></i></button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="table-responsive element userlist-table">
+                    <div class="table-responsive userlist-table">
                         <table class="table card-table text-nowrap mb-0">
                             <thead style="top: 0px; height: 35px; background-color: #5195D3">
                                 <tr>
                                     <th style="letter-spacing: 0px; width: 10px; padding: 6px 4px 6px 4px" class="fw-bold text-white"><span>Image</span></th>
-                                    <th style="letter-spacing: 0px; width: 50px; padding: 6px 12px 6px 0px" class="fw-bold text-white"><span>Name</span></th>
+                                    <th style="letter-spacing: 0px; width: 50px; padding: 6px 12px 6px 0px" class="fw-bold text-white"><span>Name and Surname</span></th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Position | Level</th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">
-                                        <div v-if="!!parseInt(loginPermiss.emp_all)">Position / Dept.</div>
-                                        <div v-else>Position</div>
+                                        <div v-if="loginPermiss.emp_all == 1">Department | Section</div>
+                                        <div v-else>Section</div>
                                     </th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Country | Province</th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Phone Number</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Country</th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Employee ID</th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Scan ID</th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Food ID</th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Roster</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Level</th>
-                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Started</th>
+                                    <th style="letter-spacing: 0px; padding: 6px 12px" class="fw-bold text-white">Status</th>
                                     <th style="letter-spacing: 0px; padding: 6px 12px; width: 10%" class="fw-bold text-white">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="tx-13">
                                 <tr class="tr-hover" v-for="list in empData.data" :key="list.id">
-                                    <td style="padding: 6px 4px 6px 0px; border: none">
+                                    <td style="padding: 6px 4px 6px 4px; border: none">
                                         <div class="pos-relative" @click="empPrev(list.id)">
                                             <img v-if="list.photo" alt="" class="rounded-circle avatar-md me-2 cur-pointer" :src="'assets/img/profile/'+ list.photo">                                   
                                             <img v-if="!list.photo && list.gender == 'Male'" alt="" class="rounded-circle avatar-md me-2 cur-pointer" src="assets/img/male.png">
@@ -58,14 +59,28 @@
                                         <span class="laofont">{{ list.namelao }} {{ list.surnamelao }}</span>
                                     </td>
                                     <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7"> 
-                                        {{ list.position }}
-                                        <div v-if="!!parseInt(loginPermiss.emp_all)">{{ list.department }}</div>
+                                        {{ list.position }} <br> {{list.levels}}
+                                    </td>
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
+                                        <span v-if="loginPermiss.emp_all == 1">{{ list.department }}<br></span>
+                                        {{list.section}}
+                                    </td>
+                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
+                                        <div class="d-flex justify-content-start align-items-center">
+                                            <div class="wd-30 text-center">
+                                                <img width="20" :src="'assets/img/flags/'+ list.country + '.png'" alt="">
+                                            </div>
+                                            {{ list.country }} <br>
+                                        </div>
+                                        <div class="d-flex justify-content-start align-items-center">
+                                            <div class="wd-30 text-center">
+                                                <i v-if="list.province" class="fe fe-map-pin"></i> 
+                                            </div>
+                                            {{ list.province}} 
+                                        </div>
                                     </td>
                                     <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7"> 
                                         <i v-if="list.phone" class="fa fa-tty me-1"></i> {{ list.phone}} 
-                                    </td>
-                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
-                                        <img width="20" class="me-2" :src="'assets/img/flags/'+ list.country + '.png'" alt="" >{{ list.country }}
                                     </td>
                                     <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">
                                         <div v-if="list.empid">{{ list.empid }}</div>
@@ -81,12 +96,22 @@
                                     <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">                          
                                         {{ list.roster }}
                                     </td>
-                                    <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7">                          
-                                        {{ list.levels }}
-                                    </td>
                                     <td style="padding: 6px 12px; border-top: 0px; border-bottom: 0.5px solid #e3e8f7"> 
-                                        <span v-if="list.status == 'Current' || list.status == 'Temporary'">{{ timeago(list.startdate) }}<br></span>
-                                        {{ list.status }}
+                                        <div class="d-flex justify-content-start align-items-center">
+                                            <div class="wd-30 text-center">
+                                                <i v-if="list.status == 'Current' || list.status == 'Temporary'" class="fe fe-user-check"></i> 
+                                                <i v-else class="fe fe-user-x"></i> 
+                                            </div>
+                                            {{ list.status }} <br>
+                                        </div>
+                                        <div class="d-flex justify-content-start align-items-center" v-if="list.status == 'Current' || list.status == 'Temporary'">
+                                            <div class="wd-30 text-center">
+                                                <i class="fe fe-clock"></i> 
+                                            </div>
+                                            <div class="mg-b-3">
+                                                {{timeago(list.startdate)}}
+                                            </div>
+                                        </div>
                                     </td>
                                     <td style="padding: 0px 4px; vertical-align: middle; border-bottom: 0.5px solid #e3e8f7">
                                         <div class="d-flex justify-content-start">
@@ -175,19 +200,21 @@
                                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-4">
                                     <div class="form-group">
                                         <label class="mb-0">Country  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.country" placeholder="Select" :options="lkCountry"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.country" placeholder="Select" :options="lkCountry"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-8 col-md-6 col-sm-8">
                                     <div class="form-group">
                                         <label class="mb-0">Province</label>
-                                        <input type="text" class="form-control laofont" placeholder="Province..." v-model="empForm.province">
+                                        <Multiselect v-if="empForm.country == 'Laos'" class="multi-color ht-40" v-model="empForm.province" placeholder="Select" :searchable="true" :searchStart="true" :options="lkProv" @select="getDistrict()"/>
+                                        <input v-else type="text" class="form-control" placeholder="Province..." v-model="empForm.province">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
                                         <label class="mb-0">District</label>
-                                        <input type="text" class="form-control laofont" placeholder="District..." v-model="empForm.district">
+                                        <Multiselect v-if="empForm.country == 'Laos'" class="multi-color ht-40" v-model="empForm.district" placeholder="Select" :searchable="true" :searchStart="true" :options="lkDist"/>
+                                        <input v-else type="text" class="form-control laofont" placeholder="District..." v-model="empForm.district">
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
@@ -218,19 +245,19 @@
                                     <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <label class="mb-0">Position  <span class=" text-danger">*</span></label> 
-                                            <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" searchable="true" searchStart="true" :options="lkPosition"/>
+                                            <Multiselect class="multi-color ht-40" v-model="empForm.position" placeholder="Select" searchable="true" searchStart="true" :options="lkPosition"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">Contract Type</label> 
-                                            <Multiselect class="multi-color" v-model="empForm.contract" placeholder="Select" :options="lkContract"/>
+                                            <Multiselect class="multi-color ht-40" v-model="empForm.contract" placeholder="Select" :options="lkContract"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">Levels</label> 
-                                            <Multiselect class="multi-color" v-model="empForm.levels" placeholder="Select" :options="lkLevels"/>
+                                            <Multiselect class="multi-color ht-40" v-model="empForm.levels" placeholder="Select" :options="lkLevels"/>
                                         </div>
                                     </div>
                                 </div>
@@ -257,13 +284,13 @@
                                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">Roster  <span class=" text-danger">*</span></label> 
-                                            <Multiselect class="multi-color" v-model="empForm.roster" placeholder="Select" :options="lkRoster"/>
+                                            <Multiselect class="multi-color ht-40" v-model="empForm.roster" placeholder="Select" :options="lkRoster"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-4 col-sm-4 col-6">
                                         <div class="form-group">
                                             <label class="mb-0">Scan Times  <span class=" text-danger">*</span></label> 
-                                            <Multiselect class="multi-color" v-model="empForm.scantimes" placeholder="Select" :options="lkScantimes"/>
+                                            <Multiselect class="multi-color ht-40" v-model="empForm.scantimes" placeholder="Select" :options="lkScantimes"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-4 col-sm-4 col-6">
@@ -278,25 +305,25 @@
                                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
                                         <div class="form-group">
                                             <label class="mb-0">Site  <span class=" text-danger">*</span></label> 
-                                            <Multiselect class="multi-color" v-model="empForm.site" placeholder="Select" :options="lkSite"/>
+                                            <Multiselect class="multi-color ht-40" v-model="empForm.site" placeholder="Select" :options="lkSite"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-9 col-md-8 col-sm-8">
                                         <div class="form-group">
                                             <label class="mb-0">Department  <span class=" text-danger">*</span></label> 
-                                            <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" searchable="true" searchStart="true" :options="lkDept"/>
+                                            <Multiselect class="multi-color ht-40" v-model="empForm.dept" placeholder="Select" searchable="true" searchStart="true" :options="lkDept"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <label class="mb-0">Section</label> 
-                                            <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" searchable="true" searchStart="true" :options="lkSection"/>
+                                            <Multiselect class="multi-color ht-40" v-model="empForm.section" placeholder="Select" searchable="true" searchStart="true" :options="lkSection"/>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <label class="mb-0">Crew</label> 
-                                            <Multiselect class="multi-color" v-model="empForm.crew" placeholder="Select" searchable="true" :options="lkCrew"/>
+                                            <Multiselect class="multi-color ht-40" v-model="empForm.crew" placeholder="Select" searchable="true" :options="lkCrew"/>
                                         </div>
                                     </div>
                                 </div>
@@ -330,7 +357,7 @@
                                         </button>
                                     </div> -->
 
-                                    <div class="table-responsive element border" style="max-height: 270px">
+                                    <div class="table-responsive border" style="max-height: 270px">
                                         <table class="table main-table-reference text-nowrap mg-b-0">
                                             <thead class="position-sticky" style="top: 0px">
                                                 <tr>
@@ -349,7 +376,7 @@
                                                     <th>Scan Times</th>
                                                     <th>Hours</th>
                                                     <th>Levels</th>
-                                                    <th>contact</th>
+                                                    <th>contract</th>
                                                     <th>Remarks</th>
                                                     <th class=" border-end-0 wd-80p">Actions</th>
                                                 </tr>
@@ -371,7 +398,7 @@
                                                     <td> {{ lst.scantimes }} </td>
                                                     <td> {{ lst.working_hrs }} </td>
                                                     <td> {{ lst.levels }} </td>
-                                                    <td> {{ lst.contact }} </td>
+                                                    <td> {{ lst.contract }} </td>
                                                     <td class="laofont"> {{ lst.remarks }} </td>
                                                     <td class="p-0 align-middle border-end-0">
                                                         <div class="d-flex justify-content-start ms-1">
@@ -395,7 +422,7 @@
 
                                 <!-- contact person -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab2">
-                                    <div class="table-responsive element border" style="max-height: 270px">
+                                    <div class="table-responsive border" style="max-height: 270px">
                                         <table class="table main-table-reference text-nowrap mg-b-0">
                                             <thead class="position-sticky" style="top: 0px">
                                                 <tr>
@@ -434,7 +461,7 @@
                                 
                                 <!-- Bank Account -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab3">
-                                    <div class="table-responsive element border" style="max-height: 270px">
+                                    <div class="table-responsive border" style="max-height: 270px">
                                         <table class="table main-table-reference text-nowrap mg-b-0">
                                             <thead class="position-sticky" style="top: 0px">
                                                 <tr>
@@ -475,7 +502,7 @@
 
                                 <!-- Personal cards -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab4">
-                                    <div class="table-responsive element border" style="max-height: 270px">
+                                    <div class="table-responsive border" style="max-height: 270px">
                                         <table class="table main-table-reference text-nowrap mg-b-0">
                                             <thead class="position-sticky" style="top: 0px">
                                                 <tr>
@@ -514,7 +541,7 @@
 
                                 <!-- Annual Leave -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab5">
-                                    <div class="table-responsive element border" style="max-height: 270px">
+                                    <div class="table-responsive border" style="max-height: 270px">
                                         <table class="table main-table-reference text-nowrap mg-b-0">
                                             <thead class="position-sticky" style="top: 0px">
                                                 <tr>
@@ -527,7 +554,7 @@
                                             <tbody> 
                                                 <tr class="tr-hover" v-for="lst in alData" :key="lst.id">
                                                     <td class="border-start-0"> {{ lst.years }} </td>
-                                                    <td> {{ lst.remain }} </td>
+                                                    <td> {{ formatNumber2(lst.remain) }} </td>
                                                     <td class="laofont"> {{ lst.remarks }} </td>
                                                     <td class="p-0 align-middle border-end-0">
                                                         <div class="d-flex justify-content-start ms-1">
@@ -551,7 +578,7 @@
 
                                 <!-- Document and Files -->
                                 <div class="tab-pane overflow-auto" :class="actTab" id="tab6">
-                                    <div class="table-responsive element border" style="max-height: 270px">
+                                    <div class="table-responsive border" style="max-height: 270px">
                                         <table class="table main-table-reference text-nowrap mg-b-0">
                                             <thead class="position-sticky" style="top: 0px">
                                                 <tr>
@@ -639,7 +666,7 @@
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Site  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.site" placeholder="Select" :options="lkSite"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.site" placeholder="Select" :options="lkSite"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
@@ -657,31 +684,31 @@
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Status  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.status" placeholder="Select" :options="lkStatus"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.status" placeholder="Select" :options="lkStatus"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">Position  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.position" placeholder="Select" searchable="true" searchStart="true" :options="lkPosition"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.position" placeholder="Select" searchable="true" searchStart="true" :options="lkPosition"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">Department  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.dept" placeholder="Select" searchable="true" searchStart="true" :options="lkDept"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.dept" placeholder="Select" searchable="true" searchStart="true" :options="lkDept"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">Section</label> 
-                                        <Multiselect class="multi-color" v-model="empForm.section" placeholder="Select" searchable="true" searchStart="true" :options="lkSection"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.section" placeholder="Select" searchable="true" searchStart="true" :options="lkSection"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Crew</label> 
-                                        <Multiselect class="multi-color" v-model="empForm.crew" placeholder="Select" searchable="true" :options="lkCrew"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.crew" placeholder="Select" searchable="true" :options="lkCrew"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-6">
@@ -705,13 +732,13 @@
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Roster  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.roster" placeholder="Select" :options="lkRoster"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.roster" placeholder="Select" :options="lkRoster"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Scan Times  <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="empForm.scantimes" placeholder="Select" :options="lkScantimes"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.scantimes" placeholder="Select" :options="lkScantimes"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
@@ -723,13 +750,13 @@
                                 <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Levels</label> 
-                                        <Multiselect class="multi-color" v-model="empForm.levels" placeholder="Select" :options="lkLevels"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.levels" placeholder="Select" :options="lkLevels"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-6">
                                     <div class="form-group">
                                         <label class="mb-0">contact Type</label> 
-                                        <Multiselect class="multi-color" v-model="empForm.contract" placeholder="Select" :options="lkContract"/>
+                                        <Multiselect class="multi-color ht-40" v-model="empForm.contract" placeholder="Select" :options="lkContract"/>
                                     </div>
                                 </div>
                                 <div class="col-xl-10">
@@ -775,7 +802,7 @@
                                 <div class="col-lg-5 col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">relate <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="contForm.relate" placeholder="Select" searchable="true" searchStart="true" :options="lkRelate"/>
+                                        <Multiselect class="multi-color ht-40" v-model="contForm.relate" placeholder="Select" searchable="true" searchStart="true" :options="lkRelate"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-md-12">
@@ -820,7 +847,7 @@
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">Bank Name <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="bankForm.bankname" placeholder="Select" searchable="true"  :options="lkBank"/>
+                                        <Multiselect class="multi-color ht-40" v-model="bankForm.bankname" placeholder="Select" searchable="true"  :options="lkBank"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12">
@@ -877,7 +904,7 @@
                                 <div class="col-lg-4 col-md-12">
                                     <div class="form-group">
                                         <label class="mb-0">Card Type <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="cardForm.cardtype" placeholder="Select" :options="lkCard"/>
+                                        <Multiselect class="multi-color ht-40" v-model="cardForm.cardtype" placeholder="Select" :options="lkCard"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-12">
@@ -928,13 +955,13 @@
                                 <div class="col-md-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Year <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="alForm.years" placeholder="Select" :options="lkYear"/>
+                                        <Multiselect class="multi-color ht-40" v-model="alForm.years" placeholder="Select" :options="lkYear"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Remain <span class=" text-danger">*</span></label>
-                                        <input type="number" class="form-control" placeholder="Card id..." v-model="alForm.remain">
+                                        <input type="text" class="form-control" placeholder="Card id..." v-model="alForm.remain">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -970,6 +997,8 @@ export default {
     data() {
         return {
             lkCountry: [],
+            lkProv: [],
+            lkDist: [],
             lkPosition: [],
             lkStatus: [],
             lkContract: [],
@@ -1020,7 +1049,7 @@ export default {
             contForm: { id: '', userid: '', name: '', relate: '', phone: '', address: '' },
             bankForm: { id: '', userid: '', bankname: '', branch: '', acctname: '', acctno: '', remarks: '' },
             cardForm: { id: '', userid: '', cardtype: '', cardid: '', expire: '', remarks: '' },
-            alForm: { id: '', userid: '', years: '', remain: '', remarks: '' },
+            alForm: { id: '', userid: '', years: '', remain: '0', remarks: '' },
             
             loading: false,
         };
@@ -1178,6 +1207,7 @@ export default {
                         this.photoPrev = window.location.origin + '/assets/img/no.jpg'
                     }
 
+                    this.getDistrict()
                     this.getDetail(id);
                     this.getContact(id);
                     this.getBank(id);
@@ -1957,6 +1987,7 @@ export default {
 		},
 
         empFormClear(){
+            this.lkDist =[];
             let f = this.empForm;
                 f.gender = 'Male';
                 f.name = '';
@@ -1979,7 +2010,7 @@ export default {
                 f.startdate = '';
                 f.enddate = '';
                 f.position = '';
-                f.contact = '';
+                f.contract = '';
                 f.levels = '';
                 f.empid = '';
                 f.scanid = '';
@@ -2021,8 +2052,7 @@ export default {
 
         alFormClear(){
             let f = this.alForm;
-                f.year = '';
-                f.remain = '';
+                f.years = '';
                 f.remarks = '';
         },
 
@@ -2032,19 +2062,23 @@ export default {
             const permiss = await axios.get('/api/permiss')
             this.loginPermiss = permiss.data;
 
-            const emp = await axios.get(`/api/employee?page=${1}&search=${this.search}`)
-            this.empData = emp.data;
+            // const emp = await axios.get(`/api/employee?page=${1}&search=${this.search}`)
+            // this.empData = emp.data;
             
-            this.loading = false;
+            // if (emp.data[0].photo){
+            //     this.photoPrev = window.location.origin + '/assets/img/profile/' + emp.data[0].photo
+            // } else {
+            //     this.photoPrev = window.location.origin + '/assets/img/no.jpg'
+            // }
+            this.getEmp();
 
-            if (response.data[0].photo){
-                this.photoPrev = window.location.origin + '/assets/img/profile/' + response.data[0].photo
-            } else {
-                this.photoPrev = window.location.origin + '/assets/img/no.jpg'
-            }
+            this.loading = false;
 
             const country = await axios.get('/api/lookup/country')
             this.lkCountry = country.data;
+
+            const prov = await axios.get('/api/lookup/province')
+            this.lkProv = prov.data;
 
             const position = await axios.get('/api/lookup/position')
             this.lkPosition = position.data;
@@ -2077,6 +2111,22 @@ export default {
             this.lkCrew = crew.data;
         },
 
+        async getEmp(){
+            const emp = await axios.get(`/api/employee?page=${1}&search=${this.search}`)
+            this.empData = emp.data;
+            
+            if (emp.data[0].photo){
+                this.photoPrev = window.location.origin + '/assets/img/profile/' + emp.data[0].photo
+            } else {
+                this.photoPrev = window.location.origin + '/assets/img/no.jpg'
+            }
+        },
+
+        getDistrict(){
+            this.$axios.post('/api/lookup/district', {prov: this.empForm.province})
+            .then(res => this.lkDist = res.data)
+        },
+
         getRelateLK(){
             this.$axios.get('/api/lookup/relate').then((res) => {
                 this.lkRelate = res.data;
@@ -2103,6 +2153,11 @@ export default {
 
         formatNumber(value) {
 			let val = (value / 1).toFixed(0).replace(",", ".");
+			return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		},
+
+        formatNumber2(value) {
+			let val = (value / 1).toFixed(2).replace(",", ".");
 			return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
 
@@ -2133,126 +2188,5 @@ export default {
 </script>
 
 <style>
-
-     .base-image-input {
-        display: block;
-        width: 200px;
-        height: 240px;
-        cursor: pointer;
-        background-size: cover;
-        background-position: center center;
-    }
-    .emp-image {
-        background: #F0F0F0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: gray;
-    }
-    .emp-image:hover {
-        background: #E0E0E0;
-        color: blueviolet ;
-    }
-
-    .multi-color{
-        color: #4D5875;
-    }
-
-    .bad{
-        position: absolute;
-        height: 12px;
-        width: 12px;
-        border: 2px solid white;
-        right: 8px;
-        bottom: 2px;
-    }
-    .cur-pointer{
-        cursor: pointer;
-    }
-
-    /* Search box */
-    .search-i{
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    .search-ism{
-        position: absolute;
-        left: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    .search-c:hover{
-        background: #E9EBEC;
-    }
-    .search-c{ 
-        position: absolute;
-        z-index: 999;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 5px;
-        width: 30px;
-        height: 30px;
-        color: gray;
-        border-radius: 50px;
-    }
-
-    .search-csm{ 
-        position: absolute;
-        z-index: 999;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 2px;
-        width: 25px;
-        height: 25px;
-        color: gray;
-        border-radius: 50px;
-    }
-
-    .tr-hover:hover{
-        background: #f2f4f8; 
-    }
-
-	/* Button icon */
-	.btn-i:hover{
-		background: #E9EBEC;
-        color: blue;
-	}
-	.btn-i{
-		border-radius: 50px;
-	}
-
-    .dropdown-hover:hover{
-        color: blue;
-        font-weight: 500;
-    }
-
-    .btn-add:hover{
-        background: #DDE1E5;
-        border-radius: 50px;
-    }
-
-    .main-table-reference>thead>tr>th, .main-table-reference>thead>tr>td{
-        letter-spacing: 0.5px;
-        padding: 7px 10px;
-        border-right: 1px solid #e3e8f7;
-        border-left: 1px solid #e3e8f7;
-        border-top: none;
-        border-bottom: none;
-        background-color: #5195D3; /* #80B1F4 #5195D3*/
-        color: white;
-        /* color: #22252f; */
-    }
-    
-    .main-table-reference>tbody>tr>th, .main-table-reference>tbody>tr>td{
-        padding: 4px 10px;
-    }
-
-    .element::-webkit-scrollbar {
-        display: none;
-    }
 
 </style>

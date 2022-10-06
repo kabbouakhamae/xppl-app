@@ -6,7 +6,7 @@
                     <h4 class="card-title text-muted mb-0 my-auto">Permission Setting</h4>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center wd-sm-300">         
-                    <Multiselect class="multi-color me-1" placeholder="Select name" searchable="true" searchStart="true" v-model="selUser" @select="permissEdit()" :options="userList"/>
+                    <Multiselect class="multi-color ht-40 me-1" placeholder="Select name" searchable="true" searchStart="true" v-model="selUser" @select="permissEdit()" :options="userList"/>
                     <div style="width: 40px">
                         <button type="button" class="btn ripple btn-primary" :class="btnSave" style="padding: 0px; width: 40px; height: 38px" title="Save" @click="permissUpdate()"><i class="fe fe-save tx-18"></i></button>
                     </div>
@@ -17,7 +17,7 @@
                 <div class="col-xl-3">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="text-muted">Permission</h6>
+                            <h6 class="card-title">Permission</h6>
                             <div class="d-flex justify-content-between">
                                 <span>Access</span>
                                 <div class="custom-control custom-switch">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="text-muted">Department Tools</h6>
+                            <h6 class="card-title">Department Tools</h6>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Geology</span>
                                 <div class="custom-control custom-switch">
@@ -53,9 +53,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card">
+                    <!-- <div class="card">
                         <div class="card-body">
-                            <h6 class="text-muted">Generals</h6>
+                            <h6 class="card-title">Generals</h6>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>View all Annual Leave</span>
                                 <div class="custom-control custom-switch">
@@ -71,12 +71,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-xl-3">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="text-muted">Employee</h6>
+                            <h6 class="card-title">Employee</h6>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>View All</span>
                                 <div class="custom-control custom-switch">
@@ -156,7 +156,7 @@
                 <div class="col-xl-3">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="text-muted">Fuels</h6>
+                            <h6 class="card-title">Fuels</h6>
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Access</span>
                                 <div class="custom-control custom-switch">
@@ -174,6 +174,28 @@
                                 </div>
                             </div>
                             
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">Roster</h6>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>All Department</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="rosAll" v-model="permissData.rosAll" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="rosAll"></label>
+                                </div>
+                            </div>
+  
+                            <div class="d-flex justify-content-between">
+                                <span>Management</span>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="rosEdit" v-model="permissData.rosEdit" @change='$emit("input", $event.target.checked)'>
+                                    <label class="custom-control-label cur-pointer" for="rosEdit"></label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -209,10 +231,10 @@ export default {
                 cardDel: '',
                 alDel: '',
                 fileDel: '',
-                alAll: '',
-                tranAll: '',
                 fuel: '',
-                fuelAll: ''
+                fuelAll: '',
+                rosAll: '',
+                rosEdit: '',
             },
             search: '',
             selectedRow: null,
@@ -272,10 +294,10 @@ export default {
                 dt.cardDel = !!parseInt(res.data.card_del);
                 dt.alDel = !!parseInt(res.data.al_del);
                 dt.fileDel = !!parseInt(res.data.file_del);
-                dt.alAll = !!parseInt(res.data.al_all);
-                dt.tranAll = !!parseInt(res.data.tran_all);
                 dt.fuel = !!parseInt(res.data.fuel);
                 dt.fuelAll = !!parseInt(res.data.fuel_all);
+                dt.rosAll = !!parseInt(res.data.ros_all);
+                dt.rosEdit = !!parseInt(res.data.ros_edit);
 
             }).catch((err) => {
                 console.log(err);
@@ -313,10 +335,10 @@ export default {
                 dt.cardDel = '';
                 dt.alDel = '';
                 dt.fileDel = '';
-                dt.alAll = '';
-                dt.tranAll = '';
                 dt.fuel = '';
                 dt.fuelAll = '';
+                dt.rosAll = '';
+                dt.rosEdit = '';
         },
             
     },

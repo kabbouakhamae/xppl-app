@@ -8,10 +8,10 @@
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center">
                     <div class="wd-xl-150 wd-lg-150 wd-md-150 wd-70p">
-                        <Multiselect class="multi-color" placeholder="Month" :options="lkMonth" v-model="mont" @select="montSelected()"/>
+                        <Multiselect class="multi-color ht-40" placeholder="Month" :options="lkMonth" v-model="mont" @select="montSelected()"/>
                     </div>
                     <div class="ms-1" style="width: 120px">
-                        <Multiselect class="multi-color" placeholder="Year" :options="lkYear" v-model="year" @select="yearSelected()"/>
+                        <Multiselect class="multi-color ht-40" placeholder="Year" :options="lkYear" v-model="year" @select="yearSelected()"/>
                     </div>
                 </div>
             </div> 
@@ -182,25 +182,25 @@
                                 <div class="col-sm-5">
                                     <div class="form-group">
                                         <label class="mb-0">Plant <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="headForm.plant" placeholder="Select" :options="lkPant"/>
+                                        <Multiselect class="multi-color ht-40" v-model="headForm.plant" placeholder="Select" :options="lkPant"/>
                                     </div>
                                 </div>
                                 <div class="col-sm-7">
                                     <div class="form-group">
                                         <label class="mb-0">Department / Company <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="headForm.cost_dept" searchable="true" searchStart="true" placeholder="Select" @select="deptChanged()" :options="lkDept"/>
+                                        <Multiselect class="multi-color ht-40" v-model="headForm.cost_dept" searchable="true" searchStart="true" placeholder="Select" @select="deptChanged()" :options="lkDept"/>
                                     </div>
                                 </div>
                                 <div class="col-sm-5 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Cost Type <span class=" text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="headForm.cost_type" placeholder="Select" @select="typeChanged()" :options="lkType"/>
+                                        <Multiselect class="multi-color ht-40" v-model="headForm.cost_type" placeholder="Select" @select="typeChanged()" :options="lkType"/>
                                     </div>
                                 </div>                                
                                 <div class="col-sm-7 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Cost Code <span class=" text-danger">*</span></label>
-                                        <Multiselect v-if="headForm.cost_type == 'WBS'" class="multi-color" v-model="headForm.cost_no" placeholder="Select" :options="lkWbs"/>
+                                        <Multiselect v-if="headForm.cost_type == 'WBS'" class="multi-color ht-40" v-model="headForm.cost_no" placeholder="Select" :options="lkWbs"/>
                                         <cleave v-else-if="headForm.cost_type == 'Cost Center'" :options="options" disabled class="form-control" v-model="headForm.cost_no" placeholder="Cost center..."/>
                                         <cleave v-else :options="options"  class="form-control" v-model="headForm.cost_no" placeholder="Cost center..."/>
                                     </div>
@@ -208,7 +208,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label class="mb-0">Approve by</label> 
-                                        <Multiselect class="multi-color" v-model="headForm.approved_by" placeholder="Select" :options="lkApprove"/>
+                                        <Multiselect class="multi-color ht-40" v-model="headForm.approved_by" placeholder="Select" :options="lkApprove"/>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -247,14 +247,14 @@
                                 <div class="col-lg-2 col-md-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Shift <span class="text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="detailForm.work_shift" placeholder="Select" :options="lkShift"/>
+                                        <Multiselect class="multi-color ht-40" v-model="detailForm.work_shift" placeholder="Select" :options="lkShift"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-md-6 col-6">
                                     <div class="form-group">
                                         <label class="mb-0">Equipment No.<span class="text-danger">*</span></label> 
                                         <input v-if="headForm.cost_type == 'IO'" type="text" class="form-control" placeholder="Equipment no..." v-model="detailForm.equip_no">
-                                        <Multiselect v-else class="multi-color" v-model="detailForm.equip_no" placeholder="Select" searchable="true" @select="equipChanged()" :options="lkEquipno"/>
+                                        <Multiselect v-else class="multi-color ht-40" v-model="detailForm.equip_no" placeholder="Select" searchable="true" @select="equipChanged()" :options="lkEquipno"/>
                                     </div>
                                 </div>
                                 <div class="col-lg-7 col-12">
@@ -281,7 +281,7 @@
                                         <label v-if="headForm.cost_type == 'IO'" class="mb-0">Driver <span class="text-danger">*</span></label>
                                         <label v-else class="mb-0">Driver</label>
                                         <input v-if="headForm.cost_type == 'IO'" type="text" class="form-control" placeholder="Driver name..." v-model="detailForm.driver">
-                                        <Multiselect v-else class="multi-color" v-model="detailForm.driver" searchable="true" searchStart="true" placeholder="Select" title="Double click to add driver name" @dblclick="driverNew()" :options="lkDriver"/>                 
+                                        <Multiselect v-else class="multi-color ht-40" v-model="detailForm.driver" searchable="true" searchStart="true" placeholder="Select" title="Double click to add driver name" @dblclick="driverNew()" :options="lkDriver"/>                 
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-md-6 col-6">
@@ -309,7 +309,7 @@
                                 <div class="col-lg-7 col-12">
                                     <div class="form-group">
                                         <label class="mb-0">Material <span class="text-danger">*</span></label> 
-                                        <Multiselect class="multi-color" v-model="detailForm.material" placeholder="Select" :options="lkMaterial"/>
+                                        <Multiselect class="multi-color ht-40" v-model="detailForm.material" placeholder="Select" :options="lkMaterial"/>
                                     </div>
                                 </div>
                             </div>

@@ -36,7 +36,7 @@ class EmployeeController extends Controller{
                                 })
                             ->orWhere('a.name', 'like', $name)
                             ->orWhere('a.namelao', 'like', $namelao)
-                            ->select('a.id', 'a.gender', 'a.name', 'a.surname', 'a.namelao', 'a.surnamelao', 'a.country', 'a.province', 'a.phone', 'b.position', 'b.department', 'b.startdate', 'b.status', 'b.empid', 'b.scanid', 'b.foodid', 'b.roster', 'b.scantimes', 'b.levels', 'a.photo')
+                            ->select('a.id', 'a.gender', 'a.name', 'a.surname', 'a.namelao', 'a.surnamelao', 'a.country', 'a.province', 'a.phone', 'b.position', 'b.department', 'b.section', 'b.startdate', 'b.status', 'b.empid', 'b.scanid', 'b.foodid', 'b.roster', 'b.scantimes', 'b.levels', 'a.photo')
                             ->orderBy('a.name')
                             ->paginate(10);
 
@@ -60,7 +60,7 @@ class EmployeeController extends Controller{
                                 })
                             ->orWhere('a.name', 'like', $name)
                             ->orWhere('a.namelao', 'like', $namelao)
-                            ->select('a.id', 'a.gender', 'a.name', 'a.surname', 'a.namelao', 'a.surnamelao', 'a.country', 'a.province', 'a.phone', 'b.position', 'b.department', 'b.startdate', 'b.status', 'b.empid', 'b.scanid', 'b.foodid', 'b.roster', 'b.scantimes', 'b.levels', 'a.photo')
+                            ->select('a.id', 'a.gender', 'a.name', 'a.surname', 'a.namelao', 'a.surnamelao', 'a.country', 'a.province', 'a.phone', 'b.position', 'b.department', 'b.section', 'b.startdate', 'b.status', 'b.empid', 'b.scanid', 'b.foodid', 'b.roster', 'b.scantimes', 'b.levels', 'a.photo')
                             ->orderBy('a.name')
                             ->paginate(10);
         }

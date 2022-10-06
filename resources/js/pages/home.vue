@@ -90,7 +90,7 @@
                     <span class="d-block mg-b-10 text-muted tx-12">Current employee based by countries...</span>
                     <div class="list-group border-0" v-for="lst in countCounty" :key="lst.country" >
                         <div class="list-group-item border-top-0" id="br-t-0">
-                            <i v-if="lst.country == 'Lao PDR'" class="flag-icon flag-icon-la flag-icon-squared"></i>
+                            <i v-if="lst.country == 'Laos'" class="flag-icon flag-icon-la flag-icon-squared"></i>
                             <i v-else-if="lst.country == 'Thailand'" class="flag-icon flag-icon-th flag-icon-squared"></i>
                             <i v-else-if="lst.country == 'Philippines'" class="flag-icon flag-icon-ph flag-icon-squared"></i>
                             <i v-else-if="lst.country == 'Indonesia'" class="flag-icon flag-icon-id flag-icon-squared"></i>
@@ -289,7 +289,137 @@ export default {
 </script>
 
 <style>
+    .base-image-input {
+        display: block;
+        width: 200px;
+        height: 240px;
+        cursor: pointer;
+        background-size: cover;
+        background-position: center center;
+    }
+    .emp-image {
+        background: #F0F0F0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: gray;
+    }
+    .emp-image:hover {
+        background: #E0E0E0;
+        color: blueviolet ;
+    }
+
+    .multi-color{
+        color: #4D5875;
+    }
+
+    .bad{
+        position: absolute;
+        height: 12px;
+        width: 12px;
+        border: 2px solid white;
+        right: 8px;
+        bottom: 2px;
+    }
+    .cur-pointer{
+        cursor: pointer;
+    }
+
+    .search-i{
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .search-ism{
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .search-c:hover{
+        background: #E9EBEC;
+    }
+    .search-c{ 
+        position: absolute;
+        z-index: 999;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 5px;
+        width: 30px;
+        height: 30px;
+        color: gray;
+        border-radius: 50px;
+    }
+
+    .search-csm{ 
+        position: absolute;
+        z-index: 999;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 2px;
+        width: 25px;
+        height: 25px;
+        color: gray;
+        border-radius: 50px;
+    }
+
+    .tr-hover:hover{
+        background: #f2f4f8; 
+    }
+
+	.btn-i:hover{
+		background: #E9EBEC;
+        color: blue;
+	}
+	.btn-i{
+		border-radius: 50px;
+	}
+
+    .dropdown-hover:hover{
+        color: blue;
+        font-weight: 500;
+    }
+
+    .btn-add:hover{
+        background: #DDE1E5;
+        border-radius: 50px;
+    }
+
+    .main-table-reference>thead>tr>th, .main-table-reference>thead>tr>td{
+        letter-spacing: 0.5px;
+        padding: 7px 10px;
+        border-right: 1px solid #e3e8f7;
+        border-left: 1px solid #e3e8f7;
+        border-top: none;
+        border-bottom: none;
+        background-color: #5195D3; /* #80B1F4 #5195D3*/
+        color: white;
+        /* color: #22252f; */
+    }
+    
+    .main-table-reference>tbody>tr>th, .main-table-reference>tbody>tr>td{
+        padding: 3px 10px;
+    }
+
+    .element::-webkit-scrollbar {
+        display: none;
+    }
+
+    .modal-backdrop{
+        opacity:0.5 !important;
+    }
     .card{
         margin-bottom: 10px;
+    }
+    .box-height{
+        height: 31px;
+        font-size: 14px;
+    }
+    .btn-tools{
+        height: 31px;
+        width: 31px;
     }
 </style>

@@ -10,7 +10,7 @@
                         </div>
                         <div class="d-flex my-xl-auto right-content align-items-center">
                             <div class="wd-xl-200 wd-lg-200 wd-md-200 wd-100p">
-                                <Multiselect class="multi-color" placeholder="Category" searchable="true" searchStart="true" :options="genCodeCate" v-model="genCodeForm.category" @select="genCateSelected()"/>
+                                <Multiselect class="multi-color ht-40" placeholder="Category" searchable="true" searchStart="true" :options="genCodeCate" v-model="genCodeForm.category" @select="genCateSelected()"/>
                             </div>
                         </div>
                     </div>  
@@ -55,7 +55,7 @@
                         </div>
                         <div class="d-flex my-xl-auto right-content align-items-center">
                             <div class="wd-xl-200 wd-lg-200 wd-md-200 wd-100p">
-                                <Multiselect class="multi-color" placeholder="Category..." searchable="true" searchStart="true" :options="fuelCodeCate" v-model="fuelCodeForm.category" @select="fuelCateSelected()"/>
+                                <Multiselect class="multi-color ht-40" placeholder="Category..." searchable="true" searchStart="true" :options="fuelCodeCate" v-model="fuelCodeForm.category" @select="fuelCateSelected()"/>
                             </div>
                         </div>
                     </div>  
@@ -225,7 +225,7 @@
                 <div class="modal-body">  
                     <div class="form-group">
                         <label class="mb-0">Department</label> 
-                        <Multiselect class="multi-color" v-model="fuelCodeForm.dept" placeholder="Select" :options="lkDept"/>
+                        <Multiselect class="multi-color ht-40" v-model="fuelCodeForm.dept" placeholder="Select" :options="lkDept"/>
                     </div>
                     <div class="form-group">
                         <label class="mb-0">Code  <span class=" text-danger">*</span></label>

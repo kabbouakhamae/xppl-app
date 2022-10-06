@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FingerscanController extends Controller
-{
-    public function summary(Request $request){
+{   
+    public function dateCol(Request $request){
+        $m = explode('-',$request->date)[1];
+        $y = explode('-',$request->date)[0];
 
+        $col = DB::select("select 'c'+ convert(varchar, calendar, 112) as 'colid', left(convert(varchar, calendar, 3),2) as colname, format(calendar, 'MMMM-yyyy') as mont from calendar where year(calendar) = ? and month(calendar) = ? order by calendar", [$y, $m]);
+        return $col;
+    }
+
+    public function summary(Request $request){
         $param = [
             $request->dept,
             $request->date,

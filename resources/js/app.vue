@@ -31,23 +31,16 @@
 							</router-link>
 						</li>
 
+                        <li class="slide " @click="roster()">
+							<router-link class="side-menu__item" :class="roster_act" to="/roster">
+								<span class="side-menu__label"><i class="far fa-calendar-check text-center wd-20"></i><span class="mx-2">Roster</span></span>
+							</router-link>
+						</li>
+
                         <li class="slide " @click="fingerscan()">
 							<router-link class="side-menu__item" :class="fingerscan_act" to="/fingerscan">
 								<span class="side-menu__label"><i class="far fa-hand-pointer text-center wd-20"></i><span class="mx-2">Finger Scan</span></span>
 							</router-link>
-						</li>
-
-						<!-- Roster -->
-                        <li class="slide" :class="rosExp" @click="rosClick()">
-							<a class="side-menu__item" :class="rosAct" href="#">
-								<span class="side-menu__label"><i class="far fa-calendar text-center wd-20"></i><span class="mx-2">Roster</span></span>
-								<i class="angle fe fe-chevron-down"></i>
-							</a>
-							<ul class="slide-menu">
-								<li><router-link class="slide-item" :class="rosPreviewAct" @click="rosPreviewClick()" to="/rospreview">Preview</router-link></li>
-								<li><router-link class="slide-item" :class="rosManageAct" @click="rosManageClick()" to="/rosmanage">Manage</router-link></li>
-								<li><router-link class="slide-item" :class="rosCodeAct" @click="rosCodeClick()" to="/roscode">Code</router-link></li>			
-							</ul>
 						</li>
 
 
@@ -68,7 +61,7 @@
 						<div v-if="!!parseInt(permiss.fuel)">
 							<li class="slide" :class="fuelExp" @click="fuelClick()">
 								<a class="side-menu__item" :class="fuelAct" href="#">
-									<span class="side-menu__label"><i class="fa fa-tint text-center wd-20"></i><span class="mx-2">Fuels</span></span>
+									<span class="side-menu__label"><i class="fa fa-fire text-center wd-20"></i><span class="mx-2">Fuels</span></span>
 									<i class="angle fe fe-chevron-down"></i>
 								</a>
 								<ul class="slide-menu">
@@ -252,23 +245,17 @@ export default {
 			transAct: '',
 			lookupAct: '',
 			permissAct: '',
-
+			roster_act: '',
 			fuelAct: '',
 			fuelConsAct: '',
 			fuelReportAct: '',
 			fuelLookup_act: '',
-
-			rosAct: '',
-			rosPreviewAct: '',
-			rosManageAct: '',
-			rosCodeAct: '',
 
 			carRent_act: '',
 			carRentDetail_act: '',
 			carRentReport_act: '',
 			carRentCode_act: '',
 
-			rosExp: '',
 			fuelExp: '',
 			infoExp: '',
 			carRent_exp: '',
@@ -306,6 +293,11 @@ export default {
 			this.empAct = 'active';
 		},
 		
+		roster(){
+			this.clearAct();
+			this.roster_act = 'active';
+		},
+
 		fingerscan(){
 			this.clearAct();
 			this.fingerscan_act = 'active';
@@ -359,24 +351,6 @@ export default {
 			this.fuelLookup_act = 'active';
 		},
 
-		rosPreviewClick(){
-			this.clearAct();
-			this.rosAct = 'active';
-			this.rosPreviewAct = 'active';
-		},
-
-		rosManageClick(){
-			this.clearAct();
-			this.rosAct = 'active';
-			this.rosMangeAct = 'active';
-		},
-
-		rosCodeClick(){
-			this.clearAct();
-			this.rosAct = 'active';
-			this.rosCodeAct = 'active';
-		},
-
 		carRentDetail(){
 			this.clearAct();
 			this.carRent_act = 'active';
@@ -395,25 +369,12 @@ export default {
 			this.carRentCode_act = 'active';
 		},
 
-		rosClick(){
-			if (this.rosExp){
-				this.rosExp = '';
-			} else {
-				this.settExp = '';
-				this.infoExp = '';
-				this.fuelExp = '';
-				this.carRent_exp = '';
-				this.rosExp = 'is-expanded';
-			}
-		},
-
 		fuelClick(){
 			if (this.fuelExp){
 				this.fuelExp = '';
 			} else {
 				this.settExp = '';
 				this.infoExp = '';
-				this.rosExp = '';
 				this.carRent_exp = '';
 				this.fuelExp = 'is-expanded';
 			}
@@ -425,7 +386,6 @@ export default {
 			} else {
 				this.settExp = '';
 				this.fuelExp = '';
-				this.rosExp = '';
 				this.carRent_exp = '';
 				this.infoExp = 'is-expanded';
 			}
@@ -437,7 +397,6 @@ export default {
 			} else {
 				this.settExp = '';
 				this.fuelExp = '';
-				this.rosExp = '';
 				this.infoExp = '';
 				this.carRent_exp = 'is-expanded';
 			}
@@ -449,7 +408,6 @@ export default {
 			} else {
 				this.infoExp = '';
 				this.fuelExp = '';
-				this.rosExp = '';
 				this.carRent_exp = '';
 				this.settExp = 'is-expanded';
 			}
@@ -474,10 +432,7 @@ export default {
 			this.fuelConsAct = '';
 			this.fuelReportAct = '';
 			this.fuelLookup_act = '';
-			this.rosAct = '';
-			this.rosPreviewAct = '';
-			this.rosManageAct = '';
-			this.rosCodeAct = '';
+			this.roster_act = '';
 			this.carRent_act = '';
 			this.carRentDetail_act = '';
 			this.carRentReport_act = '';
@@ -488,7 +443,6 @@ export default {
 			this.fuelExp = '';
 			this.infoExp = '';
 			this.settExp = '';
-			this.rosExp = '';
 			this.carRent_exp = '';
 		},
 
@@ -525,7 +479,6 @@ export default {
 </script>
 
 <style src="@vueform/multiselect/themes/default.css">
-
 
 </style>
 

@@ -89,10 +89,13 @@ class EmpAnnualController extends Controller
 
     public function info(Request $request){
 
-        $dept = $request->dept;
-        $year = $request->yyyy;
-        $info = DB::select('exec uspEmpAnnualLeave ?, ?', [$dept, $year]);
+        $param = [
+            $request->dept,
+            $request->year,
+            $request->search.'%'
+        ];
 
+        $info = DB::select('exec uspEmpAnnualLeave ?, ?, ?', $param);
         return $info;
     }
 

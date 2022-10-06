@@ -3,68 +3,55 @@
         <loading/>
     </div> 
     <div v-else>
-        <div class="breadcrumb-header justify-content-between align-items-center mb-1 mt-0" >
-            <div>
-                <h4 class="card-title mg-b-0">Annual Leave</h4>
-                <p class="tx-12 tx-gray-500 mb-2">Annual leave Gets, Used and Reamining...</p>
-            </div>
-            <div class="d-flex my-xl-auto justify-content-end">
-                <div class="wd-xl-200 wd-lg-200 wd-md-200 wd-70p">
-                    <Multiselect class="multi-color" v-model="depts" mode="multiple" placeholder="Departments..." :close-on-select="false" :searchable="false" :searchStart="true" :options="lkDept" @select="getAlInfo()"/>
-                </div>
-                <div class="ms-1" style="width: 120px">
-                    <Multiselect class="multi-color" placeholder="Year" :options="lkYear" v-model="year" @select="yearChange()"/>
-                </div>
-            </div>
-        </div> 
-
         <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <h6 class="text-danger fw-bold">{{year}}</h6>
-                    <div class="d-flex justify-content-start">
-                        <button class="btn btn-icon btn-sm btn-i wd-25 ht-25" data-bs-toggle="dropdown" title="Tools">
-                            <i class="mdi mdi-dots-horizontal text-gray" style="font-size: 15px"></i>
-                        </button> 
-                        <div class="dropdown-menu tx-13">
-                            <!-- <div class="dropdown-item cur-pointer dropdown-hover" @click="exportToPDF()">
-                                <i class="far fa-file-pdf me-2"></i><span>Export To PDF</span>
-                            </div> -->
-                            <div class="dropdown-item cur-pointer dropdown-hover" @click="ExportExcel()">
-                                <i class="far fa-file-excel me-2"></i><span>Export To Excel</span>
-                            </div>
+            <div class="card-body pd-t-10">
+                <h4 class="card-title mg-b-0 text-muted text-capitalize">{{dept}} Annual Leave Infomation In <span class="text-danger">{{year}}</span></h4>
+                <div class="d-lg-flex justify-content-between mt-2 mb-1">
+                    <div class="wd-lg-300 wd-100p">
+                        <div class="pos-relative">
+                            <input class="form-control form-control-sm pd-l-25 box-height" type="text" placeholder="Search by name..." v-model="search" @input="searchChanged()" title="Search by name">
+                                <i class="fe fe-search search-ism text-muted"></i>
+                            <button class="btn btn-icon btn-sm search-csm text-muted" v-if="btnClear" @click="searchClear()"><i class="fe fe-x" style="font-size: 14px"></i></button>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-xl-0 mt-lg-0 mt-md-1 mt-1">
+                        <div class="wd-lg-200 wd-md-200 wd-100p me-1">
+                            <Multiselect class="multi-color box-height" v-model="dept" placeholder="Departments..." :searchable="false" :searchStart="true" :options="lkDept" @select="selChanged()"/>
+                        </div>
+                        <div class="wd-md-120 wd-60p">
+                            <Multiselect class="multi-color box-height" v-model="year" placeholder="Year..." :searchable="false" :searchStart="true" :options="lkYear" @select="selChanged()"/>
                         </div>
                     </div>
                 </div>
-
-                <div class="table-responsive element ht-md-650">
-                    <table class="table main-table-reference text-nowrap table-hover" id="al" data-excel-name="Annual Leave Info">
+                
+                <div class="table-responsive border" style="max-height: 75vh">
+                    <table class="table main-table-reference text-nowrap mg-b-0" id="al" data-excel-name="Annual Leave Info">
                         <thead class="position-sticky" style="top: 0px">
                             <tr>
+                                <th class="border-start-0">No</th>
                                 <th>Name and Surname</th>
                                 <th>Name Lao</th>
                                 <th>Position</th>
-                                <th>Department</th>
                                 <th>{{ year - 1 }} Remain</th>
                                 <th>{{ year }} Get</th>
                                 <th>{{ year }} Use</th>
                                 <th>{{ year }} Remain</th>
-                                <th class="p-0 align-middle wd-80p"><span class="d-flex justify-content-start text-white px-2">Remarks</span></th>
+                                <th class="wd-60p">Remarks</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr v-for="lst in alInfo" :key="lst.id">
+                        <tbody> 
+                            <tr v-for="(lst, inx) in infoData" :key="lst.id" class="tr-hover">
+                                <td class="text-center border-start-0">{{inx + 1}}</td>
                                 <td>{{ lst.title }} {{ lst.name }} {{ lst.surname }}</td>
                                 <td class="laofont"> <span v-if="lst.namelao">{{ lst.titlelao }}</span> {{ lst.namelao }} {{ lst.surnamelao }}</td>
                                 <td> {{ lst.position }} </td>
-                                <td> {{ lst.department }} </td>
                                 <td class="text-end"> {{ formatNumber(lst.remain) }} </td>
                                 <td class="text-end"> {{ formatNumber(lst.get) }} </td>
                                 <td class="text-end"> {{ formatNumber(lst.use) }} </td>
                                 <td class="text-end bg-danger" v-if="lst.total < 0">{{ formatNumber(lst.total) }}</td>
                                 <td class="text-end" v-else> {{ formatNumber(lst.total) }} </td>
                                 <td class="laofont"> {{ lst.remarks }} </td>
-                            </tr>
+                            </tr>                                                                              
                         </tbody>
                     </table>
                 </div>
@@ -83,9 +70,11 @@ export default {
             loginPermiss: [],
             lkYear: [],
             lkDept: [],
-            alInfo: [],
-            depts: [],
-            year: new Date().getFullYear(),
+            infoData: [],
+            dept: [],
+            year: '',
+            search: '',
+            btnClear: false,
             loading: false
         };
     },
@@ -95,41 +84,64 @@ export default {
     },
 
     methods: {
-        yearChange(){
-            this.getAlInfo();
-        },
-
-        async getAlInfo(){
+        async onLoad(){
             this.loading = true;
-            let fd = new FormData();
-                fd.append('dept', this.depts.toString());
-                fd.append('yyyy', this.year);
 
-            const res = await axios.post('/api/annual/info', fd, {headers:{"Content-Type": "multipart/form-date"}})
-            this.alInfo = res.data;
-            this.loading = false;
-        },
-
-        async getAlInfo2(){
-            this.loading = true;
             const profile = await axios.get('api/profile')
-			let loginDept = profile.data.department;
+			this.dept = profile.data.department;
+            this.year = new Date().getFullYear();
 
-            let fd = new FormData();
-                fd.append('dept', loginDept);
-                fd.append('yyyy', this.year);
+            const info = await axios.get(`/api/annual/info?dept=${this.dept}&year=${this.year}&search=${this.search}`)
+            this.infoData = info.data;
 
-            const res = await axios.post('/api/annual/info', fd, {headers:{"Content-Type": "multipart/form-date"}})
-            this.alInfo = res.data;
-            this.loading = false;
-        },
+            const dept = await axios.get('/api/lookup/depts')
+            this.lkDept = dept.data;
 
-        async lookup(){
             const year = await axios.get('/api/lookup/year')
             this.lkYear = year.data;
 
-            const depts = await axios.get('/api/lookup/depts')
-            this.lkDept = depts.data;  
+            this.loading = false; 
+        },
+
+        // async getAlInfo(){
+        //     this.loading = true;
+        //     let fd = new FormData();
+        //         fd.append('dept', this.dept.toString());
+        //         fd.append('yyyy', this.year);
+
+        //     const res = await axios.post('/api/annual/info', fd, {headers:{"Content-Type": "multipart/form-date"}})
+        //     this.alInfo = res.data;
+        //     this.loading = false;
+        // },
+
+        async selChanged(){
+            this.loading = true;
+
+            const info = await axios.get(`/api/annual/info?dept=${this.dept}&year=${this.year}&search=${this.search}`)
+            this.infoData = info.data;
+
+            this.loading = false; 
+        },
+
+        getAlInfo(){
+            this.$axios.get(`/api/annual/info?dept=${this.dept}&year=${this.year}&search=${this.search}`)
+            .then(res => this.infoData = res.data)
+        },
+
+        searchChanged(){
+            if(this.search.length >0){
+                this.btnClear = true;
+                this.getAlInfo();
+            } else {
+                this.btnClear = false;
+                this.getAlInfo();
+            }
+        },
+
+        searchClear(){
+            this.search = '';
+            this.btnClear = false;
+            this.getAlInfo();
         },
 
         formatNumber(value) {
@@ -145,8 +157,7 @@ export default {
     },
 
     created(){
-        this.getAlInfo2();
-        this.lookup();
+        this.onLoad();
     },
 
     beforeRouteEnter(to, from, next){

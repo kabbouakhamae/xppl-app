@@ -7,14 +7,13 @@ import SignUp from "../pages/SignUp.vue";
 import Employee from "../pages/Employee.vue";
 import Permission from "../pages/Permission.vue";
 import Annual from "../pages/Annual.vue";
+import LeaveInfo from "../pages/LeaveInfo.vue";
 import Transport from "../pages/Transport.vue";
 import FuelCons from "../pages/FuelCons.vue";
 import FuelReport from "../pages/FuelReport.vue";
 import FuelLookup from "../pages/FuelLookup.vue";
 import Lookup from "../pages/Lookup.vue";
-import RosPreview from "../pages/RosPreview.vue";
-import RosManage from "../pages/RosManage.vue";
-import RosCode from "../pages/RosCode.vue";
+import Roster from "../pages/Roster.vue";
 import CarRentDetail from "../pages/CarRentDetail.vue";
 import CarRentReport from "../pages/CarRentReport.vue";
 import CarRentCode from "../pages/CarRentCode.vue";
@@ -59,6 +58,11 @@ const routes =[
         component: Annual
     },
     {
+        name: "leaveinfo",
+        path: "/leaveinfo",
+        component: LeaveInfo
+    },
+    {
         name: "transport",
         path: "/transport",
         component: Transport
@@ -84,19 +88,9 @@ const routes =[
         component: Lookup
     },
     {
-        name: "rospreview",
-        path: "/rospreview",
-        component: RosPreview
-    },
-    {
-        name: "rosmanage",
-        path: "/rosmanage",
-        component: RosManage
-    },
-    {
-        name: "roscode",
-        path: "/roscode",
-        component: RosCode
+        name: "roster",
+        path: "/roster",
+        component: Roster
     },
     {
         name: "carrentdetail",

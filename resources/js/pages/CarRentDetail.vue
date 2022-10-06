@@ -8,10 +8,10 @@
 
             <div class="d-flex my-xl-auto right-content align-items-center">
                 <div class="wd-xl-150 wd-lg-150 wd-md-150 wd-70p">
-                    <Multiselect class="multi-color" placeholder="Month" :options="lkMonth" v-model="mont" @select="montSelected()"/>
+                    <Multiselect class="multi-color ht-40" placeholder="Month" :options="lkMonth" v-model="mont" @select="montSelected()"/>
                 </div>
                 <div class="ms-1" style="width: 120px">
-                    <Multiselect class="multi-color" placeholder="Year" :options="lkYear" v-model="year" @select="yearSelected()"/>
+                    <Multiselect class="multi-color ht-40" placeholder="Year" :options="lkYear" v-model="year" @select="yearSelected()"/>
                 </div>
             </div>
         </div> 
@@ -187,19 +187,19 @@
                         <div class="col-lg-3 col-6">
                             <div class="form-group">
                                 <label class="mb-0">Driver <span class="text-danger">*</span></label> 
-                                <Multiselect class="multi-color" v-model="headForm.driver" placeholder="Select" :options="lkDriver"/>
+                                <Multiselect class="multi-color ht-40" v-model="headForm.driver" placeholder="Select" :options="lkDriver"/>
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label class="mb-0">Company <span class="text-danger">*</span></label> 
-                                <Multiselect class="multi-color" v-model="headForm.company" placeholder="Select" :options="lkComp"/>
+                                <Multiselect class="multi-color ht-40" v-model="headForm.company" placeholder="Select" :options="lkComp"/>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">
                             <div class="form-group">
                                 <label class="mb-0">LV No. <span class="text-danger">*</span></label> 
-                                <Multiselect class="multi-color" v-model="headForm.equip_no" searchable="true" placeholder="Select" :options="lkEquipNo" @select="carNoSelected()"/>
+                                <Multiselect class="multi-color ht-40" v-model="headForm.equip_no" searchable="true" placeholder="Select" :options="lkEquipNo" @select="carNoSelected()"/>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -211,19 +211,19 @@
                         <div class="col-lg-3 col-6">
                             <div class="form-group">
                                 <label class="mb-0">Depart From <span class="text-danger">*</span></label> 
-                                <Multiselect class="multi-color" v-model="headForm.depart_point" placeholder="Select" :options="lkFrom"/>
+                                <Multiselect class="multi-color ht-40" v-model="headForm.depart_point" placeholder="Select" :options="lkFrom"/>
                             </div>
                         </div>
                         <div class="col-lg-3 col-6">
                             <div class="form-group">
                                 <label class="mb-0">Destination <span class="text-danger">*</span></label> 
-                                <Multiselect class="multi-color" v-model="headForm.destination" placeholder="Select" :options="lkDest"/>
+                                <Multiselect class="multi-color ht-40" v-model="headForm.destination" placeholder="Select" :options="lkDest"/>
                             </div>
                         </div>
                         <div class="col-lg-3 col-8">
                             <div class="form-group">
                                 <label class="mb-0">Type of Car <span class="text-danger">*</span></label> 
-                                <Multiselect class="multi-color" v-model="headForm.car_type" placeholder="Select" :options="lkCarType" @select="carTypeSelected()"/>
+                                <Multiselect class="multi-color ht-40" v-model="headForm.car_type" placeholder="Select" :options="lkCarType" @select="carTypeSelected()"/>
                             </div>
                         </div>
                         <div class="col-lg-2 col-4">
@@ -248,7 +248,7 @@
                         <div class="col-lg-3 col-8">
                             <div class="form-group">
                                 <label class="mb-0">Route <span class="text-danger">*</span></label> 
-                                <Multiselect class="multi-color" v-model="headForm.route" placeholder="Select" :options="lkRoute" @select="routeSelected()"/>
+                                <Multiselect class="multi-color ht-40" v-model="headForm.route" placeholder="Select" :options="lkRoute" @select="routeSelected()"/>
                             </div>
                         </div>
                         <div class="col-lg-3 col-4">
@@ -311,7 +311,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label class="mb-0">Type of Pay <span class="text-danger">*</span></label> 
-                                <Multiselect class="multi-color" v-model="detailForm.paid_type" placeholder="Select" :options="lkPaidType"/>
+                                <Multiselect class="multi-color ht-40" v-model="detailForm.paid_type" placeholder="Select" :options="lkPaidType"/>
                             </div>
                         </div>
                         <div class="col-4">

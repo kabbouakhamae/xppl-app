@@ -159,10 +159,10 @@ class UserController extends Controller
                 'card_del' => $request->cardDel,
                 'al_del' => $request->alDel,
                 'file_del' => $request->fileDel,
-                'al_all' => $request->alAll,
-                'tran_all' => $request->tranAll,
                 'fuel' => $request->fuel,
-                'fuel_all' => $request->fuelAll
+                'fuel_all' => $request->fuelAll,
+                'ros_all' => $request->rosAll,
+                'ros_edit' => $request->rosEdit
             ]);
     }
 

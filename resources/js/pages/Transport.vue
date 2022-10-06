@@ -10,9 +10,9 @@
             </div>
             <div class="d-flex my-xl-auto justify-content-end">
                 <div class="wd-xl-200 wd-lg-200 wd-md-200 wd-80p">
-                    <Multiselect class="multi-color" v-model="depts" mode="multiple" placeholder="Departments..." :close-on-select="false" :searchable="false" :searchStart="true" :options="lkDept" @select="getTransport()"/>
+                    <Multiselect class="multi-color ht-40" v-model="depts" mode="multiple" placeholder="Departments..." :close-on-select="false" :searchable="false" :searchStart="true" :options="lkDept" @select="getTransport()"/>
                 </div>
-                <div class="ms-1" style="width: 120px">
+                <div class="ms-1 wd-150">
                     <input type="date" class="form-control" placeholder="Date..." v-model="date" @change="getTransport()">
                 </div>
             </div>
@@ -190,7 +190,7 @@ export default {
             const inbound = await axios.post('/api/transport/in', fd, {headers:{"Content-Type": "multipart/form-date"}})
             this.inData = inbound.data;
 
-             this.loading = false;
+            this.loading = false;
         },
         
         async getTransport2(){

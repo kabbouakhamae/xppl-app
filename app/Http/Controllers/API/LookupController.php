@@ -14,6 +14,16 @@ class LookupController extends Controller
         return $country;
     }
 
+    public function province(){
+        $prov = DB::select("select code as value, code as label from lookup_code where category ='province' and used = 1");
+        return $prov;
+    }
+    
+    public function district(Request $request){
+        $dist = DB::select("select code as value, code as label from lookup_code where category ='district' and descr = ? and used = 1", [$request->prov]);
+        return $dist;
+    }
+
     public function position(){
         $position = DB::select("select code as value, code as label from lookup_code where category ='position' and used = 1");
         return $position;

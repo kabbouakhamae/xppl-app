@@ -89,7 +89,7 @@
                         </div>   
                         <div class="form-group">
                             <label class="mb-0">Active</label> 
-                            <Multiselect class="multi-color" v-model="codeForm.used" placeholder="Select" :options="lkUsed"/>
+                            <Multiselect class="multi-color ht-40" v-model="codeForm.used" placeholder="Select" :options="lkUsed"/>
                         </div>
                         <div class="d-flex justify-content-end">
                             <button v-if="bntAddShow" type="button" class="btn btn-primary" :class="addCodeDis" @click="addCode()"><i class="fe fe-plus"></i><span class="mx-1">Add</span></button> 
